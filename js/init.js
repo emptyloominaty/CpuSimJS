@@ -12,7 +12,7 @@ let cpu = {
     bit: 16,
     status: "Off",
     maxPc:  Math.pow(2, this.bit),
-    cpuData: {op:0,decoded:0,bytes:0,cycles:0,InstructionCache:0,inst:0,phase:0,bytesLeft:0,fetchI:1},
+    cpuData: {op:0,decoded:0,bytes:0,cycles:0,InstructionCache:0,inst:0,phase:0,bytesLeft:0,fetchI:1,cyclesI:0},
     registers: {},
     init: function() {
         cpu.createRegisters()
@@ -29,8 +29,15 @@ let cpu = {
         } else if (phase===1) {
             cpu.fetchBytes()
         } else if (phase===2) {
-            cpu.cpuData.inst = cpu.cpuData.instructionCache
-            cpu.execute(cpu.cpuData.inst)
+            if (cpu.cpuData.cyclesI>0) {
+                cpu.cpuData.cyclesI--
+            }
+            if (cpu.cpuData.cyclesI===0) {
+                cpu.cpuData.phase++
+            }
+        } else if (phase===3) {
+            let inst = cpu.cpuData.instructionCache
+            cpu.execute(inst)
         }
         //update screen
         control.updateHTML()
@@ -42,6 +49,7 @@ let cpu = {
         cpu.cpuData.bytes = cpu.cpuData.decoded[0]
         cpu.cpuData.cycles = cpu.cpuData.decoded[1]
         cpu.cpuData.bytesLeft = cpu.cpuData.bytes
+        cpu.cpuData.cyclesI = cpu.cpuData.cycles-cpu.cpuData.bytes
 
         cpu.cpuData.instructionCache = new Array(5).fill(0)
         cpu.registers.pc++
@@ -107,7 +115,7 @@ let cpu = {
                 control.debug.push({text:"Stored data from r"+inst[1]+" to mem"+ memoryAddress})
                 break
             }
-            case 5: { //LDV
+            case 5: { //LDI
                 let value = functions.convert8to16(inst[2],inst[3])
                 this.registers["r"+inst[1]] = value
                 control.debug.push({text:"Loaded data "+value+" to r"+inst[1]})
@@ -238,13 +246,13 @@ let opCodeList = {
     2: {bytes:4,name:"SUB",cycles:5},   //Subtract
     3: {bytes:4,name:"LD",cycles:5},    //Load
     4: {bytes:4,name:"ST",cycles:5},    //Store
-    5: {bytes:4,name:"LDV",cycles:4},   //Load Value
+    5: {bytes:4,name:"LDI",cycles:4},   //Load Immediate
     6: {bytes:3,name:"JMP",cycles:4},   //Jump
     7: {bytes:3,name:"JSR",cycles:6},   //Jump to Subroutine
     8: {bytes:1,name:"RFS",cycles:6},   //Return From Subroutine
     9: {bytes:2,name:"INC",cycles:3},   //Increment by 1
     10: {bytes:2,name:"DEC",cycles:3},  //Decrement by 1
-    11: {bytes:4,name:"ADC",cycles:5},  //Add with Carry //TODO:FIX PLS
+    11: {bytes:4,name:"ADC",cycles:5},  //Add with Carry //TODO:FIX?
     12: {bytes:4,name:"SUC",cycles:5},  //TODO:Subtract with Carry
     13: {bytes:2,name:"ROL",cycles:3},  //TODO:Rotate Left
     14: {bytes:2,name:"ROR",cycles:3},  //TODO:Rotate Right
@@ -266,11 +274,14 @@ let opCodeList = {
     29: {bytes:3,name:"JE",cycles:5},    //TODO:Conditional Jump if equal
     30: {bytes:3,name:"JNE",cycles:5},   //TODO:Conditional Jump if not equal
 
-    31: {bytes:4,name:"MUL",cycles:7},   //TODO:Multiply
+    31: {bytes:4,name:"MUL",cycles:12},  //TODO:Multiply
     32: {bytes:4,name:"DIV",cycles:35},  //TODO:Divide
 
-    33: {bytes:4,name:"DIV",cycles:35},  //TODO:Divide
+    33: {bytes:1,name:"TRP",cycles:2},  //TODO:Transfer Register(r14) to Program Counter
+    34: {bytes:1,name:"TPR",cycles:2},  //TODO:Transfer Program Counter to Register(r14)
 
+    35: {bytes:3,name:"AD2",cycles:4},  //TODO:Add but A=A+B
+    36: {bytes:3,name:"SU2",cycles:4},  //TODO:Sub but A=A-B
 
     255: {bytes:1,name:"STOP",cycles:1},
 }
@@ -304,12 +315,15 @@ console.log("EMP 1 "+ cpu.bit+"bit CPU")
 console.log("Clock:"+clockHz+"hz Ram:"+(memory.memorySize/1024)+"kB")
 //----------------------------------------------------------------------TEST ONLY
 memory.data[300]=5  //(44,1)
+memory.data[301]=0  //(45,1)
 memory.data[302]=48  //(46,1)
 memory.data[303]=117 //(47,1)
 memory.data[304]=127 //(48,1)
 memory.data[305]=127 //(49,1)
 memory.data[306]=120 //(50,1)
-memory.data[308]=-3 //(52,1)
+memory.data[307]=0 //(51,1)
+memory.data[308]=3 //(52,1)
+memory.data[309]=0 //(53,1)
 
 //load
 memory.data[256]=3
