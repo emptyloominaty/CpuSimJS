@@ -7,65 +7,59 @@ let cpu = {
     timeA: 0,
     timeB: 0,
     timeC: 0,
+    timeCArray: [clockHz,clockHz,clockHz,clockHz],
     timeD: 0,
+    timeI: 0,
     //TEST end
     bit: 16,
     status: "Off",
     maxPc:  Math.pow(2, this.bit),
-    cpuData: {op:0,decoded:0,bytes:0,cycles:0,InstructionCache:0,inst:0,phase:0,bytesLeft:0,fetchI:1},
+    cpuData: {op:0,decoded:0,bytes:0,cycles:0,InstructionCache:0,inst:0},
     registers: {},
     init: function() {
         cpu.createRegisters()
     },
     compute: function() {
-        //TEST start
-        cpu.timeA = Date.now()
-        cpu.timeC = (cpu.timeA-cpu.timeB)
-        cpu.timeB = Date.now()
-        //TEST end
-        let phase = cpu.cpuData.phase
-        if (phase===0) {
-            cpu.fetchStart()
-        } else if (phase===1) {
-            cpu.fetchBytes()
-        } else if (phase===2) {
-            cpu.cpuData.inst = cpu.cpuData.instructionCache
-            cpu.execute(cpu.cpuData.inst)
-        }
-        //update screen
-        control.updateHTML()
+        cpu.cpuData.inst = cpu.fetchC()
+        cpu.execute(cpu.cpuData.inst)
     },
-    fetchStart: function() {
+    fetchC: function() {
            //fetch first byte (opcode)
-        cpu.cpuData.op = memory.data[cpu.registers.pc]
-        cpu.cpuData.decoded = cpu.decode(cpu.cpuData.op)
+        cpu.cpuData.op = memory.data[this.registers.pc]
+        cpu.cpuData.decoded = cpu.decode(cpu.cpuData.op) //1,2,3,4
         cpu.cpuData.bytes = cpu.cpuData.decoded[0]
         cpu.cpuData.cycles = cpu.cpuData.decoded[1]
-        cpu.cpuData.bytesLeft = cpu.cpuData.bytes
+
+        //TEST start
+        this.timeA = Date.now()
+        cpu.timeC = (this.timeA-this.timeB)/cpu.cpuData.cycles
+        cpu.timeCArray[cpu.timeI] = cpu.timeC
+        cpu.timeI++
+        if (cpu.timeI>3) {cpu.timeI=0}
+        this.timeB = Date.now()
+        //TEST end
+
+        clearInterval(run)
+        run = setInterval(cpu.compute, clock*cpu.cpuData.cycles) //TODO?
 
         cpu.cpuData.instructionCache = new Array(5).fill(0)
-        cpu.registers.pc++
+        this.registers.pc++
 
         // save opcode to [0]
         cpu.cpuData.instructionCache[0] = cpu.cpuData.op
-        console.log("OP: "+cpu.cpuData.op+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp) //test
+        console.log("OP: "+cpu.cpuData.op+"  PC:"+this.registers.pc+" SP:"+this.registers.sp) //test
 
-        cpu.cpuData.phase++
-    },
-    fetchBytes: function() {
         //fetch all bytes
-        if(cpu.cpuData.bytesLeft>1) {
-            cpu.cpuData.instructionCache[cpu.cpuData.fetchI] = memory.data[cpu.registers.pc]
-            cpu.registers.pc++
-            cpu.cpuData.fetchI++
-            cpu.cpuData.bytesLeft--
-        } else {
-            cpu.cpuData.phase++
-            cpu.cpuData.fetchI=1
+        for (let i = 1; i < cpu.cpuData.bytes; i++) {
+            cpu.cpuData.instructionCache[i] = memory.data[this.registers.pc]
+            this.registers.pc++
         }
-        if (cpu.registers.pc>cpu.maxPc) {
-            cpu.registers.pc = 256
+
+        if (this.registers.pc>this.maxPc) {
+            this.registers.pc = 256
         }
+
+        return cpu.cpuData.instructionCache
     },
     decode: function(op) {
         return [opCodeList[op].bytes,opCodeList[op].cycles]
@@ -173,14 +167,14 @@ let cpu = {
             case 255: { //STOP
                 clearInterval(run)
                 this.status="Stopped"
-                cpu.timeC=cpu.timeA
+                this.timeCArray= [0,0,0,0],
                 control.debug.push({text:"Cpu Stopped"})
                 control.printDebug()
                 break
             }
         }
-        //reset cpu phase after execute
-        cpu.cpuData.phase=0
+        //update screen
+        control.updateHTML()
     },
     setFlags: function(input) {
         this.registers.flags.Z = (input===0)
@@ -223,7 +217,7 @@ let control = {
             document.getElementById("programCounter").innerHTML = cpu.registers.pc
             document.getElementById("stackPointer").innerHTML = cpu.registers.sp
             document.getElementById("registersAll").innerHTML = JSON.stringify(cpu.registers)
-            let clock = Math.round(1 / cpu.timeC* 1000)
+            let clock = Math.round((1 / ((cpu.timeCArray[0] + cpu.timeCArray[1] + cpu.timeCArray[2] + cpu.timeCArray[3]) / 4)* 1000) * 10) / 10
             if (clock=="Infinity") { clock=0 }
             document.getElementById("clockRealSpeed").innerHTML = clock
             cpu.timeD = Date.now()
@@ -244,7 +238,7 @@ let opCodeList = {
     8: {bytes:1,name:"RFS",cycles:6},   //Return From Subroutine
     9: {bytes:2,name:"INC",cycles:3},   //Increment by 1
     10: {bytes:2,name:"DEC",cycles:3},  //Decrement by 1
-    11: {bytes:4,name:"ADC",cycles:5},  //Add with Carry //TODO:FIX PLS
+    11: {bytes:4,name:"ADC",cycles:5},  //Add with Carry
     12: {bytes:4,name:"SUC",cycles:5},  //TODO:Subtract with Carry
     13: {bytes:2,name:"ROL",cycles:3},  //TODO:Rotate Left
     14: {bytes:2,name:"ROR",cycles:3},  //TODO:Rotate Right
@@ -269,9 +263,8 @@ let opCodeList = {
     31: {bytes:4,name:"MUL",cycles:7},   //TODO:Multiply
     32: {bytes:4,name:"DIV",cycles:35},  //TODO:Divide
 
-    33: {bytes:4,name:"DIV",cycles:35},  //TODO:Divide
 
-
+    254: {bytes:3,name:"WAIT",cycles:3}, //TODO:Wait (1-65536) Cycles
     255: {bytes:1,name:"STOP",cycles:1},
 }
 
@@ -368,7 +361,7 @@ memory.data[317]=1
 
 //adc
 memory.data[318]=11
-memory.data[319]=1
+memory.data[319]=1 
 memory.data[320]=4
 memory.data[321]=8
 
@@ -394,20 +387,13 @@ memory.data[333]=1
 memory.data[334]=9
 memory.data[335]=0
 
-//JSR
-memory.data[336]=7
-memory.data[337]=84 //340
-memory.data[338]=1
-
-//inc
-memory.data[340]=9
-memory.data[341]=0
+//JMP
+memory.data[336]=0x06
+memory.data[337]=0x4e //334
+memory.data[338]=0x01
 
 //RFS
-memory.data[342]=8
-
-//RFS
-memory.data[339]=8
+memory.data[336]=8
 
 //stop
 memory.data[283]=255
