@@ -1,35 +1,57 @@
+//config
+let clockHz = 20
+
 /*----------CPU-------------*/
 let cpu = {
+    //TEST start
+    timeA: 0,
+    timeB: 0,
+    timeC: 0,
+    timeCArray: [clockHz,clockHz,clockHz,clockHz],
+    timeD: 0,
+    timeI: 0,
+    //TEST end
     bit: 16,
+    status: "Off",
     maxPc:  Math.pow(2, this.bit),
+    cpuData: {op:0,decoded:0,bytes:0,cycles:0,InstructionCache:0,inst:0},
     registers: {},
     init: function() {
         cpu.createRegisters()
     },
     compute: function() {
-        let inst = cpu.fetchC()
-        cpu.execute(inst)
+        cpu.cpuData.inst = cpu.fetchC()
+        cpu.execute(cpu.cpuData.inst)
     },
     fetchC: function() {
            //fetch first byte (opcode)
-        let op = memory.data[this.registers.pc]
-        let decoded = cpu.decode(op) //1,2,3,4
-        let bytes = decoded[0]
-        let cycles = decoded[1]
+        cpu.cpuData.op = memory.data[this.registers.pc]
+        cpu.cpuData.decoded = cpu.decode(cpu.cpuData.op) //1,2,3,4
+        cpu.cpuData.bytes = cpu.cpuData.decoded[0]
+        cpu.cpuData.cycles = cpu.cpuData.decoded[1]
+
+        //TEST start
+        this.timeA = Date.now()
+        cpu.timeC = (this.timeA-this.timeB)/cpu.cpuData.cycles
+        cpu.timeCArray[cpu.timeI] = cpu.timeC
+        cpu.timeI++
+        if (cpu.timeI>3) {cpu.timeI=0}
+        this.timeB = Date.now()
+        //TEST end
 
         clearInterval(run)
-        run = setInterval(cpu.compute, clock*cycles) //TODO?
+        run = setInterval(cpu.compute, clock*cpu.cpuData.cycles) //TODO?
 
-        let instructionCache = new Array(5).fill(0)
+        cpu.cpuData.instructionCache = new Array(5).fill(0)
         this.registers.pc++
 
         // save opcode to [0]
-        instructionCache[0] = op
-        console.log("OP: "+op+"  PC:"+this.registers.pc+" SP:"+this.registers.sp) //test
+        cpu.cpuData.instructionCache[0] = cpu.cpuData.op
+        console.log("OP: "+cpu.cpuData.op+"  PC:"+this.registers.pc+" SP:"+this.registers.sp) //test
 
         //fetch all bytes
-        for (let i = 1; i < bytes; i++) {
-            instructionCache[i] = memory.data[this.registers.pc]
+        for (let i = 1; i < cpu.cpuData.bytes; i++) {
+            cpu.cpuData.instructionCache[i] = memory.data[this.registers.pc]
             this.registers.pc++
         }
 
@@ -37,7 +59,7 @@ let cpu = {
             this.registers.pc = 256
         }
 
-        return instructionCache
+        return cpu.cpuData.instructionCache
     },
     decode: function(op) {
         return [opCodeList[op].bytes,opCodeList[op].cycles]
@@ -51,6 +73,9 @@ let cpu = {
             case 1: { //ADD
                 this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])
                 this.setFlags(this.registers["r" + inst[3]])
+                if(this.registers.flags.C===true) {
+                    this.registers["r" + inst[3]]=(this.registers["r" + inst[3]]-32768)
+                }
                 control.debug.push({text:"  r"+inst[1]+"("+this.registers["r" + inst[1]]+") +" +" r"+inst[2]+"("+this.registers["r" + inst[2]]+") = "+"r" + inst[3]+"("+this.registers["r" + inst[3]]+")"})
                 break
             }
@@ -114,11 +139,14 @@ let cpu = {
             }
             case 11: { //ADC
                 if (this.registers.flags.C) {
-                    this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])+32768
+                    this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])+1
                 } else {
                     this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])
                 }
                 this.setFlags(this.registers["r" + inst[3]])
+                if(this.registers.flags.C===true) {
+                    this.registers["r" + inst[3]]=(this.registers["r" + inst[3]]-32768)
+                }
                 control.debug.push({text:"(C)  r"+inst[1]+"("+this.registers["r" + inst[1]]+") +" +" r"+inst[2]+"("+this.registers["r" + inst[2]]+") = "+"r" + inst[3]+"("+this.registers["r" + inst[3]]+")"})
                 break
             }
@@ -138,11 +166,15 @@ let cpu = {
 
             case 255: { //STOP
                 clearInterval(run)
+                this.status="Stopped"
+                this.timeCArray= [0,0,0,0],
                 control.debug.push({text:"Cpu Stopped"})
-               control.printDebug()
+                control.printDebug()
                 break
             }
         }
+        //update screen
+        control.updateHTML()
     },
     setFlags: function(input) {
         this.registers.flags.Z = (input===0)
@@ -178,6 +210,18 @@ let control = {
     },
     printRegisters: function() {
             console.log(cpu.registers)
+    },
+    updateHTML: function() {
+        if ((cpu.timeA-cpu.timeD)>16) {
+            document.getElementById("cpuStatus").innerHTML = cpu.status
+            document.getElementById("programCounter").innerHTML = cpu.registers.pc
+            document.getElementById("stackPointer").innerHTML = cpu.registers.sp
+            document.getElementById("registersAll").innerHTML = JSON.stringify(cpu.registers)
+            let clock = Math.round((1 / ((cpu.timeCArray[0] + cpu.timeCArray[1] + cpu.timeCArray[2] + cpu.timeCArray[3]) / 4)* 1000) * 10) / 10
+            if (clock=="Infinity") { clock=0 }
+            document.getElementById("clockRealSpeed").innerHTML = clock
+            cpu.timeD = Date.now()
+        }
     }
 }
 
@@ -243,13 +287,12 @@ let functions = {
 
 
 }
-//config
-let clockHz = 50
 
 //main
 cpu.init()
 memory.init()
 control.reset() //test
+control.updateHTML() //update screen
 console.log("EMP 1 "+ cpu.bit+"bit CPU")
 console.log("Clock:"+clockHz+"hz Ram:"+(memory.memorySize/1024)+"kB")
 //----------------------------------------------------------------------TEST ONLY
@@ -325,7 +368,7 @@ memory.data[321]=8
 //adc
 memory.data[322]=11
 memory.data[323]=0
-memory.data[324]=4
+memory.data[324]=0
 memory.data[325]=7
 
 //store
@@ -340,8 +383,17 @@ memory.data[331]=8
 memory.data[332]=96 //352
 memory.data[333]=1
 
+//inc
+memory.data[334]=9
+memory.data[335]=0
+
+//JMP
+memory.data[336]=0x06
+memory.data[337]=0x4e //334
+memory.data[338]=0x01
+
 //RFS
-memory.data[330]=8
+memory.data[336]=8
 
 //stop
 memory.data[283]=255
@@ -350,7 +402,9 @@ memory.data[283]=255
 
 let clock = 1 / clockHz * 1000
 let run = setInterval(cpu.compute, clock)
+cpu.status="Executing"
 
 //console log tests
 console.log(memory.data)
 control.printRegisters()
+
