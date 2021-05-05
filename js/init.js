@@ -23,7 +23,8 @@ let functions = {
         while (hex.length < padding) {
             hex = "0" + hex;
         }
-        return "0x"+hex;
+        //return "0x"+hex;
+        return hex;
     },
 
     regElements: function() {
@@ -164,15 +165,19 @@ let cpu = {
             }
             case 7: { //JSR
                 let value = functions.convert8to16(inst[1],inst[2])
-                memory.data[this.registers.sp] = this.registers.pc
+                let pcBytes = functions.convert16to8(this.registers.pc)
+                memory.data[this.registers.sp] = pcBytes[0] //low
+                this.registers.sp++
+                memory.data[this.registers.sp] = pcBytes[1] //high
                 this.registers.sp++
                 this.registers.pc = value
                 control.debug.push({text:"Jumped to "+value})
                 break
             }
             case 8: { //RFS
-                this.registers.pc = memory.data[this.registers.sp-1]
-                this.registers.sp--
+                let returnAddress = functions.convert8to16(memory.data[this.registers.sp-2],memory.data[this.registers.sp-1])
+                this.registers.pc = returnAddress
+                this.registers.sp-=2
                 control.debug.push({text:"Returned"})
                 break
             }
