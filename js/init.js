@@ -1,6 +1,41 @@
 //config
 let clockHz = 20
 
+/*----------functions-------------*/
+let functions = {
+    convert8to16 : function(byteB,byteA) {
+        let result = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
+        let sign = byteA & (1 << 7)
+        let x = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
+        if (sign) {
+            result = 0xFFFF0000 | x
+        }
+        return result
+    },
+    convert16to8 : function(firstNumber) {
+        let high = ((firstNumber >> 8) & 0xff)
+        let low = firstNumber & 0xff
+        return [low,high]
+    },
+    decimalToHex: function(d, padding) {
+        let hex = Number(d).toString(16);
+        padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding;
+        while (hex.length < padding) {
+            hex = "0" + hex;
+        }
+        return "0x"+hex;
+    },
+
+    regElements: function() {
+        let el_reg =  new Array(16).fill(0)
+        for (let i = 0; i<16; i++) {
+            el_reg[i] = document.getElementById("reg"+i)
+        }
+        return el_reg
+    }
+}
+
+
 /*----------CPU-------------*/
 let cpu = {
     //TEST start
@@ -210,6 +245,21 @@ let memory = {
 
 /*------------------------*/
 let control = {
+    el_cpuStatus: document.getElementById("cpuStatus"),
+    el_programCounter: document.getElementById("programCounter"),
+    el_stackPointer: document.getElementById("stackPointer"),
+    el_clockSpeed: document.getElementById("clockRealSpeed"),
+    el_cpuInfoFirst: document.getElementById("cpuFirst"),
+    el_cpuInfoSecond: document.getElementById("cpuSecond"),
+    el_regs: functions.regElements(),
+    el_regPc: document.getElementById("regpc"),
+    el_regSp: document.getElementById("regsp"),
+    el_aluOpcode: document.getElementById("aluOpcode"),
+    el_aluName: document.getElementById("aluName"),
+    el_aluReg1: document.getElementById("aluReg1"),
+    el_aluReg2: document.getElementById("aluReg2"),
+    el_aluReg3: document.getElementById("aluReg3"),
+    el_allMem: document.getElementById("memAllValues"),
     startCpu: function() {
         run = setInterval(cpu.compute, clock)
         cpu.status="Executing"
@@ -235,53 +285,49 @@ let control = {
             console.log(cpu.registers)
     },
     updateHTML: function() {
-        //TODO: SAVE ELEMENT IN VAR
         if ((cpu.timeA-cpu.timeD)>16) {
-            document.getElementById("cpuStatus").innerHTML = cpu.status
-            document.getElementById("programCounter").innerHTML = cpu.registers.pc
-            document.getElementById("stackPointer").innerHTML = cpu.registers.sp
+            this.el_cpuStatus.innerHTML = cpu.status
+            this.el_programCounter.innerHTML = cpu.registers.pc
+            this.el_stackPointer.innerHTML = cpu.registers.sp
             let clock = Math.round(1 / cpu.timeC* 1000)
             if (clock=="Infinity") { clock=0 }
-            document.getElementById("clockRealSpeed").innerHTML = clock
+            this.el_clockSpeed.innerHTML = clock
             cpu.timeD = Date.now()
             control.updateHTMLRegisters()
             control.updateHTMLAlu()
         }
     },
     updateHTMLStart: function() {
-        //TODO: SAVE ELEMENT IN VAR
-        document.getElementById("cpuFirst").innerHTML = cpuFirstInfo
-        document.getElementById("cpuSecond").innerHTML = cpuSecondInfo
+        this.el_cpuInfoFirst.innerHTML = cpuFirstInfo
+        this.el_cpuInfoSecond.innerHTML = cpuSecondInfo
     },
     updateHTMLRegisters: function() {
-        //TODO: SAVE ELEMENT IN VAR
-        document.getElementById("reg0").innerHTML = cpu.registers.r0
-        document.getElementById("reg1").innerHTML = cpu.registers.r1
-        document.getElementById("reg2").innerHTML = cpu.registers.r2
-        document.getElementById("reg3").innerHTML = cpu.registers.r3
-        document.getElementById("reg4").innerHTML = cpu.registers.r4
-        document.getElementById("reg5").innerHTML = cpu.registers.r5
-        document.getElementById("reg6").innerHTML = cpu.registers.r6
-        document.getElementById("reg7").innerHTML = cpu.registers.r7
-
-        document.getElementById("reg8").innerHTML = cpu.registers.r8
-        document.getElementById("reg9").innerHTML = cpu.registers.r9
-        document.getElementById("reg10").innerHTML = cpu.registers.r10
-        document.getElementById("reg11").innerHTML = cpu.registers.r11
-        document.getElementById("reg12").innerHTML = cpu.registers.r12
-        document.getElementById("reg13").innerHTML = cpu.registers.r13
-        document.getElementById("reg14").innerHTML = cpu.registers.r14
-        document.getElementById("reg15").innerHTML = cpu.registers.r15
-
-        document.getElementById("regpc").innerHTML = cpu.registers.pc
-        document.getElementById("regsp").innerHTML = cpu.registers.sp
+        for (let i = 0; i<16; i++) {
+            this.el_regs[i].innerHTML=cpu.registers["r"+i]
+        }
+        this.el_regPc.innerHTML = cpu.registers.pc
+        this.el_regSp.innerHTML = cpu.registers.sp
     },
     updateHTMLAlu: function() {
-        document.getElementById("aluOpcode").innerHTML = cpu.cpuData.instructionCache[0]
-        document.getElementById("aluName").innerHTML = opCodeList[cpu.cpuData.instructionCache[0]].name
-        document.getElementById("aluReg1").innerHTML = cpu.cpuData.instructionCache[1]
-        document.getElementById("aluReg2").innerHTML = cpu.cpuData.instructionCache[2]
-        document.getElementById("aluReg3").innerHTML = cpu.cpuData.instructionCache[3]
+        this.el_aluOpcode.innerHTML = cpu.cpuData.instructionCache[0]
+        this.el_aluName.innerHTML = opCodeList[cpu.cpuData.instructionCache[0]].name
+        this.el_aluReg1.innerHTML = cpu.cpuData.instructionCache[1]
+        this.el_aluReg2.innerHTML = cpu.cpuData.instructionCache[2]
+        this.el_aluReg3.innerHTML = cpu.cpuData.instructionCache[3]
+    },
+    getAllMemoryValues: function() {
+        let text = ""
+        for (let i=0; i<memory.memorySize; i++) {
+            if (memory.data[i]!==0) {
+                text+="<span>"+functions.decimalToHex(memory.data[i],2)+" </span>"
+            } else {
+                text+="<span style='color:#ba9999'>"+functions.decimalToHex(memory.data[i],2)+" </span>"
+            }
+        }
+        this.el_allMem.innerHTML = text
+    },
+    clearMemoryValuesHTML: function(){
+        this.el_allMem.innerHTML = ""
     }
 }
 
@@ -333,25 +379,6 @@ let opCodeList = {
 }
 
 
-let functions = {
-    convert8to16 : function(byteB,byteA) {
-        let result = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
-        let sign = byteA & (1 << 7)
-        let x = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
-        if (sign) {
-            result = 0xFFFF0000 | x
-        }
-        return result
-    },
-    convert16to8 : function(firstNumber) {
-        let high = ((firstNumber >> 8) & 0xff)
-        let low = firstNumber & 0xff
-        return [low,high]
-    },
-
-
-}
-
 //main
 control.reset() //test
 control.updateHTML() //update screen
@@ -367,9 +394,9 @@ control.startCpu() //only for debugging?
 memory.data[300]=5  //(44,1)
 memory.data[301]=0  //(45,1)
 memory.data[302]=48  //(46,1)
-memory.data[303]=117 //(47,1)
+memory.data[303]=1 //(47,1)
 memory.data[304]=127 //(48,1)
-memory.data[305]=127 //(49,1)
+memory.data[305]=1 //(49,1)
 memory.data[306]=120 //(50,1)
 memory.data[307]=0 //(51,1)
 memory.data[308]=3 //(52,1)

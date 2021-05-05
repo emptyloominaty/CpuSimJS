@@ -38,6 +38,11 @@ h1,h2,h3,h4 {
     flex-direction: row;
 }
 
+.wrapper3 {
+    display:flex;
+    justify-content: center;
+}
+
 .borderSpan {
     font-weight:600;
     border: 1px solid #414044;
@@ -51,6 +56,9 @@ h1,h2,h3,h4 {
     line-height:14px;
 }
 
+#memAllValues {
+    font-family: 'Courier New', monospace;
+}
 
 /* Buttons & Inputs */
 

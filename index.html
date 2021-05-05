@@ -15,12 +15,12 @@
 
     <div id="app">
         <!--START/STOP Button + clock (1-250hz) -->
-        <div id="first">
+        <div class="wrapper3" id="first">
             <button id="startStopBtn"> Start </button>
             <input type="number" max="250" min="1" autocomplete="off" value="25" >
         </div>
 
-        <div class="wrapper2">
+        <div class="wrapper2 wrapper3">
             <div class="wrapper1">
                 <!--INFO ABOUT CPU -->
                 <div class="window1" id="infoDiv">
@@ -47,6 +47,10 @@
             <div class="window1" id="regDiv">
                 <h3>Registers</h3>
                 <div class="wrapper1">
+                    <div class="wrapper2">
+                        <p> PC:<span class="borderSpan" id="regpc">-</span> </p>
+                        <p> SP:<span class="borderSpan" id="regsp">-</span> </p>
+                    </div>
                     <div class="wrapper2">
                         <p> r0:<span class="borderSpan" id="reg0">-</span> </p>
                         <p> r8:<span class="borderSpan" id="reg8">-</span> </p>
@@ -79,10 +83,6 @@
                         <p> r7:<span class="borderSpan" id="reg7">-</span> </p>
                         <p> r15:<span class="borderSpan" id="reg15">-</span> </p>
                     </div>
-                    <div class="wrapper2">
-                        <p> PC:<span class="borderSpan" id="regpc">-</span> </p>
-                        <p> SP:<span class="borderSpan" id="regsp">-</span> </p>
-                    </div>
                 </div>
             </div>
             <!--Memory -->
@@ -97,19 +97,25 @@
                         <input type="text" max="250" min="1" autocomplete="off" >
                         <button class="smallerTxtBtn" id="getValueMem"> Get Value</button>
                     </div>
-                    <div class="wrapper2">
-                        <input type="text" max="250" min="1" autocomplete="off"  >
-                        <button class="smallerTxtBtn" id="setValueMem"> Set Value</button>
-                    </div>
                 </div>
             </div>
         </div>
         <!--Code Editor -->
-        <div class="window1" id="editorDiv">
+        <div class="window1 wrapper3" id="editorDiv">
             <h3>Code Editor</h3>
             <button class="smallerTxtBtn" id="uploadCodeToMem"> Upload to Mem</button>
         </div>
+        <div class="window1 wrapper3" id="memExportDiv">
+            <div class="wrapper1">
+                <div class="wrapper2">
+                    <h3>Memory Values</h3>
+                    <button class="smallerTxtBtn" onclick="control.getAllMemoryValues()" > Get All Memory Values</button>
+                    <button class="smallerTxtBtn" onclick="control.clearMemoryValuesHTML()" > Clear</button>
 
+                </div>
+                <div id="memAllValues"></div>
+            </div>
+        </div>
     </div>
     <script src="js/init.js"></script>
 </body>

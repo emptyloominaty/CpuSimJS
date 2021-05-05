@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a2c93ddd-0d58-4838-9628-0491401e20ed" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/styles/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/functions.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/init.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/init.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,8 +22,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
-        <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -64,7 +65,8 @@
       <updated>1619989263954</updated>
       <workItem from="1619989272512" duration="10469000" />
       <workItem from="1620032022610" duration="31107000" />
-      <workItem from="1620117603177" duration="29980000" />
+      <workItem from="1620117603177" duration="30202000" />
+      <workItem from="1620205504797" duration="6831000" />
     </task>
     <servers />
   </component>
@@ -72,18 +74,18 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1620168404123">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1620208587124">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1080@0.0.1920.1040" timestamp="1620168404123" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1080@0.0.1920.1040" timestamp="1620208587124" />
     <state x="461" y="162" key="SettingsEditor" timestamp="1619989290787">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="162" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1080@0.0.1920.1040" timestamp="1619989290787" />
-    <state x="616" y="240" key="run.anything.popup" timestamp="1620139988751">
+    <state x="616" y="240" key="run.anything.popup" timestamp="1620212658296">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040/1920.0.1920.1080@0.0.1920.1040" timestamp="1620139988751" />
+    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040/1920.0.1920.1080@0.0.1920.1040" timestamp="1620212658296" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1620079087061">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
