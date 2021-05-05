@@ -179,8 +179,7 @@ let cpu = {
 
 
             case 255: { //STOP
-                clearInterval(run)
-                this.status="Stopped"
+                control.stopCpu()
                 cpu.timeC=cpu.timeA
                 control.debug.push({text:"Cpu Stopped"})
                 control.printDebug()
@@ -211,6 +210,16 @@ let memory = {
 
 /*------------------------*/
 let control = {
+    startCpu: function() {
+        run = setInterval(cpu.compute, clock)
+        cpu.status="Executing"
+        control.updateHTML() //update screen
+    },
+    stopCpu: function() {
+        clearInterval(run)
+        cpu.status="Stopped"
+        control.updateHTML() //update screen
+    },
     reset: function(){
         cpu.init() //reset registers
         memory.init() //reset ram
@@ -226,16 +235,53 @@ let control = {
             console.log(cpu.registers)
     },
     updateHTML: function() {
+        //TODO: SAVE ELEMENT IN VAR
         if ((cpu.timeA-cpu.timeD)>16) {
             document.getElementById("cpuStatus").innerHTML = cpu.status
             document.getElementById("programCounter").innerHTML = cpu.registers.pc
             document.getElementById("stackPointer").innerHTML = cpu.registers.sp
-            document.getElementById("registersAll").innerHTML = JSON.stringify(cpu.registers)
             let clock = Math.round(1 / cpu.timeC* 1000)
             if (clock=="Infinity") { clock=0 }
             document.getElementById("clockRealSpeed").innerHTML = clock
             cpu.timeD = Date.now()
+            control.updateHTMLRegisters()
+            control.updateHTMLAlu()
         }
+    },
+    updateHTMLStart: function() {
+        //TODO: SAVE ELEMENT IN VAR
+        document.getElementById("cpuFirst").innerHTML = cpuFirstInfo
+        document.getElementById("cpuSecond").innerHTML = cpuSecondInfo
+    },
+    updateHTMLRegisters: function() {
+        //TODO: SAVE ELEMENT IN VAR
+        document.getElementById("reg0").innerHTML = cpu.registers.r0
+        document.getElementById("reg1").innerHTML = cpu.registers.r1
+        document.getElementById("reg2").innerHTML = cpu.registers.r2
+        document.getElementById("reg3").innerHTML = cpu.registers.r3
+        document.getElementById("reg4").innerHTML = cpu.registers.r4
+        document.getElementById("reg5").innerHTML = cpu.registers.r5
+        document.getElementById("reg6").innerHTML = cpu.registers.r6
+        document.getElementById("reg7").innerHTML = cpu.registers.r7
+
+        document.getElementById("reg8").innerHTML = cpu.registers.r8
+        document.getElementById("reg9").innerHTML = cpu.registers.r9
+        document.getElementById("reg10").innerHTML = cpu.registers.r10
+        document.getElementById("reg11").innerHTML = cpu.registers.r11
+        document.getElementById("reg12").innerHTML = cpu.registers.r12
+        document.getElementById("reg13").innerHTML = cpu.registers.r13
+        document.getElementById("reg14").innerHTML = cpu.registers.r14
+        document.getElementById("reg15").innerHTML = cpu.registers.r15
+
+        document.getElementById("regpc").innerHTML = cpu.registers.pc
+        document.getElementById("regsp").innerHTML = cpu.registers.sp
+    },
+    updateHTMLAlu: function() {
+        document.getElementById("aluOpcode").innerHTML = cpu.cpuData.instructionCache[0]
+        document.getElementById("aluName").innerHTML = opCodeList[cpu.cpuData.instructionCache[0]].name
+        document.getElementById("aluReg1").innerHTML = cpu.cpuData.instructionCache[1]
+        document.getElementById("aluReg2").innerHTML = cpu.cpuData.instructionCache[2]
+        document.getElementById("aluReg3").innerHTML = cpu.cpuData.instructionCache[3]
     }
 }
 
@@ -307,12 +353,16 @@ let functions = {
 }
 
 //main
-cpu.init()
-memory.init()
 control.reset() //test
 control.updateHTML() //update screen
-console.log("EMP 1 "+ cpu.bit+"bit CPU")
-console.log("Clock:"+clockHz+"hz Ram:"+(memory.memorySize/1024)+"kB")
+let cpuFirstInfo = "EMP 1 "+ cpu.bit+"bit CPU"
+let cpuSecondInfo = "Clock:"+clockHz+"hz Ram:"+(memory.memorySize/1024)+"kB"
+control.updateHTMLStart()
+let clock = 1 / clockHz * 1000
+let run //Interval
+
+control.startCpu() //only for debugging?
+
 //----------------------------------------------------------------------TEST ONLY
 memory.data[300]=5  //(44,1)
 memory.data[301]=0  //(45,1)
@@ -427,10 +477,6 @@ memory.data[339]=8
 memory.data[283]=255
 
 //----------------------------------------------------------------------TEST ONLY
-
-let clock = 1 / clockHz * 1000
-let run = setInterval(cpu.compute, clock)
-cpu.status="Executing"
 
 //console log tests
 console.log(memory.data)

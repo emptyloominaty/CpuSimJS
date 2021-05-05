@@ -4,20 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMP Cpu</title>
-   <!-- <link rel="stylesheet" type="text/css" href="styles/style.css"> -->
-   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
-<style>
-    html {
-        background-color:#2f2f2f;
-        color:#eee;
-        height:100%;
-    }
-</style>
-    <script src="js/init.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles/style.css">
 </head>
 <body>
-    <h3>Status: <span id="cpuStatus"></span> | PC:<span id="programCounter"></span> | SP:<span id="stackPointer"></span>/255</h3>
-    <p>Clock: <span id="clockRealSpeed"></span> hz</p>
-    <p>Registers: <span id="registersAll"></span></p>
+    <div class="deleteThis">
+        <p style="font-size:24px;">Status: <span id="cpuStatus"></span> | PC:<span id="programCounter"></span> | SP:<span id="stackPointer"></span>/255</p>
+        <p>Clock: <span id="clockRealSpeed"></span> hz</p>
+        <hr>
+    </div>
+
+    <div id="app">
+        <!--START/STOP Button + clock (1-250hz) -->
+        <div id="first">
+            <button id="startStopBtn"> Start </button>
+            <input type="number" max="250" min="1" autocomplete="off" value="25" >
+        </div>
+
+        <div class="wrapper2">
+            <div class="wrapper1">
+                <!--INFO ABOUT CPU -->
+                <div class="window1" id="infoDiv">
+                    <p id="cpuFirst"></p>
+                    <p id="cpuSecond"></p>
+                </div>
+                <!--ALU -->
+                <div class="window1" id="aluDiv">
+                    <h3>ALU</h3>
+                    <div class="wrapper1">
+                        <div class="wrapper2">
+                            <p> Opcode:<span class="borderSpan" id="aluOpcode">-</span> </p>
+                            <p> Name:<span class="borderSpan" id="aluName">-</span> </p>
+                        </div>
+                        <div class="wrapper2">
+                            <p> A:<span class="borderSpan" id="aluReg1">-</span> </p>
+                            <p> B:<span class="borderSpan" id="aluReg2">-</span> </p>
+                            <p> C:<span class="borderSpan" id="aluReg3">-</span> </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Registers -->
+            <div class="window1" id="regDiv">
+                <h3>Registers</h3>
+                <div class="wrapper1">
+                    <div class="wrapper2">
+                        <p> r0:<span class="borderSpan" id="reg0">-</span> </p>
+                        <p> r8:<span class="borderSpan" id="reg8">-</span> </p>
+                    </div>
+                    <div class="wrapper2">
+                        <p> r1:<span class="borderSpan" id="reg1">-</span> </p>
+                        <p> r9:<span class="borderSpan" id="reg9">-</span> </p>
+                    </div>
+                    <div class="wrapper2">
+                        <p> r2:<span class="borderSpan" id="reg2">-</span> </p>
+                        <p> r10:<span class="borderSpan" id="reg10">-</span> </p>
+                    </div>
+                    <div class="wrapper2">
+                        <p> r3:<span class="borderSpan" id="reg3">-</span> </p>
+                        <p> r11:<span class="borderSpan" id="reg11">-</span> </p>
+                    </div>
+                    <div class="wrapper2">
+                        <p> r4:<span class="borderSpan" id="reg4">-</span> </p>
+                        <p> r12:<span class="borderSpan" id="reg12">-</span> </p>
+                    </div>
+                    <div class="wrapper2">
+                        <p> r5:<span class="borderSpan" id="reg5">-</span> </p>
+                        <p> r13:<span class="borderSpan" id="reg13">-</span> </p>
+                    </div>
+                    <div class="wrapper2">
+                        <p> r6:<span class="borderSpan" id="reg6">-</span> </p>
+                        <p> r14:<span class="borderSpan" id="reg14">-</span> </p>
+                    </div>
+                    <div class="wrapper2">
+                        <p> r7:<span class="borderSpan" id="reg7">-</span> </p>
+                        <p> r15:<span class="borderSpan" id="reg15">-</span> </p>
+                    </div>
+                    <div class="wrapper2">
+                        <p> PC:<span class="borderSpan" id="regpc">-</span> </p>
+                        <p> SP:<span class="borderSpan" id="regsp">-</span> </p>
+                    </div>
+                </div>
+            </div>
+            <!--Memory -->
+            <div class="window1" id="memDiv">
+                <h3>Memory</h3>
+                <div class="wrapper1">
+                    <div class="wrapper2">
+                       <p> Memory Usage:<span id="memUsage"></span> </p>
+                        <button class="smallerTxtBtn" id="getUsageMem"> Get Usage</button>
+                    </div>
+                    <div class="wrapper2">
+                        <input type="text" max="250" min="1" autocomplete="off" >
+                        <button class="smallerTxtBtn" id="getValueMem"> Get Value</button>
+                    </div>
+                    <div class="wrapper2">
+                        <input type="text" max="250" min="1" autocomplete="off"  >
+                        <button class="smallerTxtBtn" id="setValueMem"> Set Value</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Code Editor -->
+        <div class="window1" id="editorDiv">
+            <h3>Code Editor</h3>
+            <button class="smallerTxtBtn" id="uploadCodeToMem"> Upload to Mem</button>
+        </div>
+
+    </div>
+    <script src="js/init.js"></script>
 </body>
 </html>

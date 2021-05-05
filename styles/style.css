@@ -1,0 +1,132 @@
+html {
+    background-color:#2f2f2f;
+    color:#eee;
+    height:100%;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /*text-align: center;*/
+}
+
+p {
+    margin-top:5px;
+    margin-bottom:5px;
+}
+
+h1,h2,h3,h4 {
+    text-align: center;
+    margin:5px;
+}
+
+.window1 {
+    border: 2px solid #303a44;
+    box-shadow:  0 0 3px #769893;
+    text-shadow: 0 0 3px #769893;
+    background-color: #3a3a3a;
+    border-radius:3px;
+    padding: 7px;
+    margin:10px;
+}
+
+.wrapper1 {
+    display:flex;
+    flex-direction: column;
+}
+
+.wrapper2 {
+    display:flex;
+    flex-direction: row;
+}
+
+.borderSpan {
+    font-weight:600;
+    border: 1px solid #414044;
+    background-color: #2f2f2f;
+    border-radius:3px;
+    padding: 4px;
+    margin:0 10px 0 10px ;
+    display: inline-block;
+    width:48px;
+    text-align:center;
+    line-height:14px;
+}
+
+
+/* Buttons & Inputs */
+
+button {
+    margin:5px;
+    padding: 3px;
+    width:100px;
+    background-color: #3a3a3a;
+    color: #ededed;
+    text-shadow: 0 0 3px #dcdcdc;
+    border:1px solid #c8c8c8;
+    border-radius:3px;
+    cursor:pointer;
+    transition:all 0.2s;
+    font-size:1.2rem;
+}
+
+button:hover {
+    background-color: #575757;
+   /* text-shadow: 0 0 8px #86d789;*/
+}
+
+.smallerTxtBtn {
+    font-size:0.9rem;
+}
+
+input {
+    background-color: #3a3a3a;
+    color:#fff;
+    font-family: Calibri, Arial, sans-serif;
+    font-size:1rem;
+    text-align:center;
+    border:1px solid #c8c8c8;
+    border-radius: 3px;
+    width: 50px;
+    padding:3px;
+}
+
+input:focus {
+    outline:none;
+    border-color: #fff;
+}
+
+
+
+
+
+/* -----Disable Arrows from input type number------- */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #444;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #777;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
