@@ -8,16 +8,15 @@
 </head>
 <body>
     <div class="deleteThis">
-        <p style="font-size:24px;">Status: <span id="cpuStatus"></span> | PC:<span id="programCounter"></span> | SP:<span id="stackPointer"></span>/255</p>
+        <p style="font-size:24px;">Status: <span id="cpuStatus"></span></p>
         <p>Clock: <span id="clockRealSpeed"></span> hz</p>
-        <hr>
     </div>
 
     <div id="app">
         <!--START/STOP Button + clock (1-250hz) -->
         <div class="wrapper3" id="first">
-            <button id="startStopBtn"> Start </button>
-            <input type="number" max="250" min="1" autocomplete="off" value="25" >
+            <button id="btnToggleCpu" onclick="control.toggleCpu()" > Start </button>
+            <input id="setCpuClock" type="number" max="250" min="1" autocomplete="off" value="25" >
         </div>
 
         <div class="wrapper2 wrapper3">
@@ -91,19 +90,29 @@
                 <div class="wrapper1">
                     <div class="wrapper2">
                        <p> Memory Usage:<span id="memUsage"></span> </p>
-                        <button class="smallerTxtBtn" id="getUsageMem"> Get Usage</button>
+                        <button class="smallerTxtBtn" onclick="control.getMemoryUsage()"> Get Usage</button>
                     </div>
                     <div class="wrapper2">
-                        <input type="text" max="250" min="1" autocomplete="off" >
-                        <button class="smallerTxtBtn" id="getValueMem"> Get Value</button>
+                        <input type="text" pattern="0[xX][0-9a-fA-F]+" maxlength="6" value="0x" autocomplete="off" id="input_GetMemVal">
+                        <button class="smallerTxtBtn" onclick="control.getMemoryValue()"> Get Value</button>
+
+                    </div>
+                    <div class="wrapper3">
+                        <span class="borderSpan" id="memVal">-</span>
+                        <span class="borderSpan" id="memValHex">-</span>
                     </div>
                 </div>
             </div>
         </div>
         <!--Code Editor -->
         <div class="window1 wrapper3" id="editorDiv">
-            <h3>Code Editor</h3>
-            <button class="smallerTxtBtn" id="uploadCodeToMem"> Upload to Mem</button>
+            <div class="wrapper1">
+                <div class="wrapper2">
+                    <h3>Code Editor</h3>
+                    <button class="smallerTxtBtn" onclick="assembler.assembly()"> Upload to Mem</button>
+                </div>
+             <textarea spellcheck="false" id="codeEditor"> </textarea>
+            </div>
         </div>
         <div class="window1 wrapper3" id="memExportDiv">
             <div class="wrapper1">
@@ -118,5 +127,6 @@
         </div>
     </div>
     <script src="js/init.js"></script>
+    <script src="js/assembler.js"></script>
 </body>
 </html>

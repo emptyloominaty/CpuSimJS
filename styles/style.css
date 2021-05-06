@@ -97,12 +97,24 @@ input {
     padding:3px;
 }
 
+#input_GetMemVal {
+    height:16px;
+    margin-top:6px;
+}
+
 input:focus {
     outline:none;
     border-color: #fff;
 }
 
-
+#codeEditor {
+    color: #7baebf;
+    font-weight:600;
+    background-color: #2f2f2f;
+    width:300px;
+    height:200px;
+    padding:10px;
+}
 
 
 

@@ -1,5 +1,5 @@
 //config
-let clockHz = 20
+let clockHz = 25
 
 /*----------functions-------------*/
 let functions = {
@@ -26,7 +26,9 @@ let functions = {
         //return "0x"+hex;
         return hex;
     },
-
+    hexToDec: function(hex) {
+       return Number(hex)
+    },
     regElements: function() {
         let el_reg =  new Array(16).fill(0)
         for (let i = 0; i<16; i++) {
@@ -112,7 +114,11 @@ let cpu = {
         }
     },
     decode: function(op) {
-        return [opCodeList[op].bytes,opCodeList[op].cycles]
+        if(opCodeList[op]) {
+            return [opCodeList[op].bytes, opCodeList[op].cycles]
+        } else {
+            return [1, 1]
+        }
     },
     execute: function(inst) {
         switch (inst[0]) {
@@ -175,8 +181,7 @@ let cpu = {
                 break
             }
             case 8: { //RFS
-                let returnAddress = functions.convert8to16(memory.data[this.registers.sp-2],memory.data[this.registers.sp-1])
-                this.registers.pc = returnAddress
+                this.registers.pc = functions.convert8to16(memory.data[this.registers.sp-2],memory.data[this.registers.sp-1])
                 this.registers.sp-=2
                 control.debug.push({text:"Returned"})
                 break
@@ -265,15 +270,35 @@ let control = {
     el_aluReg2: document.getElementById("aluReg2"),
     el_aluReg3: document.getElementById("aluReg3"),
     el_allMem: document.getElementById("memAllValues"),
+    el_memUsage: document.getElementById("memUsage"),
+    el_memVal: document.getElementById("memVal"),
+    el_memValHex: document.getElementById("memValHex"),
+    el_btnToggleCpu: document.getElementById("btnToggleCpu"),
+    el_setCpuClock: document.getElementById("setCpuClock"),
     startCpu: function() {
+        cpu.init()
         run = setInterval(cpu.compute, clock)
         cpu.status="Executing"
+        this.el_btnToggleCpu.innerText = "Stop"
         control.updateHTML() //update screen
     },
     stopCpu: function() {
         clearInterval(run)
         cpu.status="Stopped"
+        this.el_btnToggleCpu.innerText = "Start"
         control.updateHTML() //update screen
+    },
+    toggleCpu: function() {
+        clockHz = this.el_setCpuClock.value
+        clock = 1 / clockHz * 1000
+        cpuSecondInfo = "Clock:"+clockHz+"hz Ram:"+(memory.memorySize/1024)+"kB"
+        control.updateHTMLStart()
+      if (cpu.status==="Executing")  {
+          this.stopCpu()
+      } else {
+          this.startCpu()
+      }
+
     },
     reset: function(){
         cpu.init() //reset registers
@@ -292,8 +317,6 @@ let control = {
     updateHTML: function() {
         if ((cpu.timeA-cpu.timeD)>16) {
             this.el_cpuStatus.innerHTML = cpu.status
-            this.el_programCounter.innerHTML = cpu.registers.pc
-            this.el_stackPointer.innerHTML = cpu.registers.sp
             let clock = Math.round(1 / cpu.timeC* 1000)
             if (clock=="Infinity") { clock=0 }
             this.el_clockSpeed.innerHTML = clock
@@ -333,7 +356,23 @@ let control = {
     },
     clearMemoryValuesHTML: function(){
         this.el_allMem.innerHTML = ""
-    }
+    },
+    getMemoryUsage: function() {
+        let memorySize = memory.memorySize
+        for (let i=0; i<memory.memorySize; i++) {
+            if (memory.data[i]!==0) {
+                memorySize--
+            }
+        }
+        this.el_memUsage.innerHTML = (memory.memorySize-memorySize) +"/"+ memory.memorySize
+    },
+    getMemoryValue: function() {
+        let getValue = functions.hexToDec(document.getElementById("input_GetMemVal").value)
+        document.getElementById("input_GetMemVal").value = "0x"
+        this.el_memVal.innerHTML = memory.data[getValue]
+        this.el_memValHex.innerHTML = "0x"+functions.decimalToHex(memory.data[getValue],2)
+    },
+
 }
 
 /*----------Op Codes List-------------*/
@@ -393,7 +432,7 @@ control.updateHTMLStart()
 let clock = 1 / clockHz * 1000
 let run //Interval
 
-control.startCpu() //only for debugging?
+//control.startCpu() //only for debugging?
 
 //----------------------------------------------------------------------TEST ONLY
 memory.data[300]=5  //(44,1)
