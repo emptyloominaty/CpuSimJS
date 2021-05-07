@@ -3,7 +3,7 @@
 let assembler = {
     functions: functions,
     assembly: function() {
-        memory.init() //remove all memory data
+        control.reset() //remove all memory data + cpu reset
         let code = document.getElementById("codeEditor").value
         code = code.replace(/;.*?;/g, ""); //comments
         code = code.split("\n")
@@ -54,7 +54,7 @@ let assembler = {
         for (const key of Object.keys(vars)) {
             vars[key].memAddress = (varsAddress + vars[key].address)
             //write var to memory
-            memory.data[vars[key].memAddress] = vars[key].value
+            memRom.data[vars[key].memAddress] = vars[key].value
         }
 
         //write instructions to memory
@@ -67,22 +67,21 @@ let assembler = {
 
             for (let j = 0; j<instBytes; j++)
                 if (j===0) { //op
-                    memory.data[memAddress+j] =  opCode
-                    console.log(memory.data[memAddress+j])
+                    memRom.data[memAddress+j] =  opCode
                 } else if (!isNaN(instructions[i]["val"+j])){ //reg
-                    memory.data[memAddress+j] =  instructions[i]["val"+j]
+                    memRom.data[memAddress+j] =  instructions[i]["val"+j]
                 } else if (opC!=="jsr" && opC!=="jg" && opC!=="jng" && opC!=="jl" && opC!=="jnl" && opC!=="je" && opC!=="jne" && opC!=="jmp") { //mem
                     let memVar = vars[instructions[i]["val"+j]].memAddress
                     memVar = this.functions.convert16to8(memVar)
-                    memory.data[memAddress+j] =  memVar[0]
+                    memRom.data[memAddress+j] =  memVar[0]
                     j++
-                    memory.data[memAddress+j] =  memVar[1]
+                    memRom.data[memAddress+j] =  memVar[1]
                 } else {  //function (jumps)
                     let jumpAddress = functions[instructions[i]["val"+j]].memAddress
                     jumpAddress = this.functions.convert16to8(jumpAddress)
-                    memory.data[memAddress+j] = jumpAddress[0]
+                    memRom.data[memAddress+j] = jumpAddress[0]
                     j++
-                    memory.data[memAddress+j] = jumpAddress[1]
+                    memRom.data[memAddress+j] = jumpAddress[1]
                 }
 
 

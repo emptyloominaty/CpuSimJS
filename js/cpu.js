@@ -1,0 +1,230 @@
+importScripts('opcodes.js');
+importScripts('functions.js');
+
+let run
+let memorySize = 65536 //bytes
+let clock = 200
+
+let cpu = {
+    timeA: 0,
+    timeB: 0,
+    timeC: 0,
+    timeD: 0,
+
+    bit: 16,
+    maxPc:  Math.pow(2, this.bit),
+    cpuData: {op:0,decoded:0,bytes:0,cycles:0,instructionCache:0,inst:0,phase:0,bytesLeft:0,fetchI:1,cyclesI:0},
+    registers: {},
+    init: function() {
+        cpu.createRegisters()
+    },
+    compute: function() {
+        cpu.timeA = Date.now()
+        cpu.timeC = (cpu.timeA-cpu.timeB)
+        cpu.timeB = Date.now()
+
+        let phase = cpu.cpuData.phase
+        if (phase===0) {
+            cpu.fetchStart()
+        } else if (phase===1) {
+            cpu.fetchBytes()
+        } else if (phase===2) {
+            if (cpu.cpuData.cyclesI>0) {
+                cpu.cpuData.cyclesI--
+            }
+            if (cpu.cpuData.cyclesI===0) {
+                cpu.cpuData.phase++
+            }
+        } else if (phase===3) {
+            let inst = cpu.cpuData.instructionCache
+            cpu.execute(inst)
+        }
+
+        cpu.sendDataToMainThread()
+    },
+    fetchStart: function() {
+        //fetch first byte (opcode)
+        cpu.cpuData.op = memory.data[cpu.registers.pc]
+        cpu.cpuData.decoded = cpu.decode(cpu.cpuData.op)
+        cpu.cpuData.bytes = cpu.cpuData.decoded[0]
+        cpu.cpuData.cycles = cpu.cpuData.decoded[1]
+        cpu.cpuData.bytesLeft = cpu.cpuData.bytes
+        cpu.cpuData.cyclesI = cpu.cpuData.cycles-cpu.cpuData.bytes
+
+        cpu.cpuData.instructionCache = new Array(5).fill(0)
+        cpu.registers.pc++
+
+        // save opcode to [0]
+        cpu.cpuData.instructionCache[0] = cpu.cpuData.op
+        console.log("OP: "+cpu.cpuData.op+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp) //test
+
+        cpu.cpuData.phase++
+    },
+    fetchBytes: function() {
+        //fetch all bytes
+        if(cpu.cpuData.bytesLeft>1) {
+            cpu.cpuData.instructionCache[cpu.cpuData.fetchI] = memory.data[cpu.registers.pc]
+            cpu.registers.pc++
+            cpu.cpuData.fetchI++
+            cpu.cpuData.bytesLeft--
+        } else {
+            cpu.cpuData.phase++
+            cpu.cpuData.fetchI=1
+        }
+        if (cpu.registers.pc>cpu.maxPc) {
+            cpu.registers.pc = 256
+        }
+    },
+    decode: function(op) {
+        if(opCodeList[op]) {
+            return [opCodeList[op].bytes, opCodeList[op].cycles]
+        } else {
+            return [1, 1]
+        }
+    },
+    execute: function(inst) {
+        switch (inst[0]) {
+            case 0: {//NOP
+                break
+            }
+            case 1: { //ADD
+                this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])
+                this.setFlags(this.registers["r" + inst[3]])
+                if(this.registers.flags.C===true) {
+                    this.registers["r" + inst[3]]=(this.registers["r" + inst[3]]-32768)
+                }
+                break
+            }
+            case 2: { //SUB
+                this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] - this.registers["r" + inst[2]])
+                this.setFlags(this.registers["r" + inst[3]])
+                break
+            }
+            case 3: { //LD
+                let memoryAddress = functions.convert8to16(inst[2],inst[3])
+                let byte1 = memory.data[memoryAddress]
+                let byte2 = memory.data[memoryAddress+1]
+                this.registers["r"+inst[1]] = functions.convert8to16(byte1,byte2)
+                break
+            }
+            case 4: {//ST
+                let memoryAddress = functions.convert8to16(inst[2], inst[3])
+                let bytes = functions.convert16to8(this.registers["r" + inst[1]])
+                memory.data[memoryAddress] = bytes[0]
+                memory.data[memoryAddress+1] = bytes[1]
+                break
+            }
+            case 5: { //LDI
+                let value = functions.convert8to16(inst[2],inst[3])
+                this.registers["r"+inst[1]] = value
+                break
+            }
+            case 6: { //JMP
+                let value = functions.convert8to16(inst[1],inst[2])
+                this.registers.pc = value
+                break
+            }
+            case 7: { //JSR
+                let value = functions.convert8to16(inst[1],inst[2])
+                let pcBytes = functions.convert16to8(this.registers.pc)
+                memory.data[this.registers.sp] = pcBytes[0] //low
+                this.registers.sp++
+                memory.data[this.registers.sp] = pcBytes[1] //high
+                this.registers.sp++
+                this.registers.pc = value
+                break
+            }
+            case 8: { //RFS
+                this.registers.pc = functions.convert8to16(memory.data[this.registers.sp-2],memory.data[this.registers.sp-1])
+                this.registers.sp-=2
+                break
+            }
+            case 9: { //INC
+                this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] + 1)
+                break
+            }
+            case 10: { //DEC
+                this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] - 1)
+                break
+            }
+            case 11: { //ADC
+                if (this.registers.flags.C) {
+                    this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])+1
+                } else {
+                    this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])
+                }
+                this.setFlags(this.registers["r" + inst[3]])
+                if(this.registers.flags.C===true) {
+                    this.registers["r" + inst[3]]=(this.registers["r" + inst[3]]-32768)
+                }
+                break
+            }
+            case 15: { //SHL
+                this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] << 1)
+                this.setFlags(this.registers["r" + inst[1]])
+                break
+            }
+            case 16: { //SHR
+                this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] >> 1)
+                this.setFlags(this.registers["r" + inst[1]])
+                break
+            }
+
+
+            case 37: { //STOP
+                cpu.timeC=cpu.timeA
+                cpu.sendDataToMainThread()
+                postMessage("stop")
+                close()
+                break
+            }
+        }
+        //reset cpu phase after execute
+        cpu.cpuData.phase=0
+    },
+    setFlags: function(input) {
+        this.registers.flags.Z = (input===0)
+        this.registers.flags.N = (input<0)
+        this.registers.flags.C = (input>32767)
+    },
+    createRegisters: function() {
+        this.registers = {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:256, flags:{N:false,O:false,Z:false,C:false}}
+    },
+    sendDataToMainThread: function() {
+        let postMsgData = {data:"data", registers:this.registers, memory: memory.data, timeA:this.timeA, timeB:this.timeB, timeC:this.timeC, timeD:this.timeD, cpuData:this.cpuData}
+        postMsgData = JSON.parse(JSON.stringify(postMsgData))
+        postMessage(postMsgData)
+    }
+}
+
+/*----------MEMORY-------------*/
+let memory = {
+    data: [],
+    init: function() {
+        this.data = new Array(memorySize).fill(0)
+    }
+}
+
+
+self.addEventListener('message', function(e) {
+    switch(e.data.data) {
+        case "start": {
+            memory.data = e.data.memory
+            clock = e.data.clock
+            run = setInterval(cpu.compute,clock)
+            break
+        }
+        case "reset": {
+            cpu.init()
+            memory.init()
+            break
+        }
+    }
+
+    self.postMessage(e.data);
+}, false);
+
+
+cpu.init()
+memory.init()
+//run = setInterval(cpu.compute,clock)

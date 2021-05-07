@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMP Cpu</title>
     <link rel="stylesheet" type="text/css" href="styles/style.css">
+
+    <script src="js/opcodes.js" defer></script>
+    <script src="js/functions.js" defer></script>
+    <script src="js/main.js" defer></script>
+    <script src="js/assembler.js" defer></script>
+
 </head>
 <body>
     <div class="deleteThis">
@@ -13,7 +19,7 @@
     </div>
 
     <div id="app">
-        <!--START/STOP Button + clock (1-250hz) -->
+        <!--START/STOP Button + clock -->
         <div class="wrapper3" id="first">
             <button id="btnToggleCpu" onclick="control.toggleCpu()" > Start </button>
             <input id="setCpuClock" type="number" max="250" min="1" autocomplete="off" value="25" >
@@ -126,9 +132,6 @@
             </div>
         </div>
     </div>
-    <script src="js/init.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/assembler.js"></script>
 
 </body>
 </html>
