@@ -172,9 +172,9 @@ let cpu = {
 
 
             case 37: { //STOP
+                postMessage("stop")
                 cpu.timeC=cpu.timeA
                 cpu.sendDataToMainThread()
-                postMessage("stop")
                 close()
                 break
             }
@@ -191,7 +191,6 @@ let cpu = {
         this.registers = {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:256, flags:{N:false,O:false,Z:false,C:false}}
     },
     sendDataToMainThread: function() {
-        console.log(this.registers)
         let postMsgData = {data:"data", registers:this.registers, memory: memory.data, timeA:this.timeA, timeB:this.timeB, timeC:this.timeC, timeD:this.timeD, cpuData:this.cpuData}
         postMsgData = JSON.parse(JSON.stringify(postMsgData))
         postMessage(postMsgData)

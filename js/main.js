@@ -53,7 +53,7 @@ let control = {
         cpuThread.postMessage('Hello World');
 
         cpuThread.addEventListener('message', function(e) {
-            //console.log('Worker said: ', e.data);
+            console.log('Worker said: ', e.data);
             switch (e.data.data) {
                 case "data": {
                     control.registers = e.data.registers
@@ -67,7 +67,9 @@ let control = {
                     break
                 }
                 case "stop": {
+                    control.status = "Stopped",
                     control.stopCpu()
+                    console.log("HELP")
                 }
             }
         }, false);
@@ -76,9 +78,9 @@ let control = {
     },
     stopCpu: function() {
         cpuThread.terminate()
-        this.status="Stopped"
+        control.status="Stopped"
         this.el_btnToggleCpu.innerText = "Start"
-        control.updateHTML() //update screen
+        control.updateHTML(1) //update screen
         cpuThread="undefined"
     },
     toggleCpu: function() {
@@ -102,8 +104,8 @@ let control = {
     printRegisters: function() {
         console.log(this.registers)
     },
-    updateHTML: function() {
-        if ((this.timeA-this.timeD)>16) {
+    updateHTML: function(forced=0) {
+        if (((this.timeA-this.timeD)>HTMLRefreshRate) || forced === 1) {
 
             this.el_cpuStatus.innerHTML = this.status
             let clock = Math.round(1 / this.timeC* 1000)
@@ -119,7 +121,6 @@ let control = {
         this.el_cpuInfoSecond.innerHTML = cpuSecondInfo
     },
     updateHTMLRegisters: function() {
-        console.log(this.registers)
         for (let i = 0; i<16; i++) {
             this.el_regs[i].innerHTML=this.registers["r"+i]
         }
