@@ -119,6 +119,7 @@ let control = {
         this.el_cpuInfoSecond.innerHTML = cpuSecondInfo
     },
     updateHTMLRegisters: function() {
+        console.log(this.registers)
         for (let i = 0; i<16; i++) {
             this.el_regs[i].innerHTML=this.registers["r"+i]
         }

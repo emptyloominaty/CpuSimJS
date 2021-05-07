@@ -1,6 +1,6 @@
 /*----------functions-------------*/
 let functions = {
-    convert8to16 : function(byteB,byteA) {
+    convert8to16 : function(byteA,byteB) {
         let result = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
         let sign = byteA & (1 << 7)
         let x = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
@@ -12,7 +12,7 @@ let functions = {
     convert16to8 : function(firstNumber) {
         let high = ((firstNumber >> 8) & 0xff)
         let low = firstNumber & 0xff
-        return [low,high]
+        return [high,low]
     },
     decimalToHex: function(d, padding) {
         let hex = Number(d).toString(16);

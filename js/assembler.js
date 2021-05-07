@@ -54,7 +54,9 @@ let assembler = {
         for (const key of Object.keys(vars)) {
             vars[key].memAddress = (varsAddress + vars[key].address)
             //write var to memory
-            memRom.data[vars[key].memAddress] = vars[key].value
+            let varbytes = this.functions.convert16to8(vars[key].value)
+            memRom.data[vars[key].memAddress] = varbytes[0]
+            memRom.data[vars[key].memAddress+1] = varbytes[1]
         }
 
         //write instructions to memory

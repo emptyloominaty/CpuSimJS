@@ -39,6 +39,7 @@ let cpu = {
             let inst = cpu.cpuData.instructionCache
             cpu.execute(inst)
         }
+        //console.log("OP: "+cpu.cpuData.op+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp+" | | | "+cpu.cpuData.instructionCache[1]+" | "+cpu.cpuData.instructionCache[2]+" | "+cpu.cpuData.instructionCache[3]) //test
 
         cpu.sendDataToMainThread()
     },
@@ -56,7 +57,6 @@ let cpu = {
 
         // save opcode to [0]
         cpu.cpuData.instructionCache[0] = cpu.cpuData.op
-        console.log("OP: "+cpu.cpuData.op+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp) //test
 
         cpu.cpuData.phase++
     },
@@ -127,9 +127,9 @@ let cpu = {
             case 7: { //JSR
                 let value = functions.convert8to16(inst[1],inst[2])
                 let pcBytes = functions.convert16to8(this.registers.pc)
-                memory.data[this.registers.sp] = pcBytes[0] //low
+                memory.data[this.registers.sp] = pcBytes[0]
                 this.registers.sp++
-                memory.data[this.registers.sp] = pcBytes[1] //high
+                memory.data[this.registers.sp] = pcBytes[1]
                 this.registers.sp++
                 this.registers.pc = value
                 break
@@ -191,6 +191,7 @@ let cpu = {
         this.registers = {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:256, flags:{N:false,O:false,Z:false,C:false}}
     },
     sendDataToMainThread: function() {
+        console.log(this.registers)
         let postMsgData = {data:"data", registers:this.registers, memory: memory.data, timeA:this.timeA, timeB:this.timeB, timeC:this.timeC, timeD:this.timeD, cpuData:this.cpuData}
         postMsgData = JSON.parse(JSON.stringify(postMsgData))
         postMessage(postMsgData)
