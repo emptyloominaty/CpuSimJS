@@ -56,11 +56,10 @@ let cpu = {
         cpu.createRegisters()
     },
     compute: function() {
-        //TEST start
         cpu.timeA = Date.now()
         cpu.timeC = (cpu.timeA-cpu.timeB)
         cpu.timeB = Date.now()
-        //TEST end
+
         let phase = cpu.cpuData.phase
         if (phase===0) {
             cpu.fetchStart()
@@ -123,7 +122,6 @@ let cpu = {
     execute: function(inst) {
         switch (inst[0]) {
             case 0: {//NOP
-                control.debug.push({text:"No Operation"})
                 break
             }
             case 1: { //ADD
@@ -132,13 +130,11 @@ let cpu = {
                 if(this.registers.flags.C===true) {
                     this.registers["r" + inst[3]]=(this.registers["r" + inst[3]]-32768)
                 }
-                control.debug.push({text:"  r"+inst[1]+"("+this.registers["r" + inst[1]]+") +" +" r"+inst[2]+"("+this.registers["r" + inst[2]]+") = "+"r" + inst[3]+"("+this.registers["r" + inst[3]]+")"})
                 break
             }
             case 2: { //SUB
                 this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] - this.registers["r" + inst[2]])
                 this.setFlags(this.registers["r" + inst[3]])
-                control.debug.push({text:" r"+inst[1]+"("+this.registers["r" + inst[1]]+") -" +" r"+inst[2]+"("+this.registers["r" + inst[2]]+") = "+"r" + inst[3]+"("+this.registers["r" + inst[3]]+")"})
                 break
             }
             case 3: { //LD
@@ -146,7 +142,6 @@ let cpu = {
                 let byte1 = memory.data[memoryAddress]
                 let byte2 = memory.data[memoryAddress+1]
                 this.registers["r"+inst[1]] = functions.convert8to16(byte1,byte2)
-                control.debug.push({text:"Loaded data from mem"+memoryAddress+" to r"+inst[1]})
                 break
             }
             case 4: {//ST
@@ -154,19 +149,16 @@ let cpu = {
                 let bytes = functions.convert16to8(this.registers["r" + inst[1]])
                 memory.data[memoryAddress] = bytes[0]
                 memory.data[memoryAddress+1] = bytes[1]
-                control.debug.push({text:"Stored data from r"+inst[1]+" to mem"+ memoryAddress})
                 break
             }
             case 5: { //LDI
                 let value = functions.convert8to16(inst[2],inst[3])
                 this.registers["r"+inst[1]] = value
-                control.debug.push({text:"Loaded data "+value+" to r"+inst[1]})
                 break
             }
             case 6: { //JMP
                 let value = functions.convert8to16(inst[1],inst[2])
                 this.registers.pc = value
-                control.debug.push({text:"Jumped to "+value})
                 break
             }
             case 7: { //JSR
@@ -177,23 +169,19 @@ let cpu = {
                 memory.data[this.registers.sp] = pcBytes[1] //high
                 this.registers.sp++
                 this.registers.pc = value
-                control.debug.push({text:"Jumped to "+value})
                 break
             }
             case 8: { //RFS
                 this.registers.pc = functions.convert8to16(memory.data[this.registers.sp-2],memory.data[this.registers.sp-1])
                 this.registers.sp-=2
-                control.debug.push({text:"Returned"})
                 break
             }
             case 9: { //INC
                 this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] + 1)
-                control.debug.push({text:"  r"+inst[1]+"("+this.registers["r" + inst[1]]+") +1"})
                 break
             }
             case 10: { //DEC
                 this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] - 1)
-                control.debug.push({text:"  r"+inst[1]+"("+this.registers["r" + inst[1]]+") -1"})
                 break
             }
             case 11: { //ADC
@@ -206,19 +194,16 @@ let cpu = {
                 if(this.registers.flags.C===true) {
                     this.registers["r" + inst[3]]=(this.registers["r" + inst[3]]-32768)
                 }
-                control.debug.push({text:"(C)  r"+inst[1]+"("+this.registers["r" + inst[1]]+") +" +" r"+inst[2]+"("+this.registers["r" + inst[2]]+") = "+"r" + inst[3]+"("+this.registers["r" + inst[3]]+")"})
                 break
             }
             case 15: { //SHL
                 this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] << 1)
                 this.setFlags(this.registers["r" + inst[1]])
-                control.debug.push({text:"Shifted  r"+inst[1]+" Left"})
                 break
             }
             case 16: { //SHR
                 this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] >> 1)
                 this.setFlags(this.registers["r" + inst[1]])
-                control.debug.push({text:"Shifted  r"+inst[1]+" Right"})
                 break
             }
 
@@ -226,8 +211,6 @@ let cpu = {
             case 255: { //STOP
                 control.stopCpu()
                 cpu.timeC=cpu.timeA
-                control.debug.push({text:"Cpu Stopped"})
-                control.printDebug()
                 break
             }
         }
@@ -303,13 +286,6 @@ let control = {
     reset: function(){
         cpu.init() //reset registers
         memory.init() //reset ram
-    },
-    debug: [],
-    printDebug: function() {
-        let loop = Object.keys(this.debug).length
-        for (let i = 0; i<loop; i++) {
-            console.log(this.debug[i].text)
-        }
     },
     printRegisters: function() {
             console.log(cpu.registers)
@@ -419,7 +395,7 @@ let opCodeList = {
     35: {bytes:3,name:"AD2",cycles:4},  //TODO:Add but A=A+B
     36: {bytes:3,name:"SU2",cycles:4},  //TODO:Sub but A=A-B
 
-    255: {bytes:1,name:"STOP",cycles:1},
+    37: {bytes:1,name:"STOP",cycles:1},
 }
 
 
@@ -545,7 +521,7 @@ memory.data[342]=8
 memory.data[339]=8
 
 //stop
-memory.data[283]=255
+memory.data[283]=37
 
 //----------------------------------------------------------------------TEST ONLY
 
