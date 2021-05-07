@@ -208,7 +208,7 @@ let cpu = {
             }
 
 
-            case 255: { //STOP
+            case 37: { //STOP
                 control.stopCpu()
                 cpu.timeC=cpu.timeA
                 break
