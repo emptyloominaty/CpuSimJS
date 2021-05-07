@@ -1,6 +1,7 @@
 //config
 let clockHz = 25
 
+
 /*----------functions-------------*/
 let functions = {
     convert8to16 : function(byteB,byteA) {
@@ -351,6 +352,7 @@ let control = {
 
 }
 
+
 /*----------Op Codes List-------------*/
 let opCodeList = {
     0: {bytes:1,name:"NOP",cycles:1},   //No operation
@@ -411,6 +413,7 @@ let run //Interval
 //control.startCpu() //only for debugging?
 
 //----------------------------------------------------------------------TEST ONLY
+/*
 memory.data[300]=5  //(44,1)
 memory.data[301]=0  //(45,1)
 memory.data[302]=48  //(46,1)
@@ -522,7 +525,7 @@ memory.data[339]=8
 
 //stop
 memory.data[283]=37
-
+*/
 //----------------------------------------------------------------------TEST ONLY
 
 //console log tests
