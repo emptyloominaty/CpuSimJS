@@ -17,30 +17,31 @@ let opCodeList = {
     14: {bytes:2,name:"ROR",cycles:3},  //Rotate Right
     15: {bytes:2,name:"SLL",cycles:3},  //Shift Logical Left
     16: {bytes:2,name:"SLR",cycles:3},  //Shift Logical Right
-    17: {bytes:3,name:"TR",cycles:4},   //TODO:Transfer Register to Register
-    18: {bytes:1,name:"TRS",cycles:2},  //TODO:Transfer Register(r15) to Stack Pointer
-    19: {bytes:1,name:"TSR",cycles:2},  //TODO:Transfer Stack pointer to Register(r15)
-    20: {bytes:2,name:"PSH",cycles:4},  //TODO:Push to stack
-    21: {bytes:2,name:"POP",cycles:4},  //TODO:Pop from stack
-    22: {bytes:4,name:"AND",cycles:5},  //TODO:Logical AND
-    23: {bytes:4,name:"OR",cycles:5},   //TODO:Logical OR
-    24: {bytes:4,name:"XOR",cycles:5},  //TODO:Logical XOR
+    17: {bytes:3,name:"TRR",cycles:4},  //Transfer Register to Register 1->2
+    18: {bytes:1,name:"TRS",cycles:2},  //Transfer Register(r15) to Stack Pointer
+    19: {bytes:1,name:"TSR",cycles:2},  //Transfer Stack pointer to Register(r15)
+    20: {bytes:2,name:"PSH",cycles:4},  //Push to stack
+    21: {bytes:2,name:"POP",cycles:4},  //Pop from stack
+    22: {bytes:4,name:"AND",cycles:5},  //Logical AND
+    23: {bytes:4,name:"OR",cycles:5},   //Logical OR
+    24: {bytes:4,name:"XOR",cycles:5},  //Logical XOR
 
-    25: {bytes:5,name:"JG",cycles:7},    //TODO:Conditional Jump if greater
-    26: {bytes:5,name:"JL",cycles:7},    //TODO:Conditional Jump if less
-    27: {bytes:5,name:"JNG",cycles:7},   //TODO:Conditional Jump if not greater
-    28: {bytes:5,name:"JNL",cycles:7},   //TODO:Conditional Jump if not less
-    29: {bytes:5,name:"JE",cycles:7},    //TODO:Conditional Jump if equal
-    30: {bytes:5,name:"JNE",cycles:7},   //TODO:Conditional Jump if not equal
+    25: {bytes:5,name:"JG",cycles:7},   //TODO:Conditional Jump if greater
+    26: {bytes:5,name:"JL",cycles:7},   //TODO:Conditional Jump if less
+    27: {bytes:5,name:"JNG",cycles:7},  //TODO:Conditional Jump if not greater
+    28: {bytes:5,name:"JNL",cycles:7},  //TODO:Conditional Jump if not less
+    29: {bytes:5,name:"JE",cycles:7},   //TODO:Conditional Jump if equal
+    30: {bytes:5,name:"JNE",cycles:7},  //TODO:Conditional Jump if not equal
 
-    31: {bytes:4,name:"MUL",cycles:12},  //TODO:Multiply
-    32: {bytes:4,name:"DIV",cycles:35},  //TODO:Divide
+    31: {bytes:4,name:"MUL",cycles:12}, //TODO:Multiply
+    32: {bytes:4,name:"DIV",cycles:35}, //TODO:Divide
 
-    33: {bytes:1,name:"TRP",cycles:2},  //TODO:Transfer Register(r14) to Program Counter
-    34: {bytes:1,name:"TPR",cycles:2},  //TODO:Transfer Program Counter to Register(r14)
+    33: {bytes:1,name:"TRP",cycles:2},  //Transfer Register(r14) to Program Counter
+    34: {bytes:1,name:"TPR",cycles:2},  //Transfer Program Counter to Register(r14)
 
     35: {bytes:3,name:"AD2",cycles:4},  //TODO:Add but A=A+B
     36: {bytes:3,name:"SU2",cycles:4},  //TODO:Sub but A=A-B
     37: {bytes:1,name:"STOP",cycles:1},
     38: {bytes:2,name:"SAR",cycles:3},  //Shift Arithmetic Right
+    39: {bytes:2,name:"NOT",cycles:3},  //Logical NOT
 }

@@ -1,4 +1,10 @@
 /*----------functions-------------*/
+let convertTo16Signed = function(data) {
+    if(data > 32767) {data = data - 65536}
+    return data
+}
+
+
 let functions = {
     convert8to16 : function(byteA,byteB) {
         let result = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
@@ -44,7 +50,7 @@ const bitwiseRotation = bitWidth => {
             const rotation = maskedRotation(r)
             let data = (value >>> rotation) |
                 ((value << (bitWidth - rotation)) & bitMask)
-            if(data > 32767) {data = data - 65536}
+            data = convertTo16Signed(data)
             return (
                 data
             )
@@ -53,7 +59,7 @@ const bitwiseRotation = bitWidth => {
             const rotation = maskedRotation(r)
             let data =     ((value << rotation) & bitMask) |
                 (value >>> (bitWidth - rotation))
-            if(data > 32767) {data = data - 65536}
+            data = convertTo16Signed(data)
             return (
                 data
             )

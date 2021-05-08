@@ -88,7 +88,9 @@ let cpu = {
                 break
             }
             case 1: { //ADD
-                this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])
+                let output = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[3]] = output
                 this.setFlags(this.registers["r" + inst[3]])
                 if(this.registers.flags.C===true) {
                     this.registers["r" + inst[3]]=(this.registers["r" + inst[3]]-32768)
@@ -96,7 +98,9 @@ let cpu = {
                 break
             }
             case 2: { //SUB
-                this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] - this.registers["r" + inst[2]])
+                let output = (this.registers["r" + inst[1]] - this.registers["r" + inst[2]])
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[3]] = output
                 this.setFlags(this.registers["r" + inst[3]])
                 break
             }
@@ -140,19 +144,28 @@ let cpu = {
                 break
             }
             case 9: { //INC
-                this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] + 1)
+                let output = (this.registers["r" + inst[1]] + 1)
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[1]] = output
+                this.setFlags(this.registers["r" + inst[1]])
                 break
             }
             case 10: { //DEC
-                this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] - 1)
+                let output = (this.registers["r" + inst[1]] - 1)
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[1]] = output
+                this.setFlags(this.registers["r" + inst[1]])
                 break
             }
             case 11: { //ADC
+                let output = 0
                 if (this.registers.flags.C) {
-                    this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])+1
+                    output =  (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])+1
                 } else {
-                    this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])
+                    output =  (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])
                 }
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[3]] = output
                 cpu.setFlags(this.registers["r" + inst[3]])
                 if(this.registers.flags.C===true) {
                     this.registers["r" + inst[3]]=(this.registers["r" + inst[3]]-32768)
@@ -180,9 +193,66 @@ let cpu = {
                 this.setFlags(this.registers["r" + inst[1]])
                 break
             }
+            case 17: { //TRR
+                this.registers["r" + inst[2]] = this.registers["r" + inst[1]]
+                    this.setFlags(this.registers["r" + inst[1]])
+                break
+            }
+            case 18: { //TRS
+                this.registers["sp"] = this.registers["r15"]
+                break
+            }
+            case 19: { //TSR
+                this.registers["r15"] = this.registers["sp"]
+                break
+            }
+            case 20: { //PSH
+                let stackBytes = functions.convert16to8(this.registers["r" + inst[1]])
+                memory.data[this.registers.sp] = stackBytes[0]
+                this.registers.sp++
+                memory.data[this.registers.sp] = stackBytes[1]
+                this.registers.sp++
+                break
+            }
+            case 21: { //POP
+                this.registers["r" + inst[1]] = functions.convert8to16(memory.data[this.registers.sp-2],memory.data[this.registers.sp-1])
+                this.registers.sp-=2
+                break
+            }
+            case 22: { //AND
+                let output = (this.registers["r" + inst[1]] & this.registers["r" + inst[2]])
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[3]] = output
+                this.setFlags(this.registers["r" + inst[3]])
+                break
+            }
+            case 23: { //OR
+                let output = (this.registers["r" + inst[1]] | this.registers["r" + inst[2]])
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[3]] = output
+                this.setFlags(this.registers["r" + inst[3]])
+                break
+            }
+            case 24: { //XOR
+                let output = (this.registers["r" + inst[1]] ^ this.registers["r" + inst[2]])
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[3]] = output
+                this.setFlags(this.registers["r" + inst[3]])
+                break
+            }
 
 
 
+
+
+            case 33: { //TRP
+                this.registers["pc"] = this.registers["r14"]
+                break
+            }
+            case 34: { //TPR
+                this.registers["r14"] = this.registers["pc"]
+                break
+            }
 
 
             case 37: { //STOP
@@ -197,6 +267,13 @@ let cpu = {
                 this.setFlags(this.registers["r" + inst[1]])
                 break
             }
+            case 39: { //NOT
+                let output = (~ this.registers["r" + inst[1]])
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[1]] = output
+                this.setFlags(this.registers["r" + inst[1]])
+                break
+            }
         }
         //reset cpu phase after execute
         cpu.cpuData.phase=0
@@ -205,7 +282,6 @@ let cpu = {
         this.registers.flags.Z = (input===0)
         this.registers.flags.N = (input<0)
         this.registers.flags.C = (input>32767)
-        console.log(input)
     },
     createRegisters: function() {
         this.registers = {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:256, flags:{N:false,O:false,Z:false,C:false}}
