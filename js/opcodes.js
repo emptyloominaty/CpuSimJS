@@ -26,14 +26,14 @@ let opCodeList = {
     23: {bytes:4,name:"OR",cycles:5},   //Logical OR
     24: {bytes:4,name:"XOR",cycles:5},  //Logical XOR
 
-    25: {bytes:5,name:"JG",cycles:7},   //TODO:Conditional Jump if greater
-    26: {bytes:5,name:"JL",cycles:7},   //TODO:Conditional Jump if less
-    27: {bytes:5,name:"JNG",cycles:7},  //TODO:Conditional Jump if not greater
-    28: {bytes:5,name:"JNL",cycles:7},  //TODO:Conditional Jump if not less
-    29: {bytes:5,name:"JE",cycles:7},   //TODO:Conditional Jump if equal
-    30: {bytes:5,name:"JNE",cycles:7},  //TODO:Conditional Jump if not equal
+    25: {bytes:5,name:"JG",cycles:7},   //Conditional Jump if greater
+    26: {bytes:5,name:"JL",cycles:7},   //Conditional Jump if less
+    27: {bytes:5,name:"JNG",cycles:7},  //Conditional Jump if not greater
+    28: {bytes:5,name:"JNL",cycles:7},  //Conditional Jump if not less
+    29: {bytes:5,name:"JE",cycles:7},   //Conditional Jump if equal
+    30: {bytes:5,name:"JNE",cycles:7},  //Conditional Jump if not equal
 
-    31: {bytes:4,name:"MUL",cycles:12}, //TODO:Multiply
+    31: {bytes:4,name:"MUL",cycles:25}, //TODO:Multiply
     32: {bytes:4,name:"DIV",cycles:35}, //TODO:Divide
 
     33: {bytes:1,name:"TRP",cycles:2},  //Transfer Register(r14) to Program Counter
@@ -44,4 +44,6 @@ let opCodeList = {
     37: {bytes:1,name:"STOP",cycles:1},
     38: {bytes:2,name:"SAR",cycles:3},  //Shift Arithmetic Right
     39: {bytes:2,name:"NOT",cycles:3},  //Logical NOT
+    40: {bytes:3,name:"STR",cycles:4},  //TODO:Store to Address saved in Register
+
 }

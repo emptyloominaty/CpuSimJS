@@ -240,10 +240,42 @@ let cpu = {
                 this.setFlags(this.registers["r" + inst[3]])
                 break
             }
-
-
-
-
+            case 25: { //JG
+                if (this.registers["r" + inst[3]] > this.registers["r" + inst[4]]) {
+                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                }
+                break
+            }
+            case 26: { //JL
+                if (this.registers["r" + inst[3]] < this.registers["r" + inst[4]]) {
+                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                }
+                break
+            }
+            case 27: { //JNG
+                if (this.registers["r" + inst[3]] >! this.registers["r" + inst[4]]) {
+                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                }
+                break
+            }
+            case 28: { //JNL
+                if (this.registers["r" + inst[3]] <! this.registers["r" + inst[4]]) {
+                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                }
+                break
+            }
+            case 29: { //JE
+                if (this.registers["r" + inst[3]] === this.registers["r" + inst[4]]) {
+                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                }
+                break
+            }
+            case 30: { //JNE
+                if (this.registers["r" + inst[3]] !== this.registers["r" + inst[4]]) {
+                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                }
+                break
+            }
 
             case 33: { //TRP
                 this.registers["pc"] = this.registers["r14"]
