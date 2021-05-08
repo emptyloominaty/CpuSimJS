@@ -34,3 +34,37 @@ let functions = {
         return el_reg
     }
 }
+
+
+const bitwiseRotation = bitWidth => {
+    const bitMask = (2 ** bitWidth) - 1
+    const maskedRotation = (rotation) => rotation & (bitWidth - 1)
+    return {
+        ror: (value, r) => {
+            const rotation = maskedRotation(r)
+            let data = (value >>> rotation) |
+                ((value << (bitWidth - rotation)) & bitMask)
+            if(data > 32767) {data = data - 65536}
+            return (
+                data
+            )
+        },
+        rol: (value, r) => {
+            const rotation = maskedRotation(r)
+            let data =     ((value << rotation) & bitMask) |
+                (value >>> (bitWidth - rotation))
+            if(data > 32767) {data = data - 65536}
+            return (
+                data
+            )
+        },
+    }
+}
+
+//const { ror: rorInt8, rol: rolInt8 } = bitwiseRotation(8);
+const { ror: rorInt16, rol: rolInt16 } = bitwiseRotation(16)
+
+
+
+
+

@@ -153,22 +153,36 @@ let cpu = {
                 } else {
                     this.registers["r" + inst[3]] = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])
                 }
-                this.setFlags(this.registers["r" + inst[3]])
+                cpu.setFlags(this.registers["r" + inst[3]])
                 if(this.registers.flags.C===true) {
                     this.registers["r" + inst[3]]=(this.registers["r" + inst[3]]-32768)
                 }
                 break
             }
-            case 15: { //SHL
+            case 13: { //ROL
+                this.registers["r" + inst[1]] = rolInt16(this.registers["r" + inst[1]],1)
+                this.setFlags(this.registers["r" + inst[1]])
+                break
+            }
+            case 14: { //ROR
+                this.registers["r" + inst[1]] = rorInt16(this.registers["r" + inst[1]],1)
+                this.setFlags(this.registers["r" + inst[1]])
+                break
+            }
+
+            case 15: { //SLL
                 this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] << 1)
                 this.setFlags(this.registers["r" + inst[1]])
                 break
             }
-            case 16: { //SHR
-                this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] >> 1)
+            case 16: { //SLR
+                this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] >>> 1)
                 this.setFlags(this.registers["r" + inst[1]])
                 break
             }
+
+
+
 
 
             case 37: { //STOP
@@ -176,6 +190,11 @@ let cpu = {
                 cpu.timeC=cpu.timeA
                 cpu.sendDataToMainThread()
                 close()
+                break
+            }
+            case 38: { //SAR
+                this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] >> 1)
+                this.setFlags(this.registers["r" + inst[1]])
                 break
             }
         }
@@ -186,6 +205,7 @@ let cpu = {
         this.registers.flags.Z = (input===0)
         this.registers.flags.N = (input<0)
         this.registers.flags.C = (input>32767)
+        console.log(input)
     },
     createRegisters: function() {
         this.registers = {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:256, flags:{N:false,O:false,Z:false,C:false}}

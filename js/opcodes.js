@@ -11,12 +11,12 @@ let opCodeList = {
     8: {bytes:1,name:"RFS",cycles:6},   //Return From Subroutine
     9: {bytes:2,name:"INC",cycles:3},   //Increment by 1
     10: {bytes:2,name:"DEC",cycles:3},  //Decrement by 1
-    11: {bytes:4,name:"ADC",cycles:5},  //Add with Carry //TODO:FIX?
+    11: {bytes:4,name:"ADC",cycles:5},  //Add with Carry
     12: {bytes:4,name:"SUC",cycles:5},  //TODO:Subtract with Carry
-    13: {bytes:2,name:"ROL",cycles:3},  //TODO:Rotate Left
-    14: {bytes:2,name:"ROR",cycles:3},  //TODO:Rotate Right
-    15: {bytes:2,name:"SHL",cycles:3},  //Shift Left
-    16: {bytes:2,name:"SHR",cycles:3},  //Shift Right
+    13: {bytes:2,name:"ROL",cycles:3},  //Rotate Left
+    14: {bytes:2,name:"ROR",cycles:3},  //Rotate Right
+    15: {bytes:2,name:"SLL",cycles:3},  //Shift Logical Left
+    16: {bytes:2,name:"SLR",cycles:3},  //Shift Logical Right
     17: {bytes:3,name:"TR",cycles:4},   //TODO:Transfer Register to Register
     18: {bytes:1,name:"TRS",cycles:2},  //TODO:Transfer Register(r15) to Stack Pointer
     19: {bytes:1,name:"TSR",cycles:2},  //TODO:Transfer Stack pointer to Register(r15)
@@ -26,12 +26,12 @@ let opCodeList = {
     23: {bytes:4,name:"OR",cycles:5},   //TODO:Logical OR
     24: {bytes:4,name:"XOR",cycles:5},  //TODO:Logical XOR
 
-    25: {bytes:3,name:"JG",cycles:5},    //TODO:Conditional Jump if greater
-    26: {bytes:3,name:"JL",cycles:5},    //TODO:Conditional Jump if less
-    27: {bytes:3,name:"JNG",cycles:5},   //TODO:Conditional Jump if not greater
-    28: {bytes:3,name:"JNL",cycles:5},   //TODO:Conditional Jump if not less
-    29: {bytes:3,name:"JE",cycles:5},    //TODO:Conditional Jump if equal
-    30: {bytes:3,name:"JNE",cycles:5},   //TODO:Conditional Jump if not equal
+    25: {bytes:5,name:"JG",cycles:7},    //TODO:Conditional Jump if greater
+    26: {bytes:5,name:"JL",cycles:7},    //TODO:Conditional Jump if less
+    27: {bytes:5,name:"JNG",cycles:7},   //TODO:Conditional Jump if not greater
+    28: {bytes:5,name:"JNL",cycles:7},   //TODO:Conditional Jump if not less
+    29: {bytes:5,name:"JE",cycles:7},    //TODO:Conditional Jump if equal
+    30: {bytes:5,name:"JNE",cycles:7},   //TODO:Conditional Jump if not equal
 
     31: {bytes:4,name:"MUL",cycles:12},  //TODO:Multiply
     32: {bytes:4,name:"DIV",cycles:35},  //TODO:Divide
@@ -41,6 +41,6 @@ let opCodeList = {
 
     35: {bytes:3,name:"AD2",cycles:4},  //TODO:Add but A=A+B
     36: {bytes:3,name:"SU2",cycles:4},  //TODO:Sub but A=A-B
-
     37: {bytes:1,name:"STOP",cycles:1},
+    38: {bytes:2,name:"SAR",cycles:3},  //Shift Arithmetic Right
 }

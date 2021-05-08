@@ -50,10 +50,9 @@ let control = {
         this.el_btnToggleCpu.innerText = "Stop"
         control.updateHTML() //update screen
         cpuThread.postMessage({data:"start",clock:clock, memory:memRom.data})
-        cpuThread.postMessage('Hello World');
 
         cpuThread.addEventListener('message', function(e) {
-            console.log('Worker said: ', e.data);
+            //console.log('Worker said: ', e.data);
             switch (e.data.data) {
                 case "data": {
                     control.registers = e.data.registers
@@ -69,7 +68,6 @@ let control = {
                 case "stop": {
                     control.status = "Stopped",
                     control.stopCpu()
-                    console.log("HELP")
                 }
             }
         }, false);
