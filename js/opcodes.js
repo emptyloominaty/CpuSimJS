@@ -5,7 +5,7 @@ let opCodeList = {
     2: {bytes:4,name:"SUB",cycles:5},   //Subtract
     3: {bytes:4,name:"LD",cycles:5},    //Load
     4: {bytes:4,name:"ST",cycles:5},    //Store
-    5: {bytes:4,name:"LDI",cycles:4},   //Load Immediate
+    5: {bytes:4,name:"LDI",cycles:4},   //Load Immediate TODO:Assembler
     6: {bytes:3,name:"JMP",cycles:4},   //Jump
     7: {bytes:3,name:"JSR",cycles:6},   //Jump to Subroutine
     8: {bytes:1,name:"RFS",cycles:6},   //Return From Subroutine
@@ -25,25 +25,26 @@ let opCodeList = {
     22: {bytes:4,name:"AND",cycles:5},  //Logical AND
     23: {bytes:4,name:"OR",cycles:5},   //Logical OR
     24: {bytes:4,name:"XOR",cycles:5},  //Logical XOR
-
     25: {bytes:5,name:"JG",cycles:7},   //Conditional Jump if greater
     26: {bytes:5,name:"JL",cycles:7},   //Conditional Jump if less
     27: {bytes:5,name:"JNG",cycles:7},  //Conditional Jump if not greater
     28: {bytes:5,name:"JNL",cycles:7},  //Conditional Jump if not less
     29: {bytes:5,name:"JE",cycles:7},   //Conditional Jump if equal
     30: {bytes:5,name:"JNE",cycles:7},  //Conditional Jump if not equal
-
-    31: {bytes:4,name:"MUL",cycles:25}, //TODO:Multiply
-    32: {bytes:4,name:"DIV",cycles:35}, //TODO:Divide
-
+    31: {bytes:4,name:"MUL",cycles:25}, //Multiply
+    32: {bytes:4,name:"DIV",cycles:35}, //Divide
     33: {bytes:1,name:"TRP",cycles:2},  //Transfer Register(r14) to Program Counter
     34: {bytes:1,name:"TPR",cycles:2},  //Transfer Program Counter to Register(r14)
-
-    35: {bytes:3,name:"AD2",cycles:4},  //TODO:Add but A=A+B
-    36: {bytes:3,name:"SU2",cycles:4},  //TODO:Sub but A=A-B
+    35: {bytes:3,name:"AD2",cycles:4},  //Add but A=A+B
+    36: {bytes:3,name:"SU2",cycles:4},  //Sub but A=A-B
     37: {bytes:1,name:"STOP",cycles:1},
     38: {bytes:2,name:"SAR",cycles:3},  //Shift Arithmetic Right
     39: {bytes:2,name:"NOT",cycles:3},  //Logical NOT
     40: {bytes:3,name:"STR",cycles:4},  //TODO:Store to Address saved in Register
-
+    41: {bytes:4,name:"ADDI",cycles:5}, //TODO:Add Immediate r0 = r0 + #value
+    42: {bytes:4,name:"SUBI",cycles:5}, //TODO:Subtract Immediate
+    43: {bytes:4,name:"MULI",cycles:25},//TODO:Multiply Immediate
+    44: {bytes:4,name:"DIVI",cycles:35},//TODO:Divide Immediate
+    45: {bytes:1,name:"INT",cycles:8}, //TODO:Interrupt
+    46: {bytes:1,name:"RTI",cycles:8}, //TODO:Return from Interrupt
 }

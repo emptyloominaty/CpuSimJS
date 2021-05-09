@@ -15,14 +15,14 @@
 <body>
     <div class="deleteThis">
         <p style="font-size:24px;">Status: <span id="cpuStatus"></span></p>
-        <p>Clock: <span id="clockRealSpeed"></span> hz</p>
+        <p>Clock: <span id="clockRealSpeed"></span></p>
     </div>
 
     <div id="app">
         <!--START/STOP Button + clock -->
         <div class="wrapper3" id="first">
             <button id="btnToggleCpu" onclick="control.toggleCpu()" > Start </button>
-            <input id="setCpuClock" type="number" max="250" min="1" autocomplete="off" value="25" >
+            <input id="setCpuClock" type="number" max="2000000" min="1" autocomplete="off" value="25" >
         </div>
 
         <div class="wrapper2 wrapper3">

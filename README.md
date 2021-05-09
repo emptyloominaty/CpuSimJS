@@ -7,6 +7,7 @@
 * IPC: 0.14 - 1 (**0.22** Avg)
 * Memory: **64** kB
 * Stack: **0x0000 - 0x00FF**
+* Clock: 1Hz - **2MHz**
 
 ### Instructions
 ```
@@ -40,11 +41,13 @@
 28 - JNL (function) #(r) #(r)   (Conditional Jump if Not Less)
 29 - JE (function) #(r) #(r)    (Conditional Jump if Equal) 
 30 - JNE (function) #(r) #(r)   (Conditional Jump if Not Equal)
-
-33 - TRP                (Transfer Register(r14) to Program Counter)
-34 - TPR                (Transfer Program Counter to Register(r14))
-
-37 - STOP               ()
-38 - SAR #(r)		(Shift Arithmetic Right)
-39 - NOT #(r)           (Logical NOT)
+31 - MUL #(r) #(r) #(r)	        (Multiply)
+32 - DIV #(r) #(r) #(r)	        (Divide)
+33 - TRP                        (Transfer Register(r14) to Program Counter)
+34 - TPR                        (Transfer Program Counter to Register(r14))
+35 - AD2 #(r) #(r)              (Add A=A+B)
+36 - SU2 #(r) #(r)              (Subtract A=A-B)
+37 - STOP                       ()
+38 - SAR #(r)		        (Shift Arithmetic Right)
+39 - NOT #(r)                   (Logical NOT)
 ```

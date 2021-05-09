@@ -21,6 +21,7 @@ let control = {
     timeB: 0,
     timeC: 0,
     timeD: 0,
+    clockReal: 0,
     registers: {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:256, flags:{N:false,O:false,Z:false,C:false}},
     memory: [],
     cpuData: {op:0,decoded:0,bytes:0,cycles:0,instructionCache:[0,0,0,0,0],inst:0,phase:0,bytesLeft:0,fetchI:1,cyclesI:0},
@@ -62,6 +63,7 @@ let control = {
                     control.timeD = e.data.timeD
                     control.cpuData = e.data.cpuData
                     control.memory = e.data.memory
+                    control.clockReal = e.data.clockReal
                     control.updateHTML() //update screen
                     break
                 }
@@ -82,6 +84,7 @@ let control = {
         cpuThread="undefined"
     },
     toggleCpu: function() {
+        //console.log(performance.now())
         clockHz = this.el_setCpuClock.value
         clock = 1 / clockHz * 1000
         cpuSecondInfo = "Clock:"+clockHz+"hz Ram:"+(memorySize/1024)+"kB"
@@ -104,12 +107,14 @@ let control = {
     },
     updateHTML: function(forced=0) {
         if (((this.timeA-this.timeD)>HTMLRefreshRate) || forced === 1) {
-
             this.el_cpuStatus.innerHTML = this.status
-            let clock = Math.round(1 / this.timeC* 1000)
+            let clock =  this.clockReal //Math.round(1 / this.timeC* 1000)
             if (clock=="Infinity") { clock=0 }
+            if (clock<1000) { clock = clock+"Hz"}
+            if (clock>=1000 && clock<1000000) { clock = (Math.round((clock/1000)*10)/10)+"kHz"}
+            if (clock>=1000000) { clock = (Math.round((clock/1000000)*10)/10)+"MHz"}
             this.el_clockSpeed.innerHTML = clock
-            this.timeD = Date.now()
+            this.timeD = performance.now()
             control.updateHTMLRegisters()
             control.updateHTMLAlu()
         }

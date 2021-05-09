@@ -10,18 +10,21 @@ let cpu = {
     timeB: 0,
     timeC: 0,
     timeD: 0,
-
+    timeE: 0,
+    timeF: 0,
+    cyclesPerSec: 0,
+    clockReal: 0,
     bit: 16,
-    maxPc:  Math.pow(2, this.bit),
+    maxPc:  Math.pow(2, 16),
     cpuData: {op:0,decoded:0,bytes:0,cycles:0,instructionCache:0,inst:0,phase:0,bytesLeft:0,fetchI:1,cyclesI:0},
     registers: {},
     init: function() {
         cpu.createRegisters()
     },
     compute: function() {
-        cpu.timeA = Date.now()
+        cpu.timeA = performance.now()
         cpu.timeC = (cpu.timeA-cpu.timeB)
-        cpu.timeB = Date.now()
+        cpu.timeB = performance.now()
 
         let phase = cpu.cpuData.phase
         if (phase===0) {
@@ -39,9 +42,22 @@ let cpu = {
             let inst = cpu.cpuData.instructionCache
             cpu.execute(inst)
         }
-        //console.log("OP: "+cpu.cpuData.op+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp+" | | | "+cpu.cpuData.instructionCache[1]+" | "+cpu.cpuData.instructionCache[2]+" | "+cpu.cpuData.instructionCache[3]) //test
 
-        cpu.sendDataToMainThread()
+
+        if (cpu.registers.pc>cpu.maxPc) {
+            cpu.registers.pc = 256
+        }
+        //console.log("OP: "+cpu.cpuData.op+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp+" | | | "+cpu.cpuData.instructionCache[1]+" | "+cpu.cpuData.instructionCache[2]+" | "+cpu.cpuData.instructionCache[3]) //test
+        cpu.cyclesPerSec++
+        if (((cpu.timeA-cpu.timeE)>16)) {
+            if (((cpu.timeA-cpu.timeF)>1000)) {
+                cpu.clockReal = cpu.cyclesPerSec
+                cpu.cyclesPerSec=0
+                cpu.timeF=performance.now()
+            }
+            cpu.sendDataToMainThread()
+            cpu.timeE = performance.now()
+        }
     },
     fetchStart: function() {
         //fetch first byte (opcode)
@@ -70,9 +86,6 @@ let cpu = {
         } else {
             cpu.cpuData.phase++
             cpu.cpuData.fetchI=1
-        }
-        if (cpu.registers.pc>cpu.maxPc) {
-            cpu.registers.pc = 256
         }
     },
     decode: function(op) {
@@ -276,7 +289,24 @@ let cpu = {
                 }
                 break
             }
-
+            case 31: { //MUL
+                let output = (this.registers["r" + inst[1]] * this.registers["r" + inst[2]])
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[3]] = output
+                this.setFlags(this.registers["r" + inst[3]])
+                if(this.registers.flags.C===true) {
+                    this.registers["r" + inst[3]]=(this.registers["r" + inst[3]]-32768)
+                }
+                break
+            }
+            case 32: { //DIV
+                let output = (this.registers["r" + inst[1]] / this.registers["r" + inst[2]])
+                output = convertTo16Signed(output)
+                output = Math.floor(output)
+                this.registers["r" + inst[3]] = output
+                this.setFlags(this.registers["r" + inst[3]])
+                break
+            }
             case 33: { //TRP
                 this.registers["pc"] = this.registers["r14"]
                 break
@@ -285,8 +315,23 @@ let cpu = {
                 this.registers["r14"] = this.registers["pc"]
                 break
             }
-
-
+            case 35: { //AD2
+                let output = (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[1]] = output
+                this.setFlags(this.registers["r" + inst[1]])
+                if(this.registers.flags.C===true) {
+                    this.registers["r" + inst[1]]=(this.registers["r" + inst[1]]-32768)
+                }
+                break
+            }
+            case 36: { //SU2
+                let output = (this.registers["r" + inst[1]] - this.registers["r" + inst[2]])
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[1]] = output
+                this.setFlags(this.registers["r" + inst[1]])
+                break
+            }
             case 37: { //STOP
                 postMessage("stop")
                 cpu.timeC=cpu.timeA
@@ -314,12 +359,13 @@ let cpu = {
         this.registers.flags.Z = (input===0)
         this.registers.flags.N = (input<0)
         this.registers.flags.C = (input>32767)
+        this.registers.flags.O = (input>65535)
     },
     createRegisters: function() {
         this.registers = {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:256, flags:{N:false,O:false,Z:false,C:false}}
     },
     sendDataToMainThread: function() {
-        let postMsgData = {data:"data", registers:this.registers, memory: memory.data, timeA:this.timeA, timeB:this.timeB, timeC:this.timeC, timeD:this.timeD, cpuData:this.cpuData}
+        let postMsgData = {data:"data", registers:this.registers, memory: memory.data, timeA:this.timeA, timeB:this.timeB, timeC:this.timeC, timeD:this.timeD, cpuData:this.cpuData, clockReal:cpu.clockReal}
         postMsgData = JSON.parse(JSON.stringify(postMsgData))
         postMessage(postMsgData)
     }
@@ -333,13 +379,34 @@ let memory = {
     }
 }
 
+//???????????????? xD
+let setInterval2 = function (time) { //0.004
+    let timeA = 0
+    let timeB = performance.now()
+    let timeDelta = 0
+
+    while(timeDelta<time) {
+        timeA = performance.now()
+        timeDelta = timeA-timeB
+        cpu.compute()
+    }
+}
 
 self.addEventListener('message', function(e) {
     switch(e.data.data) {
         case "start": {
             memory.data = e.data.memory
             clock = e.data.clock
-            run = setInterval(cpu.compute,clock)
+            console.log(clock)
+            if (clock>5) { //200hz
+                run = setInterval(cpu.compute,clock)
+            } else {
+                run = setInterval2(clock)
+            }
+
+            /*while(0===0) {
+                cpu.compute()
+            }*/
             break
         }
         case "reset": {
@@ -348,11 +415,10 @@ self.addEventListener('message', function(e) {
             break
         }
     }
-
-    self.postMessage(e.data);
 }, false);
 
 
 cpu.init()
 memory.init()
 //run = setInterval(cpu.compute,clock)
+

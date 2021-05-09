@@ -97,6 +97,12 @@ input {
     padding:3px;
 }
 
+#setCpuClock {
+    width:100px;
+    margin-top:6px;
+    height:20px;
+}
+
 #input_GetMemVal {
     height:16px;
     margin-top:6px;
