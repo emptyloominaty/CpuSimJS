@@ -1,9 +1,3 @@
-//config
-let HTMLRefreshRate = 16 //ms
-let clockHz = 25 //hz
-let memorySize = 65536 //bytes
-
-
 //worker
 let cpuThread="undefined"
 
@@ -22,7 +16,7 @@ let control = {
     timeC: 0,
     timeD: 0,
     clockReal: 0,
-    registers: {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:256, flags:{N:false,O:false,Z:false,C:false}},
+    registers: {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:256, flags:{N:false,O:false,Z:false,C:false,I:false,ID:false}},
     memory: [],
     cpuData: {op:0,decoded:0,bytes:0,cycles:0,instructionCache:[0,0,0,0,0],inst:0,phase:0,bytesLeft:0,fetchI:1,cyclesI:0},
     el_cpuStatus: document.getElementById("cpuStatus"),
@@ -43,6 +37,10 @@ let control = {
     el_memUsage: document.getElementById("memUsage"),
     el_memVal: document.getElementById("memVal"),
     el_memValHex: document.getElementById("memValHex"),
+    el_memVal2: document.getElementById("memVal2"),
+    el_memValHex2: document.getElementById("memValHex2"),
+    el_memVal4: document.getElementById("memVal4"),
+    el_memValHex4: document.getElementById("memValHex4"),
     el_btnToggleCpu: document.getElementById("btnToggleCpu"),
     el_setCpuClock: document.getElementById("setCpuClock"),
     startCpu: function() {
@@ -68,7 +66,9 @@ let control = {
                     break
                 }
                 case "stop": {
-                    control.status = "Stopped",
+                    control.status = "Stopped"
+                    control.el_btnToggleCpu.innerText = "Start"
+                    control.updateHTML(1) //update screen
                     control.stopCpu()
                 }
             }
@@ -165,6 +165,16 @@ let control = {
         document.getElementById("input_GetMemVal").value = "0x"
         this.el_memVal.innerHTML = control.memory[getValue]
         this.el_memValHex.innerHTML = "0x"+functions.decimalToHex(control.memory[getValue],2)
+
+        let bytes2 = [control.memory[getValue],control.memory[getValue+1]]
+        this.el_memValHex2.innerHTML = "0x"+convertTo16Signed(functions.decimalToHex(bytes2[0],2)+functions.decimalToHex(bytes2[1],2))
+        this.el_memVal2.innerHTML = functions.convert8to16(bytes2[0],bytes2[1])
+
+        let bytes4 = [control.memory[getValue],control.memory[getValue+1],control.memory[getValue+2],control.memory[getValue+3]]
+        this.el_memValHex4.innerHTML = "0x"+functions.decimalToHex(bytes4[0],2)+functions.decimalToHex(bytes4[1],2)+functions.decimalToHex(bytes4[2],2)+functions.decimalToHex(bytes4[3],2)
+        let hiByte = functions.convert8to16(bytes4[0],bytes4[1])
+        let loByte = functions.convert8to16(bytes4[2],bytes4[3])
+        this.el_memVal4.innerHTML = loByte+(hiByte*32768)
     },
 
 }
@@ -174,8 +184,6 @@ let control = {
 //main
 control.reset() //test
 control.updateHTML() //update screen
-let cpuFirstInfo = "EMP 1 16bit CPU"
-let cpuSecondInfo = "Clock:"+clockHz+"hz Ram:"+(memorySize/1024)+"kB"
 control.updateHTMLStart()
 let clock = 1 / clockHz * 1000
 

@@ -56,8 +56,22 @@ h1,h2,h3,h4 {
     line-height:14px;
 }
 
+.memVal2 {
+    width:58px;
+}
+
+.memVal4 {
+    width:90px;
+}
+
 #memAllValues {
     font-family: 'Courier New', monospace;
+}
+
+#variablesAddresses,#functionsAddresses {
+    background-color: #2f2f2f;
+    padding: 4px;
+    margin: 10px;
 }
 
 /* Buttons & Inputs */

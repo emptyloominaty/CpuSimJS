@@ -1,9 +1,8 @@
-importScripts('opcodes.js');
-importScripts('functions.js');
-
+importScripts('opcodes.js')
+importScripts('functions.js')
+importScripts('config.js')
 let run
-let memorySize = 65536 //bytes
-let clock = 200
+let clock = 25
 
 let cpu = {
     timeA: 0,
@@ -149,11 +148,13 @@ let cpu = {
                 memory.data[this.registers.sp] = pcBytes[1]
                 this.registers.sp++
                 this.registers.pc = value
+                cpu.checkStack()
                 break
             }
             case 8: { //RFS
                 this.registers.pc = functions.convert8to16(memory.data[this.registers.sp-2],memory.data[this.registers.sp-1])
                 this.registers.sp-=2
+                cpu.checkStack()
                 break
             }
             case 9: { //INC
@@ -177,12 +178,13 @@ let cpu = {
                 } else {
                     output =  (this.registers["r" + inst[1]] + this.registers["r" + inst[2]])
                 }
-                output = convertTo16Signed(output)
+                //output = convertTo16Signed(output)
                 this.registers["r" + inst[3]] = output
                 cpu.setFlags(this.registers["r" + inst[3]])
                 if(this.registers.flags.C===true) {
                     this.registers["r" + inst[3]]=(this.registers["r" + inst[3]]-32768)
                 }
+
                 break
             }
             case 13: { //ROL
@@ -225,11 +227,13 @@ let cpu = {
                 this.registers.sp++
                 memory.data[this.registers.sp] = stackBytes[1]
                 this.registers.sp++
+                cpu.checkStack()
                 break
             }
             case 21: { //POP
                 this.registers["r" + inst[1]] = functions.convert8to16(memory.data[this.registers.sp-2],memory.data[this.registers.sp-1])
                 this.registers.sp-=2
+                cpu.checkStack()
                 break
             }
             case 22: { //AND
@@ -362,12 +366,20 @@ let cpu = {
         this.registers.flags.O = (input>65535)
     },
     createRegisters: function() {
-        this.registers = {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:256, flags:{N:false,O:false,Z:false,C:false}}
+        this.registers = {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:stackSize+1, flags:{N:false,O:false,Z:false,C:false,I:false,ID:false}}
     },
     sendDataToMainThread: function() {
         let postMsgData = {data:"data", registers:this.registers, memory: memory.data, timeA:this.timeA, timeB:this.timeB, timeC:this.timeC, timeD:this.timeD, cpuData:this.cpuData, clockReal:cpu.clockReal}
         postMsgData = JSON.parse(JSON.stringify(postMsgData))
         postMessage(postMsgData)
+    },
+    checkStack: function() {
+       if(cpu.registers.sp>stackSize) {
+           cpu.registers.sp=0
+       }
+        if(cpu.registers.sp<0) {
+            cpu.registers.sp=stackSize
+        }
     }
 }
 
@@ -380,15 +392,23 @@ let memory = {
 }
 
 //???????????????? xD
-let setInterval2 = function (time) { //0.004
+let setInterval2 = function (time) {
     let timeA = 0
-    let timeB = performance.now()
+    let timeB = 0
     let timeDelta = 0
 
-    while(timeDelta<time) {
-        timeA = performance.now()
-        timeDelta = timeA-timeB
+    while(0===0) {
+        timeA = 0
+        timeB = performance.now()
+        timeDelta = 0
         cpu.compute()
+
+
+        while (timeDelta < time) {
+            timeA = performance.now()
+            timeDelta = timeA - timeB
+
+        }
     }
 }
 
@@ -397,16 +417,17 @@ self.addEventListener('message', function(e) {
         case "start": {
             memory.data = e.data.memory
             clock = e.data.clock
-            console.log(clock)
             if (clock>5) { //200hz
                 run = setInterval(cpu.compute,clock)
+            } else if (clock>2000000){
+                while(0===0) {
+                    cpu.compute()
+                }
             } else {
-                run = setInterval2(clock)
+                setInterval2(clock)
             }
 
-            /*while(0===0) {
-                cpu.compute()
-            }*/
+
             break
         }
         case "reset": {

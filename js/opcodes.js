@@ -3,9 +3,9 @@ let opCodeList = {
     0: {bytes:1,name:"NOP",cycles:1},   //No operation
     1: {bytes:4,name:"ADD",cycles:5},   //Add
     2: {bytes:4,name:"SUB",cycles:5},   //Subtract
-    3: {bytes:4,name:"LD",cycles:5},    //Load
-    4: {bytes:4,name:"ST",cycles:5},    //Store
-    5: {bytes:4,name:"LDI",cycles:4},   //Load Immediate TODO:Assembler
+    3: {bytes:4,name:"LD",cycles:6},    //Load
+    4: {bytes:4,name:"ST",cycles:6},    //Store
+    5: {bytes:4,name:"LDI",cycles:4},   //Load Immediate
     6: {bytes:3,name:"JMP",cycles:4},   //Jump
     7: {bytes:3,name:"JSR",cycles:6},   //Jump to Subroutine
     8: {bytes:1,name:"RFS",cycles:6},   //Return From Subroutine
@@ -45,6 +45,10 @@ let opCodeList = {
     42: {bytes:4,name:"SUBI",cycles:5}, //TODO:Subtract Immediate
     43: {bytes:4,name:"MULI",cycles:25},//TODO:Multiply Immediate
     44: {bytes:4,name:"DIVI",cycles:35},//TODO:Divide Immediate
-    45: {bytes:1,name:"INT",cycles:8}, //TODO:Interrupt
-    46: {bytes:1,name:"RTI",cycles:8}, //TODO:Return from Interrupt
+    45: {bytes:1,name:"INT",cycles:8},  //TODO:Interrupt
+    46: {bytes:1,name:"RFI",cycles:8},  //TODO:Return from Interrupt
+    47: {bytes:5,name:"LDS",cycles:8},  //TODO:Load
+    48: {bytes:5,name:"STS",cycles:8},  //TODO:Store
+    49: {bytes:1,name:"TCR",cycles:2},  //TODO:Transfer Carry Flag to Register(r13)
+    50: {bytes:1,name:"TRC",cycles:2},  //TODO:Transfer Register(r13) to Carry Flag
 }

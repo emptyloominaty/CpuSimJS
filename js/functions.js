@@ -1,6 +1,7 @@
 /*----------functions-------------*/
 let convertTo16Signed = function(data) {
     if(data > 32767) {data = data - 65536}
+    if(data < -32768) {data = data + 65536}
     return data
 }
 

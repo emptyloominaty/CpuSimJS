@@ -6,6 +6,7 @@
     <title>EMP Cpu</title>
     <link rel="stylesheet" type="text/css" href="styles/style.css">
 
+    <script src="js/config.js" defer></script>
     <script src="js/opcodes.js" defer></script>
     <script src="js/functions.js" defer></script>
     <script src="js/main.js" defer></script>
@@ -103,9 +104,20 @@
                         <button class="smallerTxtBtn" onclick="control.getMemoryValue()"> Get Value</button>
 
                     </div>
+                    <!-- 1Byte -->
                     <div class="wrapper3">
                         <span class="borderSpan" id="memVal">-</span>
-                        <span class="borderSpan" id="memValHex">-</span>
+                        1B<span class="borderSpan" id="memValHex">-</span>
+                    </div>
+                    <!-- 2Byte -->
+                    <div class="wrapper3">
+                        <span class="borderSpan memVal2" id="memVal2">-</span>
+                        2B<span class="borderSpan memVal2" id="memValHex2">-</span>
+                    </div>
+                    <!-- 4Bytes -->
+                    <div class="wrapper3">
+                        <span class="borderSpan memVal4" id="memVal4">-</span>
+                        4B<span class="borderSpan memVal4" id="memValHex4">-</span>
                     </div>
                 </div>
             </div>
@@ -117,7 +129,11 @@
                     <h3>Code Editor</h3>
                     <button class="smallerTxtBtn" onclick="assembler.assembly()"> Upload to Mem</button>
                 </div>
-             <textarea spellcheck="false" id="codeEditor"> </textarea>
+                <div class="wrapper2 wrapper3">
+                    <div id="functionsAddresses">Functions</div>
+                    <textarea spellcheck="false" id="codeEditor"> </textarea>
+                    <div id="variablesAddresses">Vars</div>
+                </div>
             </div>
         </div>
         <div class="window1 wrapper3" id="memExportDiv">
