@@ -1,6 +1,6 @@
 /*----------Op Codes List-------------*/
 let opCodeList = {
-    0: {bytes:1,name:"NOP",cycles:1},   //No operation
+    0: {bytes:1,name:"STOP",cycles:1},
     1: {bytes:4,name:"ADD",cycles:5},   //Add
     2: {bytes:4,name:"SUB",cycles:5},   //Subtract
     3: {bytes:4,name:"LD",cycles:6},    //Load
@@ -37,7 +37,7 @@ let opCodeList = {
     34: {bytes:1,name:"TPR",cycles:2},  //Transfer Program Counter to Register(r14)
     35: {bytes:3,name:"AD2",cycles:4},  //Add but A=A+B
     36: {bytes:3,name:"SU2",cycles:4},  //Sub but A=A-B
-    37: {bytes:1,name:"STOP",cycles:1},
+    37: {bytes:1,name:"NOP",cycles:1},   //No operation
     38: {bytes:2,name:"SAR",cycles:3},  //Shift Arithmetic Right
     39: {bytes:2,name:"NOT",cycles:3},  //Logical NOT
     40: {bytes:3,name:"STR",cycles:4},  //TODO:Store to Address saved in Register
