@@ -96,7 +96,11 @@ let cpu = {
     },
     execute: function(inst) {
         switch (inst[0]) {
-            case 0: {//NOP
+            case 0: { //STOP
+                postMessage("stop")
+                cpu.timeC=cpu.timeA
+                cpu.sendDataToMainThread()
+                close()
                 break
             }
             case 1: { //ADD
@@ -336,11 +340,7 @@ let cpu = {
                 this.setFlags(this.registers["r" + inst[1]])
                 break
             }
-            case 37: { //STOP
-                postMessage("stop")
-                cpu.timeC=cpu.timeA
-                cpu.sendDataToMainThread()
-                close()
+            case 37: {//NOP
                 break
             }
             case 38: { //SAR
@@ -391,7 +391,7 @@ let memory = {
     }
 }
 
-//???????????????? xD
+//???????????????? xD ??????????????????????????????????????????????????????????
 let setInterval2 = function (time) {
     let timeA = 0
     let timeB = 0
@@ -418,12 +418,15 @@ self.addEventListener('message', function(e) {
             memory.data = e.data.memory
             clock = e.data.clock
             if (clock>5) { //200hz
+                console.log("low clock")
                 run = setInterval(cpu.compute,clock)
-            } else if (clock>2000000){
+            } else if (clock<0.0005){
+                console.log("max clock")
                 while(0===0) {
                     cpu.compute()
                 }
             } else {
+                console.log("high clock")
                 setInterval2(clock)
             }
 
