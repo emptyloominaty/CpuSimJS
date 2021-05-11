@@ -501,11 +501,42 @@ let cpu = {
                 this.registers["r"+inst[1]] = functions.convert8to16(byte1,byte2)
                 break
             }
+            case 60: {//STRS8
+                let memoryAddress = functions.convert16to32Signed(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
+                let val = +this.registers["r" + inst[1]]
+                if (val>127) { val=127 } //TODO:??
+                if (val<-128) { val=-128 }
+                memory.data[memoryAddress] = val
+                break
+            }
+            case 61: { //LDRS8
+                let memoryAddress = functions.convert16to32Signed(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
+                let byte1 = memory.data[memoryAddress]
+                this.registers["r"+inst[1]] = +byte1
+                break
+            }
+            case 62: {//STAIP
+                let memoryAddress = functions.convert8to16(inst[2],inst[3])
+                let byte1 = memory.data[memoryAddress]
+                let byte2 = memory.data[memoryAddress+1]
+                this.registers["ip"+inst[1]] = functions.convert8to16(byte1,byte2)
+                break
+            }
+            case 63: {//STR8
+                let memoryAddress = this.registers["r"+inst[2]]
+                let val = +this.registers["r" + inst[1]]
+                if (val>127) { val=127 } //TODO:??
+                if (val<-128) { val=-128 }
+                memory.data[memoryAddress] = val
+                break
+            }
+            case 64: { //LDR8
+                let memoryAddress = this.registers["r"+inst[2]]
+                let byte1 = memory.data[memoryAddress]
+                this.registers["r"+inst[1]] = +byte1
+                break
+            }
 
-
-            /*
-                TODO:54-61
-            */
         }
         //reset cpu phase after execute
         cpu.cpuData.phase=0
