@@ -46,8 +46,8 @@ let opCodeList = {
     43: {bytes:4,name:"SUBI",cycles:5}, //Subtract Immediate
     44: {bytes:4,name:"MULI",cycles:25},//Multiply Immediate
     45: {bytes:4,name:"DIVI",cycles:35},//Divide Immediate
-    46: {bytes:2,name:"INT",cycles:8},  //Interrupt
-    47: {bytes:1,name:"RFI",cycles:8},  //Return from Interrupt
+    46: {bytes:2,name:"INT",cycles:7},  //Interrupt
+    47: {bytes:1,name:"RFI",cycles:7},  //Return from Interrupt
     48: {bytes:5,name:"LDS",cycles:8},  //Load (24bit address)
     49: {bytes:5,name:"STS",cycles:8},  //Store (24bit address)
     50: {bytes:1,name:"TCR",cycles:2},  //Transfer Carry Flag to Register(r13)
