@@ -56,15 +56,15 @@ let opCodeList = {
     53: {bytes:1,name:"SDI",cycles:2},  //Disable Interrupts
     54: {bytes:4,name:"LD8",cycles:5},  //Load 1byte
     55: {bytes:4,name:"ST8",cycles:5},  //Store 1byte
-    56: {bytes:5,name:"LDS8",cycles:6}, //Load 1byte (24bit address)
-    57: {bytes:5,name:"STS8",cycles:6}, //Store 1byte (24bit address)
-    58: {bytes:3,name:"STRS",cycles:5}, //Store to Address saved in Register (24bit address)
-    59: {bytes:3,name:"LDRS",cycles:5}, //Load from Address saved in Register (24bit address)
-    60: {bytes:3,name:"STRS8",cycles:5},//Store to Address saved in Register (24bit address) 1byte
-    61: {bytes:3,name:"LDRS8",cycles:5},//Load from Address saved in Register (24bit address) 1byte
+    56: {bytes:5,name:"LDS8",cycles:7}, //Load 1byte (24bit address)
+    57: {bytes:5,name:"STS8",cycles:7}, //Store 1byte (24bit address)
+    58: {bytes:3,name:"STRS",cycles:6}, //Store to Address stored in Register (24bit address)
+    59: {bytes:3,name:"LDRS",cycles:6}, //Load from Address stored in Register (24bit address)
+    60: {bytes:3,name:"STRS8",cycles:6},//Store to Address stored in Register (24bit address) 1byte
+    61: {bytes:3,name:"LDRS8",cycles:6},//Load from Address stored in Register (24bit address) 1byte
     62: {bytes:4,name:"STAIP",cycles:5},//Store address to Interrupt Pointer
-    63: {bytes:3,name:"STR8",cycles:4}, //Store to Address stored in Register 1byte
-    64: {bytes:3,name:"LDR8",cycles:4}, //Load from Address stored in Register 1byte
-    65: {bytes:3,name:"JC",cycles:4},   //TODO:Conditional Jump if Carry
-    66: {bytes:3,name:"JNC",cycles:4},  //TODO:Conditional Jump if not Carry
+    63: {bytes:3,name:"STR8",cycles:5}, //Store to Address stored in Register 1byte
+    64: {bytes:3,name:"LDR8",cycles:5}, //Load from Address stored in Register 1byte
+    65: {bytes:3,name:"JC",cycles:4},   //Conditional Jump if Carry
+    66: {bytes:3,name:"JNC",cycles:4},  //Conditional Jump if not Carry
 }

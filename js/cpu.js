@@ -536,7 +536,18 @@ let cpu = {
                 this.registers["r"+inst[1]] = +byte1
                 break
             }
-
+            case 65: { //JC
+                if (this.registers.flags.C == true) {
+                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                }
+                break
+            }
+            case 66: { //JNC
+                if (this.registers.flags.C == false) {
+                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                }
+                break
+            }
         }
         //reset cpu phase after execute
         cpu.cpuData.phase=0
