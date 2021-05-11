@@ -406,9 +406,33 @@ let cpu = {
                 this.setFlags(this.registers["r" + inst[1]])
                 break
             }
-            /*
-            TODO:46-47
-            */
+            case 46: { //INT
+                if (this.registers.flags.ID===0 && this.registers.flags.I===0) {
+                    let pcBytes = functions.convert16to8(this.registers.pc)
+                    let flags = this.registers.flags
+                    let flagBytes = functions.convert8bitsto1byte([flags.N, flags.O, flags.C, flags.Z, flags.I, flags.ID, 0, 0])
+                    memory.data[this.registers.sp] = pcBytes[0]
+                    this.registers.sp++
+                    memory.data[this.registers.sp] = pcBytes[1]
+                    this.registers.sp++
+                    memory.data[this.registers.sp] = flagBytes
+                    this.registers.sp++
+                    cpu.checkStack()
+                    this.registers.pc = this.registers["ip" + inst[1]]
+                    this.registers.flags.I=true
+                }
+                break
+            }
+            case 47: { //RFI
+                let flags = functions.convert1byteto8bits(memory.data[this.registers.sp-1])
+                this.registers.flags = {N:flags[0],O:flags[1],Z:flags[2],C:flags[3],I:flags[4],ID:flags[5]}
+                this.registers.sp-=1
+                this.registers.pc = functions.convert8to16(memory.data[this.registers.sp-2],memory.data[this.registers.sp-1])
+                this.registers.sp-=2
+                cpu.checkStack()
+                this.registers.flags.I=false
+                break
+            }
             case 48: { //LDS
                 let memoryAddress = functions.convert8to24(inst[2], inst[3], inst[4])
                 let byte1 = memory.data[memoryAddress]
@@ -423,6 +447,15 @@ let cpu = {
                 memory.data[memoryAddress+1] = bytes[1]
                 break
             }
+            case 50: {//TCR
+                this.registers.r13= +this.registers.flags.C
+                break
+            }
+            case 51: {//TCR
+                this.registers.flags.C = +this.registers.r13
+                break
+            }
+
             /*
           TODO:50-61
           */
@@ -437,7 +470,8 @@ let cpu = {
         this.registers.flags.O = (input>65535)
     },
     createRegisters: function() {
-        this.registers = {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:stackSize+1, flags:{N:false,O:false,Z:false,C:false,I:false,ID:false}}
+        this.registers = {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:stackSize+1,
+            flags:{N:false,O:false,Z:false,C:false,I:false,ID:false},ip0:0,ip1:0,ip2:0,ip3:0,ip4:0,ip5:0,ip6:0,ip7:0,ip8:0,ip9:0,ip10:0,ip11:0,ip12:0,ip13:0,ip14:0,ip15:0,}
     },
     sendDataToMainThread: function() {
         let postMsgData = {data:"data", registers:this.registers, memory: memory.data, timeA:this.timeA, timeB:this.timeB, timeC:this.timeC, timeD:this.timeD, cpuData:this.cpuData, clockReal:cpu.clockReal}

@@ -7,7 +7,7 @@ let convertTo16Signed = function(data) {
 
 
 let functions = {
-    convert8to16: function(byteA,byteB) {
+    convert8to16: function (byteA, byteB) {
         let result = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
         let sign = byteA & (1 << 7)
         let x = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
@@ -16,23 +16,47 @@ let functions = {
         }
         return result
     },
-    convert16to8: function(firstNumber) {
+    convert16to8: function (firstNumber) {
         let high = ((firstNumber >> 8) & 0xff)
         let low = firstNumber & 0xff
-        return [high,low]
+        return [high, low]
     },
-    convert24to8: function(value) {
+    convert24to8: function (value) {
         let bytes = []
         bytes[0] = value & 0xff
         bytes[1] = (value >> 8) & 0xff
         bytes[2] = (value >> 16) & 0xff
         return bytes
     },
-    convert8to24: function(byte1,byte2,byte3) {
+    convert8to24: function (byte1, byte2, byte3) {
         let ret = (byte3) << 16
         ret |= (byte2) << 8
         ret |= byte1
         return ret
+    },
+    convert8bitsto1byte: function (bytesArray) {
+        let ret
+        ret = (bytesArray[7]) << 7
+        ret |= (bytesArray[6]) << 6
+        ret |= (bytesArray[5]) << 5
+        ret |= (bytesArray[4]) << 4
+        ret |= (bytesArray[3]) << 3
+        ret |= (bytesArray[2]) << 2
+        ret |= (bytesArray[1]) << 1
+        ret |= bytesArray[0]
+        return ret
+    },
+    convert1byteto8bits: function (value) {
+        let bytes =[]
+        bytes[0] = value & 0x01
+        bytes[1] = (value >> 1) & 0x01
+        bytes[2] = (value >> 2) & 0x01
+        bytes[3] = (value >> 3) & 0x01
+        bytes[4] = (value >> 4) & 0x01
+        bytes[5] = (value >> 5) & 0x01
+        bytes[6] = (value >> 6) & 0x01
+        bytes[7] = (value >> 7) & 0x01
+        return bytes
     },
     decimalToHex: function(d, padding) {
         let hex = Number(d).toString(16);

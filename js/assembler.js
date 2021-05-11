@@ -108,8 +108,8 @@ let assembler = {
                     } else if (findRinCode(instructions[i]["val" + j])) { //reg
                         memRom.data[memAddress + j] = removeRfromCode(instructions[i]["val" + j])
                     }
-                    else if (!isNaN(instructions[i]["val" + j])) { //reg
-                        //memRom.data[memAddress + j] = instructions[i]["val" + j]
+                    else if (!isNaN(instructions[i]["val" + j])) { //STAIP/INT
+                        memRom.data[memAddress + j] = instructions[i]["val" + j]
                     } else if (opC !== "jsr" && opC !== "jg" && opC !== "jng" && opC !== "jl" && opC !== "jnl" && opC !== "je" && opC !== "jne" && opC !== "jmp") { //mem
                         let memVar = vars[instructions[i]["val" + j]].memAddress
                         memVar = this.functions.convert16to8(memVar)

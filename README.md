@@ -3,9 +3,12 @@
 ## CPU
 * Architecture: **EMP 1 16Bit**
 * **Load–store** architecture
-* Registers: **r0-r15**, Program Counter, Stack Pointer, Flags
-* IPC: 0.14 - 1 (**0.17** Avg)
-* Memory: **64** kB
+* Registers: 
+    - 16 Registers (**r0-r15**)  <br/>
+    - Program Counter, Stack Pointer, Flags <br/>
+    - 16 Interrupt Pointers 
+* IPC: **0.17** Avg
+* Max Memory: **64**kB (**16**MB)
 * Stack: **0x0000 - 0x00FF**
 * Clock: 1Hz - **2MHz**
 
@@ -50,4 +53,14 @@
 37 - NOP 		        (No operation)     
 38 - SAR r(r)		        (Shift Arithmetic Right)
 39 - NOT r(r)                   (Logical NOT)
+40 - STR r(r) r(r)              (Store to Address stored in Register)
+41 - LDR r(r) r(r)              (Load from Address stored in Register)
+42 - ADDI r(r) (value)          (Add Immediate) (r0=r0+val)
+43 - SUBI r(r) (value)          (Subtract Immediate)
+44 - MULI r(r) (value)          (Multiply Immediate)
+45 - DIVI r(r) (value)          (Divide Immediate)
+46 - INT                        (Software Interrupt)
+47 - RFI                        (Return fom Interrupt)
+48 - LDS r(r) (mem)             (Load from 24bit address)
+49 - STS r(r) (mem)             (Store from 24bit address)
 ```
