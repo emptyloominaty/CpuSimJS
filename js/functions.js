@@ -23,15 +23,26 @@ let functions = {
     },
     convert24to8: function (value) {
         let bytes = []
-        bytes[0] = value & 0xff
+        bytes[2] = value & 0xff
         bytes[1] = (value >> 8) & 0xff
-        bytes[2] = (value >> 16) & 0xff
+        bytes[0] = (value >> 16) & 0xff
         return bytes
     },
     convert8to24: function (byte1, byte2, byte3) {
-        let ret = (byte3) << 16
+        let ret = (byte1) << 16
         ret |= (byte2) << 8
-        ret |= byte1
+        ret |= byte3
+        return ret
+    },
+    convert32to16Signed: function (value) {
+        let bytes = []
+        bytes[1] = value & 0xffff
+        bytes[0] = (value >> 15) & 0xffff
+        return bytes
+    },
+    convert16to32Signed: function (word1,word2) {
+        let ret = (word1) << 15
+        ret |= word2
         return ret
     },
     convert8bitsto1byte: function (bytesArray) {

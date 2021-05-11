@@ -60,7 +60,7 @@
 44 - MULI r(r) (value)          (Multiply Immediate)
 45 - DIVI r(r) (value)          (Divide Immediate)
 46 - INT                        (Software Interrupt)
-47 - RFI                        (Return fom Interrupt)
+47 - RFI                        (Return from Interrupt)
 48 - LDS r(r) (mem)             (Load from 24bit address)
 49 - STS r(r) (mem)             (Store from 24bit address)
 ```

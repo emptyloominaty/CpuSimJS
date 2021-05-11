@@ -52,16 +52,19 @@ let opCodeList = {
     49: {bytes:5,name:"STS",cycles:8},  //Store (24bit address)
     50: {bytes:1,name:"TCR",cycles:2},  //Transfer Carry Flag to Register(r13)
     51: {bytes:1,name:"TRC",cycles:2},  //Transfer Register(r13) to Carry Flag
-    52: {bytes:1,name:"SEI",cycles:2},  //TODO:Enable Interrupts
-    53: {bytes:1,name:"SDI",cycles:2},  //TODO:Disable Interrupts
-    54: {bytes:4,name:"LD8",cycles:5},  //TODO:Load 1byte
-    55: {bytes:4,name:"ST8",cycles:5},  //TODO:Store 1byte
-    56: {bytes:5,name:"LDS8",cycles:6}, //TODO:Load 1byte (24bit address)
-    57: {bytes:5,name:"STS8",cycles:6}, //TODO:Store 1byte (24bit address)
-    58: {bytes:3,name:"STRS",cycles:5}, //TODO:Store to Address saved in Register (24bit address)
-    59: {bytes:3,name:"LDRS",cycles:5}, //TODO:Load from Address saved in Register (24bit address)
+    52: {bytes:1,name:"SEI",cycles:2},  //Enable Interrupts
+    53: {bytes:1,name:"SDI",cycles:2},  //Disable Interrupts
+    54: {bytes:4,name:"LD8",cycles:5},  //Load 1byte
+    55: {bytes:4,name:"ST8",cycles:5},  //Store 1byte
+    56: {bytes:5,name:"LDS8",cycles:6}, //Load 1byte (24bit address)
+    57: {bytes:5,name:"STS8",cycles:6}, //Store 1byte (24bit address)
+    58: {bytes:3,name:"STRS",cycles:5}, //Store to Address saved in Register (24bit address)
+    59: {bytes:3,name:"LDRS",cycles:5}, //Load from Address saved in Register (24bit address)
     60: {bytes:3,name:"STRS8",cycles:5},//TODO:Store to Address saved in Register (24bit address) 1byte
     61: {bytes:3,name:"LDRS8",cycles:5},//TODO:Load from Address saved in Register (24bit address) 1byte
     62: {bytes:4,name:"STAIP",cycles:5},//TODO:Store address to Interrupt Pointer
-
+    63: {bytes:3,name:"STR8",cycles:4}, //TODO:Store to Address stored in Register 1byte
+    64: {bytes:3,name:"LDR8",cycles:4}, //TODO:Load from Address stored in Register 1byte
+    65: {bytes:3,name:"JC",cycles:4},   //TODO:Conditional Jump if Carry
+    66: {bytes:3,name:"JNC",cycles:4},  //TODO:Conditional Jump if not Carry
 }

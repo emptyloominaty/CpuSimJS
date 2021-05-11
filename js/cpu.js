@@ -135,13 +135,11 @@ let cpu = {
                 break
             }
             case 5: { //LDI
-                let value = functions.convert8to16(inst[2],inst[3])
-                this.registers["r"+inst[1]] = value
+                this.registers["r"+inst[1]] = functions.convert8to16(inst[2],inst[3])
                 break
             }
             case 6: { //JMP
-                let value = functions.convert8to16(inst[1],inst[2])
-                this.registers.pc = value
+                this.registers.pc = functions.convert8to16(inst[1],inst[2])
                 break
             }
             case 7: { //JSR
@@ -455,10 +453,59 @@ let cpu = {
                 this.registers.flags.C = +this.registers.r13
                 break
             }
+            case 52: {//SEI
+                this.registers.flags.ID = 0
+                break
+            }
+            case 53: {//SDI
+                this.registers.flags.ID = 1
+                break
+            }
+            case 54: { //LD8
+                let memoryAddress = functions.convert8to16(inst[2],inst[3])
+                this.registers["r"+inst[1]] = +memory.data[memoryAddress]
+                break
+            }
+            case 55: {//ST8
+                let memoryAddress = functions.convert8to16(inst[2], inst[3])
+                let val = +this.registers["r" + inst[1]]
+                if (val>127) { val=127 } //TODO:??
+                if (val<-128) { val=-128 }
+                memory.data[memoryAddress] = val
+                break
+            }
+            case 56: { //LDS8
+                let memoryAddress = functions.convert8to24(inst[2],inst[3], inst[4])
+                this.registers["r"+inst[1]] = +memory.data[memoryAddress]
+                break
+            }
+            case 57: {//STS8
+                let memoryAddress = functions.convert8to24(inst[2], inst[3], inst[4])
+                let val = +this.registers["r" + inst[1]]
+                if (val>127) { val=127 } //TODO:??
+                if (val<-128) { val=-128 }
+                memory.data[memoryAddress] = val
+                break
+            }
+            case 58: {//STRS
+                let memoryAddress = functions.convert16to32Signed(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
+                let bytes = functions.convert16to8(this.registers["r" + inst[1]])
+                memory.data[memoryAddress] = bytes[0]
+                memory.data[memoryAddress+1] = bytes[1]
+                break
+            }
+            case 59: { //LDRS
+                let memoryAddress = functions.convert16to32Signed(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
+                let byte1 = memory.data[memoryAddress]
+                let byte2 = memory.data[memoryAddress+1]
+                this.registers["r"+inst[1]] = functions.convert8to16(byte1,byte2)
+                break
+            }
+
 
             /*
-          TODO:50-61
-          */
+                TODO:54-61
+            */
         }
         //reset cpu phase after execute
         cpu.cpuData.phase=0
