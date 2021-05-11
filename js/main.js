@@ -28,6 +28,12 @@ let control = {
     el_regs: functions.regElements(),
     el_regPc: document.getElementById("regpc"),
     el_regSp: document.getElementById("regsp"),
+    el_regFlagN: document.getElementById("flagsN"),
+    el_regFlagO: document.getElementById("flagsO"),
+    el_regFlagC: document.getElementById("flagsC"),
+    el_regFlagZ: document.getElementById("flagsZ"),
+    el_regFlagI: document.getElementById("flagsI"),
+    el_regFlagID: document.getElementById("flagsID"),
     el_aluOpcode: document.getElementById("aluOpcode"),
     el_aluName: document.getElementById("aluName"),
     el_aluReg1: document.getElementById("aluReg1"),
@@ -129,6 +135,12 @@ let control = {
         }
         this.el_regPc.innerHTML = this.registers.pc
         this.el_regSp.innerHTML = this.registers.sp
+        this.el_regFlagN.innerHTML =  +this.registers.flags.N
+        this.el_regFlagO.innerHTML =  +this.registers.flags.O
+        this.el_regFlagC.innerHTML =  +this.registers.flags.C
+        this.el_regFlagZ.innerHTML =  +this.registers.flags.Z
+        this.el_regFlagI.innerHTML =  +this.registers.flags.I
+        this.el_regFlagID.innerHTML =  +this.registers.flags.ID
     },
     updateHTMLAlu: function() {
         this.el_aluOpcode.innerHTML = this.cpuData.instructionCache[0]
@@ -147,6 +159,27 @@ let control = {
             }
         }
         this.el_allMem.innerHTML = text
+    },
+    getAllMemoryValuesAddr: function() {
+        let a = 0
+        let totalA = 0
+        let text = "$0000: "
+        for (let i=0; i<memorySize; i++) {
+            if (control.memory[i]!==0) {
+                text+="<span>"+functions.decimalToHex(control.memory[i],2)+" </span>"
+            } else {
+                text+="<span style='color:#ba9999'>"+functions.decimalToHex(control.memory[i],2)+" </span>"
+            }
+            a++
+            totalA++
+            if (a>15) {
+                a=0
+                text+="<br> $"+functions.decimalToHex(totalA,4)+": "
+            }
+
+        }
+        this.el_allMem.innerHTML = text
+        this.el_allMem.width = 800
     },
     clearMemoryValuesHTML: function(){
         this.el_allMem.innerHTML = ""

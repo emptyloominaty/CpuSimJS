@@ -11,7 +11,7 @@
 
 ### Instructions
 ```
-0 - NOP 		        (No operation)     
+0 - STOP                        ()  
 1 - ADD r(r) r(r) r(r)	        (Add)               
 2 - SUB r(r) r(r) r(r)	        (Subtract)
 3 - LD 	r(r) (mem)	        (Load)
@@ -47,7 +47,7 @@
 34 - TPR                        (Transfer Program Counter to Register(r14))
 35 - AD2 r(r) r(r)              (Add A=A+B)
 36 - SU2 r(r) r(r)              (Subtract A=A-B)
-37 - STOP                       ()
+37 - NOP 		        (No operation)     
 38 - SAR r(r)		        (Shift Arithmetic Right)
 39 - NOT r(r)                   (Logical NOT)
 ```

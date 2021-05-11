@@ -191,6 +191,9 @@ let cpu = {
 
                 break
             }
+            /*
+          TODO:12
+          */
             case 13: { //ROL
                 this.registers["r" + inst[1]] = rolInt16(this.registers["r" + inst[1]],1)
                 this.setFlags(this.registers["r" + inst[1]])
@@ -201,7 +204,6 @@ let cpu = {
                 this.setFlags(this.registers["r" + inst[1]])
                 break
             }
-
             case 15: { //SLL
                 this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] << 1)
                 this.setFlags(this.registers["r" + inst[1]])
@@ -355,6 +357,75 @@ let cpu = {
                 this.setFlags(this.registers["r" + inst[1]])
                 break
             }
+            case 40: {//STR
+                let memoryAddress = this.registers["r"+inst[2]]
+                let bytes = functions.convert16to8(this.registers["r" + inst[1]])
+                memory.data[memoryAddress] = bytes[0]
+                memory.data[memoryAddress+1] = bytes[1]
+                break
+            }
+            case 41: { //LDR
+                let memoryAddress = this.registers["r"+inst[2]]
+                let byte1 = memory.data[memoryAddress]
+                let byte2 = memory.data[memoryAddress+1]
+                this.registers["r"+inst[1]] = functions.convert8to16(byte1,byte2)
+                break
+            }
+            case 42: { //ADDI
+                let output = (this.registers["r" + inst[1]] + (functions.convert8to16(inst[2],inst[3])))
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[1]] = output
+                this.setFlags(this.registers["r" + inst[1]])
+                if(this.registers.flags.C===true) {
+                    this.registers["r" + inst[1]]=(this.registers["r" + inst[1]]-32768)
+                }
+                break
+            }
+            case 43: { //SUBI
+                let output = (this.registers["r" + inst[1]] - (functions.convert8to16(inst[2],inst[3])))
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[1]] = output
+                this.setFlags(this.registers["r" + inst[1]])
+                break
+            }
+            case 44: { //MULI
+                let output = (this.registers["r" + inst[1]] * (functions.convert8to16(inst[2],inst[3])))
+                output = convertTo16Signed(output)
+                this.registers["r" + inst[1]] = output
+                this.setFlags(this.registers["r" + inst[1]])
+                if(this.registers.flags.C===true) {
+                    this.registers["r" + inst[1]]=(this.registers["r" + inst[1]]-32768)
+                }
+                break
+            }
+            case 45: { //DIVI
+                let output = (this.registers["r" + inst[1]] / (functions.convert8to16(inst[2],inst[3])))
+                output = convertTo16Signed(output)
+                output = Math.floor(output)
+                this.registers["r" + inst[1]] = output
+                this.setFlags(this.registers["r" + inst[1]])
+                break
+            }
+            /*
+            TODO:46-47
+            */
+            case 48: { //LDS
+                let memoryAddress = functions.convert8to24(inst[2], inst[3], inst[4])
+                let byte1 = memory.data[memoryAddress]
+                let byte2 = memory.data[memoryAddress+1]
+                this.registers["r"+inst[1]] = functions.convert8to16(byte1,byte2)
+                break
+            }
+            case 49: {//STS
+                let memoryAddress = functions.convert8to24(inst[2], inst[3], inst[4])
+                let bytes = functions.convert16to8(this.registers["r" + inst[1]])
+                memory.data[memoryAddress] = bytes[0]
+                memory.data[memoryAddress+1] = bytes[1]
+                break
+            }
+            /*
+          TODO:50-61
+          */
         }
         //reset cpu phase after execute
         cpu.cpuData.phase=0
@@ -391,7 +462,7 @@ let memory = {
     }
 }
 
-//???????????????? xD ??????????????????????????????????????????????????????????
+//?????????????????????????????????help
 let setInterval2 = function (time) {
     let timeA = 0
     let timeB = 0
@@ -402,7 +473,6 @@ let setInterval2 = function (time) {
         timeB = performance.now()
         timeDelta = 0
         cpu.compute()
-
 
         while (timeDelta < time) {
             timeA = performance.now()

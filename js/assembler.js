@@ -86,13 +86,21 @@ let assembler = {
             let name = instructions[i].name.toUpperCase()
             let opCode = opListAssembler[name].code
 
-            if (opC==="ldi") {
+            if (opC==="ldi" || opC==="addi" || opC==="subi" || opC==="muli" || opC==="divi" ) {
                 memRom.data[memAddress] = opCode
-                memRom.data[memAddress+1] = instructions[i].val1
-                instructions[i].val2 = instructions[i].val2.replace("#","")
+                memRom.data[memAddress + 1] = instructions[i].val1
                 let valueI = this.functions.convert16to8(instructions[i].val2)
-                memRom.data[memAddress+2] = valueI[0]
-                memRom.data[memAddress+3] = valueI[1]
+                memRom.data[memAddress + 2] = valueI[0]
+                memRom.data[memAddress + 3] = valueI[1]
+            } else if (opC==="lds" || opC==="sts") {
+                memRom.data[memAddress] = opCode
+                memRom.data[memAddress + 1] = instructions[i].val1
+                let valueI = this.functions.convert24to8(instructions[i].val2)
+                memRom.data[memAddress + 2] = valueI[0]
+                memRom.data[memAddress + 3] = valueI[1]
+                memRom.data[memAddress + 4] = valueI[2]
+            } else if (0===1) {
+
             } else {
                 for (let j = 0; j<instBytes; j++) {
                     if (j === 0) { //op
@@ -146,7 +154,7 @@ document.getElementById("codeEditor").value =
     "var a 1\n" +
     "var b 1\n" +
     "var c 0\n" +
-    "avar d 10 65520\n" +
+    "avar d 10 $0a00\n" +
 
     "\n" +
     "LD r0 a\n" +

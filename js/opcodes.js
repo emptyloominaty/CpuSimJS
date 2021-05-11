@@ -37,18 +37,30 @@ let opCodeList = {
     34: {bytes:1,name:"TPR",cycles:2},  //Transfer Program Counter to Register(r14)
     35: {bytes:3,name:"AD2",cycles:4},  //Add but A=A+B
     36: {bytes:3,name:"SU2",cycles:4},  //Sub but A=A-B
-    37: {bytes:1,name:"NOP",cycles:1},   //No operation
+    37: {bytes:1,name:"NOP",cycles:1},  //No operation
     38: {bytes:2,name:"SAR",cycles:3},  //Shift Arithmetic Right
     39: {bytes:2,name:"NOT",cycles:3},  //Logical NOT
-    40: {bytes:3,name:"STR",cycles:4},  //TODO:Store to Address saved in Register
-    41: {bytes:4,name:"ADDI",cycles:5}, //TODO:Add Immediate r0 = r0 + #value
-    42: {bytes:4,name:"SUBI",cycles:5}, //TODO:Subtract Immediate
-    43: {bytes:4,name:"MULI",cycles:25},//TODO:Multiply Immediate
-    44: {bytes:4,name:"DIVI",cycles:35},//TODO:Divide Immediate
-    45: {bytes:1,name:"INT",cycles:8},  //TODO:Interrupt
-    46: {bytes:1,name:"RFI",cycles:8},  //TODO:Return from Interrupt
-    47: {bytes:5,name:"LDS",cycles:8},  //TODO:Load
-    48: {bytes:5,name:"STS",cycles:8},  //TODO:Store
-    49: {bytes:1,name:"TCR",cycles:2},  //TODO:Transfer Carry Flag to Register(r13)
-    50: {bytes:1,name:"TRC",cycles:2},  //TODO:Transfer Register(r13) to Carry Flag
+    40: {bytes:3,name:"STR",cycles:5},  //Store to Address saved in Register
+    41: {bytes:3,name:"LDR",cycles:5},  //Load from Address saved in Register
+    42: {bytes:4,name:"ADDI",cycles:5}, //Add Immediate r0 = r0 + value
+    43: {bytes:4,name:"SUBI",cycles:5}, //Subtract Immediate
+    44: {bytes:4,name:"MULI",cycles:25},//Multiply Immediate
+    45: {bytes:4,name:"DIVI",cycles:35},//Divide Immediate
+    46: {bytes:1,name:"INT",cycles:8},  //TODO:Interrupt
+    47: {bytes:1,name:"RFI",cycles:8},  //TODO:Return from Interrupt
+    48: {bytes:5,name:"LDS",cycles:8},  //Load (24bit address)
+    49: {bytes:5,name:"STS",cycles:8},  //Store (24bit address)
+    50: {bytes:1,name:"TCR",cycles:2},  //TODO:Transfer Carry Flag to Register(r13)
+    51: {bytes:1,name:"TRC",cycles:2},  //TODO:Transfer Register(r13) to Carry Flag
+    52: {bytes:1,name:"SEI",cycles:2},  //TODO:Enable Interrupts
+    53: {bytes:1,name:"SDI",cycles:2},  //TODO:Disable Interrupts
+    54: {bytes:4,name:"LD8",cycles:5},  //TODO:Load 1byte
+    55: {bytes:4,name:"ST8",cycles:5},  //TODO:Store 1byte
+    56: {bytes:5,name:"LDS8",cycles:6}, //TODO:Load 1byte (24bit address)
+    57: {bytes:5,name:"STS8",cycles:6}, //TODO:Store 1byte (24bit address)
+    58: {bytes:3,name:"STRS",cycles:5}, //TODO:Store to Address saved in Register (24bit address)
+    59: {bytes:3,name:"LDRS",cycles:5}, //TODO:Load from Address saved in Register (24bit address)
+    60: {bytes:3,name:"STRS8",cycles:5},//TODO:Store to Address saved in Register (24bit address) 1byte
+    61: {bytes:3,name:"LDRS8",cycles:5},//TODO:Load from Address saved in Register (24bit address) 1byte
+
 }

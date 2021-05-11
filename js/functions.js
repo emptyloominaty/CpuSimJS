@@ -7,7 +7,7 @@ let convertTo16Signed = function(data) {
 
 
 let functions = {
-    convert8to16 : function(byteA,byteB) {
+    convert8to16: function(byteA,byteB) {
         let result = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
         let sign = byteA & (1 << 7)
         let x = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
@@ -16,19 +16,32 @@ let functions = {
         }
         return result
     },
-    convert16to8 : function(firstNumber) {
+    convert16to8: function(firstNumber) {
         let high = ((firstNumber >> 8) & 0xff)
         let low = firstNumber & 0xff
         return [high,low]
     },
+    convert24to8: function(value) {
+        let bytes = []
+        bytes[0] = value & 0xff
+        bytes[1] = (value >> 8) & 0xff
+        bytes[2] = (value >> 16) & 0xff
+        return bytes
+    },
+    convert8to24: function(byte1,byte2,byte3) {
+        let ret = (byte3) << 16
+        ret |= (byte2) << 8
+        ret |= byte1
+        return ret
+    },
     decimalToHex: function(d, padding) {
         let hex = Number(d).toString(16);
-        padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding;
+        padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding
         while (hex.length < padding) {
-            hex = "0" + hex;
+            hex = "0" + hex
         }
         //return "0x"+hex;
-        return hex;
+        return hex
     },
     hexToDec: function(hex) {
         return Number(hex)
