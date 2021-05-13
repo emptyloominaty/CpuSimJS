@@ -3,6 +3,7 @@ importScripts('functions.js')
 importScripts('config.js')
 let run
 let clock = 25
+let stop = 0
 
 let cpu = {
     timeA: 0,
@@ -98,6 +99,7 @@ let cpu = {
         switch (inst[0]) {
             case 0: { //STOP
                 postMessage("stop")
+                stop = 1
                 cpu.timeC=cpu.timeA
                 cpu.sendDataToMainThread()
                 close()
@@ -213,16 +215,16 @@ let cpu = {
                 break
             }
             case 17: { //TRR
-                this.registers["r" + inst[2]] = this.registers["r" + inst[1]]
-                    this.setFlags(this.registers["r" + inst[1]])
+                this.registers["r" + inst[2]] = +this.registers["r" + inst[1]]
+                this.setFlags(this.registers["r" + inst[1]])
                 break
             }
             case 18: { //TRS
-                this.registers["sp"] = this.registers["r15"]
+                this.registers["sp"] = +this.registers["r15"]
                 break
             }
             case 19: { //TSR
-                this.registers["r15"] = this.registers["sp"]
+                this.registers["r15"] = +this.registers["sp"]
                 break
             }
             case 20: { //PSH
@@ -262,38 +264,38 @@ let cpu = {
                 break
             }
             case 25: { //JG
-                if (this.registers["r" + inst[3]] > this.registers["r" + inst[4]]) {
-                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                if (this.registers["r" + inst[1]] > this.registers["r" + inst[2]]) {
+                    this.registers.pc = functions.convert8to16(inst[3],inst[4])
                 }
                 break
             }
             case 26: { //JL
-                if (this.registers["r" + inst[3]] < this.registers["r" + inst[4]]) {
-                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                if (this.registers["r" + inst[1]] < this.registers["r" + inst[2]]) {
+                    this.registers.pc = functions.convert8to16(inst[3],inst[4])
                 }
                 break
             }
             case 27: { //JNG
-                if (this.registers["r" + inst[3]] >! this.registers["r" + inst[4]]) {
-                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                if (this.registers["r" + inst[1]] >! this.registers["r" + inst[2]]) {
+                    this.registers.pc = functions.convert8to16(inst[3],inst[4])
                 }
                 break
             }
             case 28: { //JNL
-                if (this.registers["r" + inst[3]] <! this.registers["r" + inst[4]]) {
-                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                if (this.registers["r" + inst[1]] <! this.registers["r" + inst[2]]) {
+                    this.registers.pc = functions.convert8to16(inst[3],inst[4])
                 }
                 break
             }
             case 29: { //JE
-                if (this.registers["r" + inst[3]] === this.registers["r" + inst[4]]) {
-                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                if (this.registers["r" + inst[1]] === this.registers["r" + inst[2]]) {
+                    this.registers.pc = functions.convert8to16(inst[3],inst[4])
                 }
                 break
             }
             case 30: { //JNE
-                if (this.registers["r" + inst[3]] !== this.registers["r" + inst[4]]) {
-                    this.registers.pc = functions.convert8to16(inst[1],inst[2])
+                if (this.registers["r" + inst[1]] !== this.registers["r" + inst[2]]) {
+                    this.registers.pc = functions.convert8to16(inst[3],inst[4])
                 }
                 break
             }
@@ -356,14 +358,14 @@ let cpu = {
                 break
             }
             case 40: {//STR
-                let memoryAddress = this.registers["r"+inst[2]]
+                let memoryAddress = convertTo16Unsigned(this.registers["r"+inst[2]])
                 let bytes = functions.convert16to8(this.registers["r" + inst[1]])
-                memory.data[memoryAddress] = bytes[0]
-                memory.data[memoryAddress+1] = bytes[1]
+                memory.data[memoryAddress] = +bytes[0]
+                memory.data[memoryAddress+1] = +bytes[1]
                 break
             }
             case 41: { //LDR
-                let memoryAddress = this.registers["r"+inst[2]]
+                let memoryAddress = convertTo16Unsigned(this.registers["r"+inst[2]])
                 let byte1 = memory.data[memoryAddress]
                 let byte2 = memory.data[memoryAddress+1]
                 this.registers["r"+inst[1]] = functions.convert8to16(byte1,byte2)
@@ -523,7 +525,7 @@ let cpu = {
                 break
             }
             case 63: {//STR8
-                let memoryAddress = this.registers["r"+inst[2]]
+                let memoryAddress = convertTo16Unsigned(this.registers["r"+inst[2]])
                 let val = +this.registers["r" + inst[1]]
                 if (val>127) { val=127 } //TODO:??
                 if (val<-128) { val=-128 }
@@ -531,7 +533,7 @@ let cpu = {
                 break
             }
             case 64: { //LDR8
-                let memoryAddress = this.registers["r"+inst[2]]
+                let memoryAddress = convertTo16Unsigned(this.registers["r"+inst[2]])
                 let byte1 = memory.data[memoryAddress]
                 this.registers["r"+inst[1]] = +byte1
                 break
@@ -591,7 +593,7 @@ let setInterval2 = function (time) {
     let timeB = 0
     let timeDelta = 0
 
-    while(0===0) {
+    while(0===stop) {
         timeA = 0
         timeB = performance.now()
         timeDelta = 0
@@ -615,7 +617,7 @@ self.addEventListener('message', function(e) {
                 run = setInterval(cpu.compute,clock)
             } else if (clock<0.0005){
                 console.log("max clock")
-                while(0===0) {
+                while(0===stop) {
                     cpu.compute()
                 }
             } else {

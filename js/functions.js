@@ -4,7 +4,10 @@ let convertTo16Signed = function(data) {
     if(data < -32768) {data = data + 65536}
     return data
 }
-
+let convertTo16Unsigned = function(data) {
+    if(data < 0) {data = data + 65536}
+    return data
+}
 
 let functions = {
     convert8to16: function (byteA, byteB) {

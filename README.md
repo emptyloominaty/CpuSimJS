@@ -82,11 +82,14 @@
 66 - JNC (function)             (Conditional Jump if not Carry)
 ```
 
+
+
+
 ### Instructions Cycles/Bytes
 
 | OP - Name  | Cycles |Bytes |
 | ------------- | :-------------: | :-------------: |
-| 0 - STOP  | 1  | 1 |
+| 0 - STOP  | 1  | 1  |
 | 1 - ADD  | 5  | 4 |
 | 2 - SUB  |  5 | 4 |
 | 3 - LD  |  6 | 4 |
@@ -152,6 +155,7 @@
 | 64 - LDR8  | 5  | 3 |    
 | 65 - JC | 4  | 3 |    
 | 66 - JNC | 4  | 3 |    
+
 
 
 

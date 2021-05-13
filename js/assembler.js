@@ -43,11 +43,10 @@ let assembler = {
             }
             /*-------------------Instructions---------------------------- */
             else if (line[0]!=="" || line[0]!==" ") {
-                instructions[inst] = {name:line[0],bytes:opListAssembler[line[0]].bytes, line:i, memAddress:(stackSize+1)+bytes, val1:line[1]||0, val2:line[2]||0, val3:line[3]||0, val4:line[4]||0}
+                instructions[inst] = {name:line[0],bytes:opListAssembler[line[0]].bytes, line:i, memAddress:(stackSize+1)+bytes, val1:line[1]||0, val2:line[2]||0, val3:line[3]||0, val4:line[4]||0, val5:line[5]||0}
                 bytes+=opListAssembler[line[0]].bytes
                 inst++
             }
-
         } //loop end
 
         //calc vars addresses
@@ -88,24 +87,23 @@ let assembler = {
 
             if (opC==="ldi" || opC==="addi" || opC==="subi" || opC==="muli" || opC==="divi" ) {
                 memRom.data[memAddress] = opCode
-                memRom.data[memAddress + 1] = instructions[i].val1
+                memRom.data[memAddress + 1] = removeRfromCode(instructions[i].val1)
                 let valueI = this.functions.convert16to8(instructions[i].val2)
+                console.log(valueI)
                 memRom.data[memAddress + 2] = valueI[0]
                 memRom.data[memAddress + 3] = valueI[1]
             } else if (opC==="lds" || opC==="sts"|| opC==="lds8" || opC==="sts8" || opC==="strs" || opC==="ldrs" || opC==="strs8" || opC==="ldrs8") {
                 memRom.data[memAddress] = opCode
-                memRom.data[memAddress + 1] = instructions[i].val1
+                memRom.data[memAddress + 1] = removeRfromCode(instructions[i].val1)
                 let valueI = this.functions.convert24to8(instructions[i].val2)
                 memRom.data[memAddress + 2] = valueI[0]
                 memRom.data[memAddress + 3] = valueI[1]
                 memRom.data[memAddress + 4] = valueI[2]
-            } else if (0===1) {
-
-            } else {
-                for (let j = 0; j<instBytes; j++) {
+            }else {
+                for(let j=0; j<instBytes; j++) {
                     if (j === 0) { //op
                         memRom.data[memAddress + j] = opCode
-                    } else if (findRinCode(instructions[i]["val" + j])) { //reg
+                    } else if (findRinCode(String(instructions[i]["val" + j]))) { //reg
                         memRom.data[memAddress + j] = removeRfromCode(instructions[i]["val" + j])
                     }
                     else if (!isNaN(instructions[i]["val" + j])) { //STAIP/INT
@@ -119,9 +117,9 @@ let assembler = {
                     } else {  //function (jumps)
                         let jumpAddress = functions[instructions[i]["val" + j]].memAddress
                         jumpAddress = this.functions.convert16to8(jumpAddress)
-                        memRom.data[memAddress + j] = jumpAddress[0]
+                        memRom.data[(memAddress + j)] = jumpAddress[0]
                         j++
-                        memRom.data[memAddress + j] = jumpAddress[1]
+                        memRom.data[(memAddress + j)] = jumpAddress[1]
                     }
                 }
             }
