@@ -1,13 +1,13 @@
 # CpuSimJS
 
 ## CPU
-* Architecture: **EMP 1 16Bit**
+* Architecture: **EMP 1 16-Bit**
 * **Load–store** architecture
-* Data Width: **16bit**
-* Address Width: **16bit / 24bit**
+* Data Width: **16-bit**
+* Address Width: **16-bit / 24-bit**
 * Registers: 
-    - 16 16Bit Registers (**r0-r15**)  <br/>
-    - 16Bit Program Counter, 16Bit Stack Pointer, Flags <br/>
+    - 16 16-Bit Registers (**r0-r15**)  <br/>
+    - 16-Bit Program Counter, 16-Bit Stack Pointer, Flags <br/>
     - 16 Interrupt Pointers 
 * IPC: **0.17** Avg
 * Max Memory: **64**kB (**16**MB)
