@@ -15,7 +15,7 @@ let cpu = {
     cyclesPerSec: 0,
     clockReal: 0,
     bit: 16,
-    maxPc:  Math.pow(2, 16),
+    maxPc:  (Math.pow(2, 16)-1),
     cpuData: {op:0,decoded:0,bytes:0,cycles:0,instructionCache:0,inst:0,phase:0,bytesLeft:0,fetchI:1,cyclesI:0},
     registers: {},
     init: function() {
@@ -293,19 +293,19 @@ let cpu = {
                 }
                 break
             }
-            case 31: { //MUL (Unsigned)
+            case 31: { //MUL
                 let output = (this.registers["r" + inst[1]] * this.registers["r" + inst[2]])
-                this.setFlags(this.registers["r" + inst[3]])
+                this.setFlags(output)
                 if(this.registers.flags.C===true) {
-                    this.registers["r" + inst[1]]=(this.registers["r" + inst[1]]-65536)
+                    output=(output-65536)
                 }
                 if(this.registers.flags.O===true) {
-                    this.registers["r" + inst[1]] = 65535
+                    output = 65535
                 }
-                this.registers["r" + inst[1]] = output
+                this.registers["r" + inst[3]] = functions.intToUint(output)
                 break
             }
-            case 32: { //DIV (Unsigned)
+            case 32: { //DIV
                 let output = (this.registers["r" + inst[1]] / this.registers["r" + inst[2]])
                 output = Math.floor(output)
                 this.registers["r" + inst[3]] = output
@@ -381,16 +381,16 @@ let cpu = {
                 this.setFlags(this.registers["r" + inst[1]])
                 break
             }
-            case 44: { //MULI (Unsigned)
+            case 44: { //MULI
                 let output = (this.registers["r" + inst[1]] * (functions.convert8to16(inst[2],inst[3])))
-                this.registers["r" + inst[1]] = output
-                this.setFlags(this.registers["r" + inst[1]])
+                this.setFlags(output)
                 if(this.registers.flags.C===true) {
-                    this.registers["r" + inst[1]]=(this.registers["r" + inst[1]]-65536)
+                    output=(output-65536)
                 }
+                this.registers["r" + inst[1]] = functions.intToUint(output)
                 break
             }
-            case 45: { //DIVI (Unsigned)
+            case 45: { //DIVI
                 let b = functions.convert8to16(inst[2],inst[3])
                 let output = (this.registers["r" + inst[1]] / (b))
                 this.registers["r" + inst[1]] = output

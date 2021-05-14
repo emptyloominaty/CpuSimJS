@@ -65,7 +65,7 @@ let assembler = {
             const regex2 = /\br.[0-9]?/g
             let found = value.match(regex2) || false
             if (found) {
-                found = found[0].replace(/r.*?/g, "") //comments
+                found = found[0].replace(/r.*?/g, "")
             }
             return found
         }

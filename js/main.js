@@ -207,7 +207,7 @@ let control = {
         this.el_memValHex4.innerHTML = "0x"+functions.decimalToHex(bytes4[0],2)+functions.decimalToHex(bytes4[1],2)+functions.decimalToHex(bytes4[2],2)+functions.decimalToHex(bytes4[3],2)
         let hiByte = functions.convert8to16(bytes4[0],bytes4[1])
         let loByte = functions.convert8to16(bytes4[2],bytes4[3])
-        this.el_memVal4.innerHTML = loByte+(hiByte*32768)
+        this.el_memVal4.innerHTML = loByte+(hiByte*65536)
     },
 
 }

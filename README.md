@@ -3,9 +3,11 @@
 ## CPU
 * Architecture: **EMP 1 16Bit**
 * **Load–store** architecture
+* Data Width: **16bit**
+* Address Width: **16bit / 24bit**
 * Registers: 
-    - 16 Registers (**r0-r15**)  <br/>
-    - Program Counter, Stack Pointer, Flags <br/>
+    - 16 16Bit Registers (**r0-r15**)  <br/>
+    - 16Bit Program Counter, 16Bit Stack Pointer, Flags <br/>
     - 16 Interrupt Pointers 
 * IPC: **0.17** Avg
 * Max Memory: **64**kB (**16**MB)
@@ -80,11 +82,6 @@
 65 - JC (function)              (Conditional Jump if Carry)
 66 - JNC (function)             (Conditional Jump if not Carry)
 ```
-
-
-
-
-### Instructions Cycles/Bytes
 
 | OP - Name  | Cycles |Bytes |
 | ------------- | :-------------: | :-------------: |
