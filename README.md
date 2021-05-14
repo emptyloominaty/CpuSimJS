@@ -12,7 +12,12 @@
 * IPC: **0.17** Avg
 * Max Memory: **64**kB (**16**MB)
 * Stack: **0x0000 - 0x00FF**
-
+* Data Types:
+    - **8-bit** Unsigned Integer
+    - **8-bit** Signed Integer
+    - **16-bit** Unsigned Integer
+    - **16-bit** Signed Integer
+    
 ### Instructions
 ```
 0 - STOP                        ()  
@@ -155,4 +160,8 @@
 
 
 
-
+|  | Start | End |
+| ------------- | :-------------: | :-------------: |
+| Stack  |  0x000000  |  0x0000FF   |
+| Program Counter | 0x000100  | 0x00FFFF   |
+| Address Space | 0x000000  | 0xFFFFFF   |

@@ -7,7 +7,7 @@ let assembler = {
         code = code.split("\n")
         code = code.filter(function(e){return e});
 
-        let vars = {}
+        let vars = {} //16-bit variables
         let functions = {}
         let instructions = []
 
@@ -18,7 +18,6 @@ let assembler = {
         }
 
         let bytes = 0
-
         let inst = 0
         for(let i = 0; i<code.length; i++) {
             let line = code[i].split(" ")
@@ -29,11 +28,25 @@ let assembler = {
             /*-------------------Variables---------------------------- */
             if (line[0]==="var" || line[0]==="VAR") {
                 line[2] = line[2].replace(/\$/g, '0x')
-                vars[line[1]] = {name:line[1], value: this.functions.intToUint(Number(line[2]),16), address:i*2, memAddress:0}
+                vars[line[1]] = {name:line[1], value: this.functions.intToUint(Number(line[2]),16), bytes:2, memAddress:0}
             } else if (line[0]==="avar" || line[0]==="AVAR") {
                 line[3] = line[3].replace(/\$/g, '0x')
                 line[2] = line[2].replace(/\$/g, '0x')
-                vars[line[1]] = {name:line[1], value: this.functions.intToUint(Number(line[2]),16), address:i*2, memAddress:Number(line[3])}
+                vars[line[1]] = {name:line[1], value: this.functions.intToUint(Number(line[2]),16), bytes:2, memAddress:Number(line[3])}
+            } else if (line[0]==="var8" || line[0]==="VAR8") {
+                line[2] = line[2].replace(/\$/g, '0x')
+                vars[line[1]] = {name:line[1], value: this.functions.intToUint(Number(line[2]),8), bytes:1, memAddress:0}
+            } else if (line[0]==="avar8" || line[0]==="AVAR8") {
+                line[3] = line[3].replace(/\$/g, '0x')
+                line[2] = line[2].replace(/\$/g, '0x')
+                vars[line[1]] = {name:line[1], value: this.functions.intToUint(Number(line[2]),8), bytes:1, memAddress:Number(line[3])}
+            } else if (line[0]==="var32" || line[0]==="VAR32") {
+                line[2] = line[2].replace(/\$/g, '0x')
+                vars[line[1]] = {name:line[1], value: this.functions.intToUint(Number(line[2]),32), bytes:4, memAddress:0}
+            } else if (line[0]==="avar32" || line[0]==="AVAR32") {
+                line[3] = line[3].replace(/\$/g, '0x')
+                line[2] = line[2].replace(/\$/g, '0x')
+                vars[line[1]] = {name:line[1], value: this.functions.intToUint(Number(line[2]),32), bytes:4, memAddress:Number(line[3])}
             }
             /*-------------------Functions---------------------------- */
             else if (found[0]) {
@@ -50,15 +63,29 @@ let assembler = {
         } //loop end
 
         //calc vars addresses
+        let varsByte = 0
         let varsAddress = (stackSize+1)+bytes
         for (const key of Object.keys(vars)) {
             if (vars[key].memAddress===0) {
-                vars[key].memAddress = (varsAddress + vars[key].address)
+                vars[key].memAddress = (varsAddress + varsByte)
+                varsByte+= vars[key].bytes
             }
             //write var to memory
-            let varbytes = this.functions.convert16to8(vars[key].value)
-            memRom.data[vars[key].memAddress] = varbytes[0]
-            memRom.data[vars[key].memAddress+1] = varbytes[1]
+            if (vars[key].bytes===2) {
+                let varbytes = this.functions.convert16to8(vars[key].value)
+                memRom.data[vars[key].memAddress] = varbytes[0]
+                memRom.data[vars[key].memAddress + 1] = varbytes[1]
+            } else if (vars[key].bytes===1) {
+                memRom.data[vars[key].memAddress] = vars[key].value
+            } else if (vars[key].bytes===4) {
+                let varwords =  this.functions.convert32to16(vars[key].value)
+                let varbytes1 = this.functions.convert16to8(varwords[0])
+                let varbytes2 = this.functions.convert16to8(varwords[1])
+                memRom.data[vars[key].memAddress] = varbytes1[0]
+                memRom.data[vars[key].memAddress + 1] = varbytes1[1]
+                memRom.data[vars[key].memAddress + 2] = varbytes2[0]
+                memRom.data[vars[key].memAddress + 3] = varbytes2[1]
+            }
         }
 
         let removeRfromCode = function(value) { //registers r1 => 1
@@ -89,7 +116,6 @@ let assembler = {
                 memRom.data[memAddress] = opCode
                 memRom.data[memAddress + 1] = removeRfromCode(instructions[i].val1)
                 let valueI = this.functions.convert16to8(instructions[i].val2)
-                console.log(valueI)
                 memRom.data[memAddress + 2] = valueI[0]
                 memRom.data[memAddress + 3] = valueI[1]
             } else if (opC==="lds" || opC==="sts"|| opC==="lds8" || opC==="sts8" || opC==="strs" || opC==="ldrs" || opC==="strs8" || opC==="ldrs8") {

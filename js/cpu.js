@@ -480,28 +480,28 @@ let cpu = {
                 break
             }
             case 58: {//STRS
-                let memoryAddress = functions.convert16to32Signed(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
+                let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
                 let bytes = functions.convert16to8(this.registers["r" + inst[1]])
                 memory.data[memoryAddress] = bytes[0]
                 memory.data[memoryAddress+1] = bytes[1]
                 break
             }
             case 59: { //LDRS
-                let memoryAddress = functions.convert16to32Signed(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
+                let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
                 let byte1 = memory.data[memoryAddress]
                 let byte2 = memory.data[memoryAddress+1]
                 this.registers["r"+inst[1]] = functions.convert8to16(byte1,byte2)
                 break
             }
             case 60: {//STRS8
-                let memoryAddress = functions.convert16to32Signed(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
+                let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
                 let val = +this.registers["r" + inst[1]]
                 val = val & 0xff
                 memory.data[memoryAddress] = val
                 break
             }
             case 61: { //LDRS8
-                let memoryAddress = functions.convert16to32Signed(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
+                let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
                 let byte1 = memory.data[memoryAddress]
                 this.registers["r"+inst[1]] = +byte1
                 break
@@ -590,7 +590,6 @@ let setInterval2 = function (time) {
         while (timeDelta < time) {
             timeA = performance.now()
             timeDelta = timeA - timeB
-
         }
     }
 }

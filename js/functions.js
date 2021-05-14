@@ -56,13 +56,13 @@ let functions = {
         ret |= byte3
         return ret
     },
-    convert32to16Signed: function (value) {
+    convert32to16: function (value) {
         let bytes = []
         bytes[1] = value & 0xffff
         bytes[0] = (value >> 16) & 0xffff
         return bytes
     },
-    convert16to32Signed: function (word1,word2) {
+    convert16to32: function (word1,word2) {
         let ret = (word1) << 16
         ret |= word2
         return ret
