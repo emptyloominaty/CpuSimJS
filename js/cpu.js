@@ -612,7 +612,6 @@ self.addEventListener('message', function(e) {
                 setInterval2(clock)
             }
 
-
             break
         }
         case "reset": {

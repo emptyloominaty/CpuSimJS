@@ -56,6 +56,9 @@ let assembler = {
             }
             /*-------------------Instructions---------------------------- */
             else if (line[0]!=="" || line[0]!==" ") {
+                if (line[2]!==undefined) {
+                    line[2] = line[2].replace(/\$/g, '0x')
+                }
                 instructions[inst] = {name:line[0],bytes:opListAssembler[line[0]].bytes, line:i, memAddress:(stackSize+1)+bytes, val1:line[1]||0, val2:line[2]||0, val3:line[3]||0, val4:line[4]||0, val5:line[5]||0}
                 bytes+=opListAssembler[line[0]].bytes
                 inst++
@@ -127,20 +130,32 @@ let assembler = {
                 memRom.data[memAddress + 4] = valueI[2]
             }else {
                 for(let j=0; j<instBytes; j++) {
-                    if (j === 0) { //op
+                    //-----------------------------------------------------------------------OPCODE
+                    if (j === 0) {
                         memRom.data[memAddress + j] = opCode
-                    } else if (findRinCode(String(instructions[i]["val" + j]))) { //reg
+                        //-----------------------------------------------------------------------REG
+                    } else if (findRinCode(String(instructions[i]["val" + j]))) {
                         memRom.data[memAddress + j] = removeRfromCode(instructions[i]["val" + j])
-                    }
-                    else if (!isNaN(instructions[i]["val" + j])) { //STAIP/INT
+                        //-----------------------------------------------------------------------LOAD/STORE HEX
+                    } else if (typeof instructions[i]["val" + j] === 'string' && instructions[i]["val" + j].startsWith("0x")) {
+                        instructions[i]["val" + j] = this.functions.hexToDec(instructions[i]["val" + j])
+                        let memVar = instructions[i]["val" + j]
+                        memVar = this.functions.convert16to8(memVar)
+                        memRom.data[memAddress + j] = memVar[0]
+                        j++
+                        memRom.data[memAddress + j] = memVar[1]
+                        //-----------------------------------------------------------------------STAIP/INT
+                    } else if (!isNaN(instructions[i]["val" + j])) {
                         memRom.data[memAddress + j] = instructions[i]["val" + j]
-                    } else if (opC !== "jsr" && opC !== "jg" && opC !== "jng" && opC !== "jl" && opC !== "jnl" && opC !== "je" && opC !== "jne" && opC !== "jmp") { //mem
+                        //-----------------------------------------------------------------------MEM ADDRESS
+                    } else if (opC !== "jsr" && opC !== "jg" && opC !== "jng" && opC !== "jl" && opC !== "jnl" && opC !== "je" && opC !== "jne" && opC !== "jmp") {
                         let memVar = vars[instructions[i]["val" + j]].memAddress
                         memVar = this.functions.convert16to8(memVar)
                         memRom.data[memAddress + j] = memVar[0]
                         j++
                         memRom.data[memAddress + j] = memVar[1]
-                    } else {  //function (jumps)
+                        //-----------------------------------------------------------------------FUNCTIONS (JUMPS)
+                    } else {
                         let jumpAddress = functions[instructions[i]["val" + j]].memAddress
                         jumpAddress = this.functions.convert16to8(jumpAddress)
                         memRom.data[(memAddress + j)] = jumpAddress[0]
