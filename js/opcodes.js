@@ -67,11 +67,12 @@ let opCodeList = {
     64: {bytes:3,name:"LDR8",cycles:5}, //Load from Address stored in Register 1byte
     65: {bytes:3,name:"JC",cycles:4},   //Conditional Jump if Carry
     66: {bytes:3,name:"JNC",cycles:4},  //Conditional Jump if not Carry
+    67: {bytes:3,name:"LDI8",cycles:3},  //Load Immediate 1byte
 
-    //idk
+    /*idk
     67: {bytes:2,name:"CUS",cycles:4},   //TODO:Convert from unsigned to signed   0 = 32768 | 32767 = 65535
     68: {bytes:2,name:"CSU",cycles:4},   //TODO:Convert from signed to unsigned   32768 = 0 | 65535 = 32767
-
+        */
 
 
 }

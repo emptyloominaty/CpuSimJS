@@ -114,13 +114,17 @@ let assembler = {
             let opC = instructions[i].name.toLowerCase()
             let name = instructions[i].name.toUpperCase()
             let opCode = opListAssembler[name].code
-
-            if (opC==="ldi" || opC==="addi" || opC==="subi" || opC==="muli" || opC==="divi" ) {
+            if (opC==="ldi" || opC==="ldi8" ||  opC==="addi" || opC==="subi" || opC==="muli" || opC==="divi" ) {
                 memRom.data[memAddress] = opCode
                 memRom.data[memAddress + 1] = removeRfromCode(instructions[i].val1)
-                let valueI = this.functions.convert16to8(instructions[i].val2)
-                memRom.data[memAddress + 2] = valueI[0]
-                memRom.data[memAddress + 3] = valueI[1]
+                if (opC==="ldi8") {
+                    memRom.data[memAddress + 2] = instructions[i].val2
+                } else {
+                    let valueI = this.functions.convert16to8(instructions[i].val2)
+                    memRom.data[memAddress + 2] = valueI[0]
+                    memRom.data[memAddress + 3] = valueI[1]
+                }
+
             } else if (opC==="ldx" || opC==="stx"|| opC==="ldx8" || opC==="stx8" || opC==="strx" || opC==="ldrx" || opC==="strx8" || opC==="ldrx8") {
                 memRom.data[memAddress] = opCode
                 memRom.data[memAddress + 1] = removeRfromCode(instructions[i].val1)
@@ -128,7 +132,7 @@ let assembler = {
                 memRom.data[memAddress + 2] = valueI[0]
                 memRom.data[memAddress + 3] = valueI[1]
                 memRom.data[memAddress + 4] = valueI[2]
-            }else {
+            } else {
                 for(let j=0; j<instBytes; j++) {
                     //-----------------------------------------------------------------------OPCODE
                     if (j === 0) {

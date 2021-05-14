@@ -538,6 +538,10 @@ let cpu = {
                 }
                 break
             }
+            case 67: { //LDI8
+                this.registers["r"+inst[1]] = +inst[2]
+                break
+            }
         }
         //reset cpu phase after execute
         cpu.cpuData.phase=0
