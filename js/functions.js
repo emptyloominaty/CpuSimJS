@@ -10,13 +10,32 @@ let convertTo16Unsigned = function(data) {
 }
 
 let functions = {
+    uintToInt: function uintToInt(uint, nbit) {
+        nbit = +nbit || 32;
+        if (nbit > 32) throw new RangeError('uintToInt only supports ints up to 32 bits');
+        uint <<= 32 - nbit;
+        uint >>= 32 - nbit;
+        return uint;
+    },
+    intToUint: function intToUint(int, nbit) {
+        let u = new Uint32Array(1);
+        nbit = +nbit || 32;
+        if (nbit > 32) throw new RangeError('intToUint only supports ints up to 32 bits');
+        u[0] = int;
+        if (nbit < 32) {
+            int = Math.pow(2, nbit) - 1;
+            return u[0] & int;
+        } else {
+            return u[0];
+        }
+    },
     convert8to16: function (byteA, byteB) {
         let result = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
-        let sign = byteA & (1 << 7)
+        /*let sign = byteA & (1 << 7)
         let x = (((byteA & 0xFF) << 8) | (byteB & 0xFF))
         if (sign) {
             result = 0xFFFF0000 | x
-        }
+        }*/
         return result
     },
     convert16to8: function (firstNumber) {
@@ -40,11 +59,11 @@ let functions = {
     convert32to16Signed: function (value) {
         let bytes = []
         bytes[1] = value & 0xffff
-        bytes[0] = (value >> 15) & 0xffff
+        bytes[0] = (value >> 16) & 0xffff
         return bytes
     },
     convert16to32Signed: function (word1,word2) {
-        let ret = (word1) << 15
+        let ret = (word1) << 16
         ret |= word2
         return ret
     },
@@ -61,16 +80,16 @@ let functions = {
         return ret
     },
     convert1byteto8bits: function (value) {
-        let bytes =[]
-        bytes[0] = value & 0x01
-        bytes[1] = (value >> 1) & 0x01
-        bytes[2] = (value >> 2) & 0x01
-        bytes[3] = (value >> 3) & 0x01
-        bytes[4] = (value >> 4) & 0x01
-        bytes[5] = (value >> 5) & 0x01
-        bytes[6] = (value >> 6) & 0x01
-        bytes[7] = (value >> 7) & 0x01
-        return bytes
+        let bit =[]
+        bit[0] = value & 0x01
+        bit[1] = (value >> 1) & 0x01
+        bit[2] = (value >> 2) & 0x01
+        bit[3] = (value >> 3) & 0x01
+        bit[4] = (value >> 4) & 0x01
+        bit[5] = (value >> 5) & 0x01
+        bit[6] = (value >> 6) & 0x01
+        bit[7] = (value >> 7) & 0x01
+        return bit
     },
     decimalToHex: function(d, padding) {
         let hex = Number(d).toString(16);

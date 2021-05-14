@@ -10,7 +10,6 @@
 * IPC: **0.17** Avg
 * Max Memory: **64**kB (**16**MB)
 * Stack: **0x0000 - 0x00FF**
-* Clock: 1Hz - **2MHz**
 
 ### Instructions
 ```

@@ -67,4 +67,16 @@ let opCodeList = {
     64: {bytes:3,name:"LDR8",cycles:5}, //Load from Address stored in Register 1byte
     65: {bytes:3,name:"JC",cycles:4},   //Conditional Jump if Carry
     66: {bytes:3,name:"JNC",cycles:4},  //Conditional Jump if not Carry
+
+    67: {bytes:5,name:"SJG",cycles:7},   //TODO:Conditional Jump if greater (Signed)
+    68: {bytes:5,name:"SJL",cycles:7},   //TODO:Conditional Jump if less (Signed)
+    69: {bytes:5,name:"SJNG",cycles:7},  //TODO:Conditional Jump if not greater (Signed)
+    70: {bytes:5,name:"SJNL",cycles:7},  //TODO:Conditional Jump if not less (Signed)
+    71: {bytes:5,name:"SJE",cycles:7},   //TODO:Conditional Jump if equal (Signed)
+    72: {bytes:5,name:"SJNE",cycles:7},  //TODO:Conditional Jump if not equal (Signed)
+    73: {bytes:4,name:"SMUL",cycles:25}, //TODO:Multiply (Signed)
+    74: {bytes:4,name:"SDIV",cycles:35}, //TODO:Divide (Signed)
+    75: {bytes:4,name:"SMULI",cycles:25},//TODO:Multiply Immediate (Signed)
+    76: {bytes:4,name:"SDIVI",cycles:35},//TODO:Divide Immediate (Signed)
+
 }

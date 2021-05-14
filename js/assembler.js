@@ -22,23 +22,23 @@ let assembler = {
         let inst = 0
         for(let i = 0; i<code.length; i++) {
             let line = code[i].split(" ")
-            line  = line.filter(function(e){return e});
+            line  = line.filter(function(e){return e})
             const regex = /<.*?>/g // <Function>
             let found = line[0].match(regex) || false
 
             /*-------------------Variables---------------------------- */
             if (line[0]==="var" || line[0]==="VAR") {
                 line[2] = line[2].replace(/\$/g, '0x')
-                vars[line[1]] = {name:line[1], value: convertTo16Signed(Number(line[2])), address:i*2, memAddress:0}
+                vars[line[1]] = {name:line[1], value: this.functions.intToUint(Number(line[2]),16), address:i*2, memAddress:0}
             } else if (line[0]==="avar" || line[0]==="AVAR") {
                 line[3] = line[3].replace(/\$/g, '0x')
                 line[2] = line[2].replace(/\$/g, '0x')
-                vars[line[1]] = {name:line[1], value: convertTo16Signed(Number(line[2])), address:i*2, memAddress:Number(line[3])}
+                vars[line[1]] = {name:line[1], value: this.functions.intToUint(Number(line[2]),16), address:i*2, memAddress:Number(line[3])}
             }
             /*-------------------Functions---------------------------- */
             else if (found[0]) {
-                let fnc = line[0].replace('<','');
-                fnc = fnc.replace('>','');
+                let fnc = line[0].replace('<','')
+                fnc = fnc.replace('>','')
                 functions[fnc] = {name:fnc,line:i, memAddress:(stackSize+1)+bytes}
             }
             /*-------------------Instructions---------------------------- */
@@ -65,7 +65,7 @@ let assembler = {
             const regex2 = /\br.[0-9]?/g
             let found = value.match(regex2) || false
             if (found) {
-                found = found[0].replace(/r.*?/g, ""); //comments
+                found = found[0].replace(/r.*?/g, "") //comments
             }
             return found
         }
