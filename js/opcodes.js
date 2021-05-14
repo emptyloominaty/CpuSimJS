@@ -48,20 +48,20 @@ let opCodeList = {
     45: {bytes:4,name:"DIVI",cycles:35},//Divide Immediate
     46: {bytes:2,name:"INT",cycles:7},  //Interrupt
     47: {bytes:1,name:"RFI",cycles:7},  //Return from Interrupt
-    48: {bytes:5,name:"LDS",cycles:8},  //Load (24bit address)
-    49: {bytes:5,name:"STS",cycles:8},  //Store (24bit address)
+    48: {bytes:5,name:"LDX",cycles:8},  //Load (24bit address)
+    49: {bytes:5,name:"STX",cycles:8},  //Store (24bit address)
     50: {bytes:1,name:"TCR",cycles:2},  //Transfer Carry Flag to Register(r13)
     51: {bytes:1,name:"TRC",cycles:2},  //Transfer Register(r13) to Carry Flag
     52: {bytes:1,name:"SEI",cycles:2},  //Enable Interrupts
     53: {bytes:1,name:"SDI",cycles:2},  //Disable Interrupts
     54: {bytes:4,name:"LD8",cycles:5},  //Load 1byte
     55: {bytes:4,name:"ST8",cycles:5},  //Store 1byte
-    56: {bytes:5,name:"LDS8",cycles:7}, //Load 1byte (24bit address)
-    57: {bytes:5,name:"STS8",cycles:7}, //Store 1byte (24bit address)
-    58: {bytes:3,name:"STRS",cycles:6}, //Store to Address stored in Register (24bit address)
-    59: {bytes:3,name:"LDRS",cycles:6}, //Load from Address stored in Register (24bit address)
-    60: {bytes:3,name:"STRS8",cycles:6},//Store to Address stored in Register (24bit address) 1byte
-    61: {bytes:3,name:"LDRS8",cycles:6},//Load from Address stored in Register (24bit address) 1byte
+    56: {bytes:5,name:"LDX8",cycles:7}, //Load 1byte (24bit address)
+    57: {bytes:5,name:"STX8",cycles:7}, //Store 1byte (24bit address)
+    58: {bytes:3,name:"STRX",cycles:6}, //Store to Address stored in Register (24bit address)
+    59: {bytes:3,name:"LDRX",cycles:6}, //Load from Address stored in Register (24bit address)
+    60: {bytes:3,name:"STRX8",cycles:6},//Store to Address stored in Register (24bit address) 1byte
+    61: {bytes:3,name:"LDRX8",cycles:6},//Load from Address stored in Register (24bit address) 1byte
     62: {bytes:4,name:"STAIP",cycles:5},//Store address to Interrupt Pointer
     63: {bytes:3,name:"STR8",cycles:5}, //Store to Address stored in Register 1byte
     64: {bytes:3,name:"LDR8",cycles:5}, //Load from Address stored in Register 1byte
@@ -71,6 +71,7 @@ let opCodeList = {
     //idk
     67: {bytes:2,name:"CUS",cycles:4},   //TODO:Convert from unsigned to signed   0 = 32768 | 32767 = 65535
     68: {bytes:2,name:"CSU",cycles:4},   //TODO:Convert from signed to unsigned   32768 = 0 | 65535 = 32767
+
 
 
 }

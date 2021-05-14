@@ -121,7 +121,7 @@ let assembler = {
                 let valueI = this.functions.convert16to8(instructions[i].val2)
                 memRom.data[memAddress + 2] = valueI[0]
                 memRom.data[memAddress + 3] = valueI[1]
-            } else if (opC==="lds" || opC==="sts"|| opC==="lds8" || opC==="sts8" || opC==="strs" || opC==="ldrs" || opC==="strs8" || opC==="ldrs8") {
+            } else if (opC==="ldx" || opC==="stx"|| opC==="ldx8" || opC==="stx8" || opC==="strx" || opC==="ldrx" || opC==="strx8" || opC==="ldrx8") {
                 memRom.data[memAddress] = opCode
                 memRom.data[memAddress + 1] = removeRfromCode(instructions[i].val1)
                 let valueI = this.functions.convert24to8(instructions[i].val2)

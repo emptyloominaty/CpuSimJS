@@ -67,20 +67,20 @@
 45 - DIVI r(r) (value)          (Divide Immediate)
 46 - INT (ip)                   (Software Interrupt)
 47 - RFI                        (Return from Interrupt)
-48 - LDS r(r) (mem)             (Load from 24bit address)
-49 - STS r(r) (mem)             (Store from 24bit address)
+48 - LDX r(r) (mem)             (Load from 24bit address)
+49 - STX r(r) (mem)             (Store from 24bit address)
 50 - TCR                        (Transfer Carry Flag to Register(r13))
 51 - TRC                        (Transfer Register(r13) to Carry Flag)
 52 - SEI                        (Enable Interrupts)
 53 - SDI                        (Disable Interrupts)
 54 - LD8 r(r) (mem)             (Load 1byte)
 55 - ST8 r(r) (mem)             (Store 1byte)
-56 - LDS8 r(r) (mem)            (Load 1byte (24bit address))
-57 - STS8 r(r) (mem)            (Store 1byte (24bit address))
-58 - STRS r(r) r(r)             (Store to Address stored in Register (24bit address))
-59 - LDRS r(r) r(r)             (Load from Address stored in Register (24bit address))
-60 - STRS8 r(r) r(r)            (Store to Address stored in Register (24bit address) 1byte)
-61 - LDRS8 r(r) r(r)            (Load from Address stored in Register (24bit address) 1byte)
+56 - LDX8 r(r) (mem)            (Load 1byte (24bit address))
+57 - STX8 r(r) (mem)            (Store 1byte (24bit address))
+58 - STRX r(r) r(r)             (Store to Address stored in Register (24bit address))
+59 - LDRX r(r) r(r)             (Load from Address stored in Register (24bit address))
+60 - STRX8 r(r) r(r)            (Store to Address stored in Register (24bit address) 1byte)
+61 - LDRX8 r(r) r(r)            (Load from Address stored in Register (24bit address) 1byte)
 62 - STAIP (ip) (mem)           (Store Address to Interrupt Pointer)
 63 - STR8 r(r) r(r)             (Store to Address stored in Register 1byte)
 64 - LDR8 r(r) r(r)             (Load from Address stored in Register 1byte)
@@ -137,20 +137,20 @@
 | 45 - DIVI  | 35  | 4 |       
 | 46 - INT |  7 | 2 |       
 | 47 - RFI  | 7  | 1 |    
-| 48 - LDS  |  8 | 5 |    
-| 49 - STS  |  8 | 5 |    
+| 48 - LDX  |  8 | 5 |    
+| 49 - STX  |  8 | 5 |    
 | 50 - TCR  | 2  | 1 |    
 | 51 - TRC |  2 | 1 |    
 | 52 - SEI | 2  | 1 |    
 | 53 - SDI | 2  | 1 |    
 | 54 - LD8 |  5 | 4 |    
 | 55 - ST8  |  5 | 4 |    
-| 56 - LDS8 | 7  | 5 |    
-| 57 - STS8 | 7  | 5 |    
-| 58 - STRS |  6 | 3 |
-| 59 - LDRS  | 6  | 3 |    
-| 60 - STRS8 | 6  | 3 |    
-| 61 - LDRS8 | 6  | 3 |    
+| 56 - LDX8 | 7  | 5 |    
+| 57 - STX8 | 7  | 5 |    
+| 58 - STRX |  6 | 3 |
+| 59 - LDRX  | 6  | 3 |    
+| 60 - STRX8 | 6  | 3 |    
+| 61 - LDRX8 | 6  | 3 |    
 | 62 - STAIP | 5  | 4 |    
 | 63 - STR8 | 5  | 3 |
 | 64 - LDR8  | 5  | 3 |    
