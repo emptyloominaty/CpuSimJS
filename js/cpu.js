@@ -14,6 +14,7 @@ let cpu = {
     timeD: 0,
     timeE: 0,
     timeF: 0,
+    timeG: 0,
     cyclesPerSec: 0,
     clockReal: 0,
     bit: 16,
@@ -51,12 +52,15 @@ let cpu = {
         }
         //console.log("OP: "+cpu.cpuData.op+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp+" | | | "+cpu.cpuData.instructionCache[1]+" | "+cpu.cpuData.instructionCache[2]+" | "+cpu.cpuData.instructionCache[3]) //test
         cpu.cyclesPerSec++
-        if (((cpu.timeA-cpu.timeE)>16)) {
-            if (((cpu.timeA-cpu.timeF)>1000)) {
+        if (((cpu.timeA-cpu.timeE)>16)) { //62.5
+            if (((cpu.timeA-cpu.timeF)>1000)) { //1
                 cpu.clockReal = cpu.cyclesPerSec
                 cpu.cyclesPerSec=0
                 cpu.timeF=performance.now()
                 cpu.sendMemoryToMainThread()
+            }
+            if (((cpu.timeA-cpu.timeG)>200)) { //5
+                cpu.timeG=performance.now()
                 /*---Break----*/
                 /*Breaks
                 1 - 0.4% loss every 1000ms
