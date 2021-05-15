@@ -5,6 +5,7 @@ let run
 let clock = 25
 let stop = 0
 let loop
+let clockType = 0 //0=low 1=high 2=max
 
 let cpu = {
     timeA: 0,
@@ -56,15 +57,23 @@ let cpu = {
                 cpu.cyclesPerSec=0
                 cpu.timeF=performance.now()
                 cpu.sendMemoryToMainThread()
-                /*---Wait 4ms----*/
-                stop=2
-                clearTimeout(loop)
-                loop = setTimeout(function () {
-                    stop=0
-                    setInterval2(clock)
-                } ,0)
-
-
+                /*---Break----*/
+                /*Breaks
+                1 - 0.4% loss every 1000ms
+                2 - 0.8% loss
+                3 - 1.2% loss
+                4 - 1.6% loss
+                5 - 2% loss
+                10 - 4% loss
+                60 - 24% loss
+                 */
+                if (clockType>0) {
+                    stop=2
+                    loop = setTimeout(function () {
+                        stop=0
+                        setInterval2(clock)
+                    } ,0)
+                }
             }
             cpu.sendDataToMainThread()
             cpu.timeE = performance.now()
@@ -604,16 +613,21 @@ let setInterval2 = function (time) {
     let timeC = 0
     let timeDelta = 0
     let loop=0
+    if (clockType===1) {
+        while (0 === stop) {
+            timeA = 0
+            timeB = performance.now()
+            timeDelta = 0
+            cpu.compute()
 
-    while(0===stop) {
-        timeA = 0
-        timeB = performance.now()
-        timeDelta = 0
-        cpu.compute()
-
-        while (timeDelta < time) {
-            timeA = performance.now()
-            timeDelta = timeA - timeB
+            while (timeDelta < time) {
+                timeA = performance.now()
+                timeDelta = timeA - timeB
+            }
+        }
+    } else if (clockType===2){
+        while(0===stop) {
+            cpu.compute()
         }
     }
 }
@@ -626,14 +640,15 @@ self.addEventListener('message', function(e) {
             memory.data = e.data.memory
             clock = e.data.clock
             if (clock>5) { //200hz
+                clockType=0
                 console.log("low clock")
                 run = setInterval(cpu.compute,clock)
             } else if (clock<0.0005){
+                clockType=2
                 console.log("max clock")
-                while(0===stop) {
-                    cpu.compute()
-                }
+                setInterval2(clock)
             } else {
+                clockType=1
                 console.log("high clock")
                 setInterval2(clock)
             }
