@@ -4,6 +4,7 @@ importScripts('config.js')
 let run
 let clock = 25
 let stop = 0
+let loop
 
 let cpu = {
     timeA: 0,
@@ -54,6 +55,16 @@ let cpu = {
                 cpu.clockReal = cpu.cyclesPerSec
                 cpu.cyclesPerSec=0
                 cpu.timeF=performance.now()
+                cpu.sendMemoryToMainThread()
+                /*---Wait 4ms----*/
+                stop=2
+                clearTimeout(loop)
+                loop = setTimeout(function () {
+                    stop=0
+                    setInterval2(clock)
+                } ,0)
+
+
             }
             cpu.sendDataToMainThread()
             cpu.timeE = performance.now()
@@ -425,14 +436,14 @@ let cpu = {
                 this.registers.flags.I=false
                 break
             }
-            case 48: { //LDS
+            case 48: { //LDX
                 let memoryAddress = functions.convert8to24(inst[2], inst[3], inst[4])
                 let byte1 = memory.data[memoryAddress]
                 let byte2 = memory.data[memoryAddress+1]
                 this.registers["r"+inst[1]] = functions.convert8to16(byte1,byte2)
                 break
             }
-            case 49: {//STS
+            case 49: {//STX
                 let memoryAddress = functions.convert8to24(inst[2], inst[3], inst[4])
                 let bytes = functions.convert16to8(this.registers["r" + inst[1]])
                 memory.data[memoryAddress] = bytes[0]
@@ -467,40 +478,40 @@ let cpu = {
                 memory.data[memoryAddress] = val
                 break
             }
-            case 56: { //LDS8
+            case 56: { //LDX8
                 let memoryAddress = functions.convert8to24(inst[2],inst[3], inst[4])
                 this.registers["r"+inst[1]] = +memory.data[memoryAddress]
                 break
             }
-            case 57: {//STS8
+            case 57: {//STX8
                 let memoryAddress = functions.convert8to24(inst[2], inst[3], inst[4])
                 let val = +this.registers["r" + inst[1]]
                 val = val & 0xff
                 memory.data[memoryAddress] = val
                 break
             }
-            case 58: {//STRS
+            case 58: {//STRX
                 let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
                 let bytes = functions.convert16to8(this.registers["r" + inst[1]])
                 memory.data[memoryAddress] = bytes[0]
                 memory.data[memoryAddress+1] = bytes[1]
                 break
             }
-            case 59: { //LDRS
+            case 59: { //LDRX
                 let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
                 let byte1 = memory.data[memoryAddress]
                 let byte2 = memory.data[memoryAddress+1]
                 this.registers["r"+inst[1]] = functions.convert8to16(byte1,byte2)
                 break
             }
-            case 60: {//STRS8
+            case 60: {//STRX8
                 let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
                 let val = +this.registers["r" + inst[1]]
                 val = val & 0xff
                 memory.data[memoryAddress] = val
                 break
             }
-            case 61: { //LDRS8
+            case 61: { //LDRX8
                 let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
                 let byte1 = memory.data[memoryAddress]
                 this.registers["r"+inst[1]] = +byte1
@@ -557,7 +568,12 @@ let cpu = {
             flags:{N:false,O:false,Z:false,C:false,I:false,ID:false},ip0:0,ip1:0,ip2:0,ip3:0,ip4:0,ip5:0,ip6:0,ip7:0,ip8:0,ip9:0,ip10:0,ip11:0,ip12:0,ip13:0,ip14:0,ip15:0,}
     },
     sendDataToMainThread: function() {
-        let postMsgData = {data:"data", registers:this.registers, memory: memory.data, timeA:this.timeA, timeB:this.timeB, timeC:this.timeC, timeD:this.timeD, cpuData:this.cpuData, clockReal:cpu.clockReal}
+        let postMsgData = {data:"data", registers:this.registers, timeA:this.timeA, timeB:this.timeB, timeC:this.timeC, timeD:this.timeD, cpuData:this.cpuData, clockReal:cpu.clockReal}
+        postMsgData = JSON.parse(JSON.stringify(postMsgData))
+        postMessage(postMsgData)
+    },
+    sendMemoryToMainThread: function() {
+        let postMsgData = {data:"memory", memory: memory.data}
         postMsgData = JSON.parse(JSON.stringify(postMsgData))
         postMessage(postMsgData)
     },
@@ -576,6 +592,8 @@ let memory = {
     data: [],
     init: function() {
         this.data = new Array(memorySize).fill(0)
+        this.data[keyboardInput] = 0 //keyboard
+        console.log(this.data[keyboardInput])
     }
 }
 
@@ -583,7 +601,9 @@ let memory = {
 let setInterval2 = function (time) {
     let timeA = 0
     let timeB = 0
+    let timeC = 0
     let timeDelta = 0
+    let loop=0
 
     while(0===stop) {
         timeA = 0
@@ -597,6 +617,8 @@ let setInterval2 = function (time) {
         }
     }
 }
+
+
 
 self.addEventListener('message', function(e) {
     switch(e.data.data) {
@@ -623,11 +645,20 @@ self.addEventListener('message', function(e) {
             memory.init()
             break
         }
+        case "input": {
+            memory.data[e.data.address] = e.data.val
+            console.log(memory.data[e.data.address])
+        }
     }
 }, false);
+
+
+
+
 
 
 cpu.init()
 memory.init()
 //run = setInterval(cpu.compute,clock)
+
 

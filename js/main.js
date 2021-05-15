@@ -55,6 +55,7 @@ let control = {
         this.el_btnToggleCpu.innerText = "Stop"
         control.updateHTML() //update screen
         cpuThread.postMessage({data:"start",clock:clock, memory:memRom.data})
+        cpuThread.postMessage({data:"input", address:keyboardInput, val:3})
 
         cpuThread.addEventListener('message', function(e) {
             //console.log('Worker said: ', e.data);
@@ -66,9 +67,12 @@ let control = {
                     control.timeC = e.data.timeC
                     control.timeD = e.data.timeD
                     control.cpuData = e.data.cpuData
-                    control.memory = e.data.memory
                     control.clockReal = e.data.clockReal
                     control.updateHTML() //update screen
+                    break
+                }
+                case "memory": {
+                    control.memory = e.data.memory
                     break
                 }
                 case "stop": {
@@ -212,8 +216,6 @@ let control = {
 
 }
 
-
-
 //main
 control.reset() //test
 control.updateHTML() //update screen
@@ -221,4 +223,14 @@ control.updateHTMLStart()
 let clock = 1 / clockHz * 1000
 
 
+let pressKey = function(key) {
+    if(cpuThread!=="undefined") {
+         cpuThread.postMessage({data:"input", address:keyboardInput, val:key})
+    }
+}
+
+
+let xd =0
+let time1 = performance.now()
+let time2 = 0
 

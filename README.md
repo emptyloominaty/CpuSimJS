@@ -17,7 +17,8 @@
     - **8-bit** Signed Integer
     - **16-bit** Unsigned Integer
     - **16-bit** Signed Integer
-    
+    - **32-bit**? Unsigned Integer
+    - **32-bit**? Signed Integer
 ### Instructions
 ```
 0 - STOP                        ()  
@@ -44,12 +45,12 @@
 22 - AND r(r) r(r) r(r)         (Logical AND)
 23 - OR r(r) r(r) r(r)          (Logical OR)
 24 - XOR r(r) r(r) r(r)         (Logical XOR)
-25 - JG (function) r(r) r(r)    (Conditional Jump if Greater) 
-26 - JL (function) r(r) r(r)    (Conditional Jump if Less) 
-27 - JNG (function) r(r) r(r)   (Conditional Jump if Not Greater) 
-28 - JNL (function) r(r) r(r)   (Conditional Jump if Not Less)
-29 - JE (function) r(r) r(r)    (Conditional Jump if Equal) 
-30 - JNE (function) r(r) r(r)   (Conditional Jump if Not Equal)
+25 - JG r(r) r(r) (function)    (Conditional Jump if Greater) 
+26 - JL r(r) r(r) (function)    (Conditional Jump if Less) 
+27 - JNG r(r) r(r) (function)   (Conditional Jump if Not Greater) 
+28 - JNL r(r) r(r) (function)   (Conditional Jump if Not Less)
+29 - JE r(r) r(r) (function)    (Conditional Jump if Equal) 
+30 - JNE r(r) r(r)  (function)  (Conditional Jump if Not Equal)
 31 - MUL r(r) r(r) r(r)	        (Multiply)
 32 - DIV r(r) r(r) r(r)	        (Divide)
 33 - TRP                        (Transfer Register(r14) to Program Counter)
@@ -86,6 +87,7 @@
 64 - LDR8 r(r) r(r)             (Load from Address stored in Register 1byte)
 65 - JC (function)              (Conditional Jump if Carry)
 66 - JNC (function)             (Conditional Jump if not Carry)
+67 - LDI8 r(r) (val)            (Load Immediate 1byte)
 ```
 
 | OP - Name  | Cycles |Bytes |
@@ -156,7 +158,7 @@
 | 64 - LDR8  | 5  | 3 |    
 | 65 - JC | 4  | 3 |    
 | 66 - JNC | 4  | 3 |    
-
+| 67 - LDI8 | 3  | 3 |    
 
 
 
