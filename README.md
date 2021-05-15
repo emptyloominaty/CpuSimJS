@@ -90,75 +90,75 @@
 67 - LDI8 r(r) (val)            (Load Immediate 1byte)
 ```
 
-| OP - Name  | Cycles |Bytes |
-| ------------- | :-------------: | :-------------: |
-| 0 - STOP  | 1  | 1  |
-| 1 - ADD  | 5  | 4 |
-| 2 - SUB  |  5 | 4 |
-| 3 - LD  |  6 | 4 |
-| 4 - ST  |  6 | 4 |
-| 5 - LDI   | 4  | 4 |
-| 6 - JMP  |  4 | 3 |
-| 7 - JSR  |  6 | 3 |
-| 8 - RFS  | 6  | 1 |
-| 9 - INC  |  3 | 2 |
-| 10 - DEC  |  3 | 2 |
-| 11 - ADC | 5  | 4 |
-| 13 - ROL | 3  | 4 |
-| 14 - ROR |  3 | 2 |         
-| 15 - SLL |  3 | 2 |       
-| 16 - SLR |  3 | 2 |       
-| 17 - TRR | 4  | 3 |       
-| 18 - TRS | 2  | 1 |       
-| 19 - TSR |  2 | 1 |       
-| 20 - PSH  |  4 | 2 |       
-| 21 - POP |  4 | 2 |       
-| 22 - AND |  5 | 4 |       
-| 23 - OR  |  5 | 4 |       
-| 24 - XOR |  5 | 4 |       
-| 25 - JG  |  7 | 5 |       
-| 26 - JL |  7 | 5 |       
-| 27 - JNG | 7  | 5 |       
-| 28 - JNL | 7  | 5 |       
-| 29 - JE  | 7  | 5 |       
-| 30 - JNE | 7  | 5 |       
-| 31 - MUL  | 25  | 4 |       
-| 32 - DIV |  35 | 4 |       
-| 33 - TRP  | 2  | 1 |       
-| 34 - TPR  | 2  | 1 |       
-| 35 - AD2 | 4  | 3 |       
-| 36 - SU2 | 4  | 3 |       
-| 37 - NOP | 1  | 1 |       
-| 38 - SAR  | 3  | 2 |       
-| 39 - NOT |  3 | 2 |       
-| 40 - STR  | 5  | 3 |       
-| 41 - LDR  | 5  | 3 |       
-| 42 - ADDI | 5  | 4 |       
-| 43 - SUBI | 5  | 4 |       
-| 44 - MULI | 25  | 4 |       
-| 45 - DIVI  | 35  | 4 |       
-| 46 - INT |  7 | 2 |       
-| 47 - RFI  | 7  | 1 |    
-| 48 - LDX  |  8 | 5 |    
-| 49 - STX  |  8 | 5 |    
-| 50 - TCR  | 2  | 1 |    
-| 51 - TRC |  2 | 1 |    
-| 52 - SEI | 2  | 1 |    
-| 53 - SDI | 2  | 1 |    
-| 54 - LD8 |  5 | 4 |    
-| 55 - ST8  |  5 | 4 |    
-| 56 - LDX8 | 7  | 5 |    
-| 57 - STX8 | 7  | 5 |    
-| 58 - STRX |  6 | 3 |
-| 59 - LDRX  | 6  | 3 |    
-| 60 - STRX8 | 6  | 3 |    
-| 61 - LDRX8 | 6  | 3 |    
-| 62 - STAIP | 5  | 4 |    
-| 63 - STR8 | 5  | 3 |
-| 64 - LDR8  | 5  | 3 |    
-| 65 - JC | 4  | 3 |    
-| 66 - JNC | 4  | 3 |    
-| 67 - LDI8 | 3  | 3 |    
+| OP - Name  | Cycles |Bytes |  | Byte1 | Byte2 | Byte3 | Byte4 | Byte5 |
+| ------------- | :-------------: | :-------------: | :-------------: | :-------------: |  :-------------: |  :-------------: |  :-------------: |  :-------------: |  
+| 0 - STOP  | 1  | 1  | -  | 0x00  |  - | -  | -  | -  |
+| 1 - ADD  | 5  | 4 | -  | 0x01  |  reg | reg  | reg  | -  |
+| 2 - SUB  |  5 | 4 | -  | 0x02  |  reg | reg  | reg  | -  |
+| 3 - LD  |  6 | 4 | -  | 0x03  |  reg | memHi  | memLo  | -  |
+| 4 - ST  |  6 | 4 | -  | 0x04  |  reg | memHi  | memLo  | -  |
+| 5 - LDI   | 4  | 4 | -  | 0x05 |  reg | valueHi  | valueLo | -  |
+| 6 - JMP  |  4 | 3 | -  | 0x06  |  memHi | memLo  | -  | -  |
+| 7 - JSR  |  6 | 3 | -  | 0x07  |  memHi | memLo   | -  | -  |
+| 8 - RFS  | 6  | 1 | -  | 0x07  |  - | -  | -  | -  |
+| 9 - INC  |  3 | 2 | -  | 0x08  |  reg | -  | -  | -  |
+| 10 - DEC  |  3 | 2 | -  | 0x09  |  reg | -  | -  | -  |
+| 11 - ADC | 5  | 4 | -  | 0x0a  |  reg | reg  | reg  | -  |
+| 13 - ROL | 3  | 4 | -  | 0x0b  |  reg | reg  | reg  | -  |
+| 14 - ROR |  3 | 2 | -  | 0x0c  |  reg | -  | -  | -  |         
+| 15 - SLL |  3 | 2 | -  | 0x0d  |  reg | -  | -  | -  |       
+| 16 - SLR |  3 | 2 | -  | 0x0e  |  reg | -  | -  | -  |       
+| 17 - TRR | 4  | 3 | -  |  0x0f  |  reg | reg  | -  | -  |      
+| 18 - TRS | 2  | 1 | -  |  0x10  |  - | -  | -  | -  |      
+| 19 - TSR |  2 | 1 | -  |   0x11  |  - | -  | -  | -  |     
+| 20 - PSH  |  4 | 2 | -  |  0x12  |  reg | -  | -  | -  |      
+| 21 - POP |  4 | 2 | -  |   0x13  |  reg | -  | -  | -  |     
+| 22 - AND |  5 | 4 |  -  |   0x14  |  reg | reg  | reg  | -  |    
+| 23 - OR  |  5 | 4 |  -  |   0x15  |  reg | reg  | reg | -  |    
+| 24 - XOR |  5 | 4 |  -  |   0x16  |  reg | reg  | reg  | -  |    
+| 25 - JG  |  7 | 5 | -  |    0x17 |  reg | reg  | memHi  | memLo |    
+| 26 - JL |  7 | 5 |  -  |    0x18  |  reg | reg  | memHi  | memLo |   
+| 27 - JNG | 7  | 5 |  -  |    0x19  |  reg | reg  | memHi  | memLo |  
+| 28 - JNL | 7  | 5 | -  |      0x1a  |   reg | reg  | memHi  | memLo |  
+| 29 - JE  | 7  | 5 |  -  |    0x1b |  reg | reg  | memHi  | memLo |  
+| 30 - JNE | 7  | 5 |   -  |   0x1c  |   reg | reg  | memHi  | memLo |  
+| 31 - MUL  | 25  | 4 | -  |    0x1d  |  reg | reg  | reg  | -  |    
+| 32 - DIV |  35 | 4 |  -  |   0x1e |   reg | reg  | reg  | -  |   
+| 33 - TRP  | 2  | 1 |  -  |    0x1f |  - | -  | -  | -  |   
+| 34 - TPR  | 2  | 1 |  -  |    0x20 |  - | -  | -  | -  |   
+| 35 - AD2 | 4  | 3 |   -  |    0x21 |  reg | reg  | -  | -  |  
+| 36 - SU2 | 4  | 3 |  -  |      0x22  |  reg | reg  | -  | -  | 
+| 37 - NOP | 1  | 1 |  -  |     0x23  |  - | -  | -  | -  |  
+| 38 - SAR  | 3  | 2 | -  |      0x24  |  reg | -  | -  | -  |  
+| 39 - NOT |  3 | 2 | -  |       0x25  |  reg | -  | -  | -  | 
+| 40 - STR  | 5  | 3 |  -  |     0x26  |  reg | reg  | -  | -  |  
+| 41 - LDR  | 5  | 3 |  -  |     0x27  |  reg | reg  | -  | -  |  
+| 42 - ADDI | 5  | 4 |  -  |      0x28  |  reg | valueHi  | valueLo  | -  | 
+| 43 - SUBI | 5  | 4 |   -  |      0x29  |  reg | valueHi  | valueLo  | -  | 
+| 44 - MULI | 25  | 4 |  -  |     0x2a  |  reg | valueHi  | valueLo  | -  | 
+| 45 - DIVI  | 35  | 4 |  -  |     0x2b  |  reg | valueHi  | valueLo  | -  | 
+| 46 - INT |  7 | 2 |    -  |     0x2c  |  ip | -  | -  | -  |
+| 47 - RFI  | 7  | 1 |   -  |   0x2d  |  - | -  | -  | -  |
+| 48 - LDX  |  8 | 5 |  -  |    0x2e  |  reg | memHi  | memMi   | memLo  |
+| 49 - STX  |  8 | 5 |  -  |    0x2f  |  reg | memHi  | memMi   | memLo  |
+| 50 - TCR  | 2  | 1 |  -  |    0x30  |  - | -  | -  | -  |
+| 51 - TRC |  2 | 1 |   -  |   0x31  |  - | -  | -  | -  |
+| 52 - SEI | 2  | 1 |  -  |    0x32  |  - | -  | -  | -  |
+| 53 - SDI | 2  | 1 |  -  |    0x33  |  - | -  | -  | -  |
+| 54 - LD8 |  5 | 4 |  -  |    0x34  |   reg | memHi  | memLo  | -  |
+| 55 - ST8  |  5 | 4 |  -  |    0x35  |   reg | memHi  | memLo  | -  |
+| 56 - LDX8 | 7  | 5 |  -  |    0x36  |   reg | memHi  | memMi   | memLo  |
+| 57 - STX8 | 7  | 5 |  -  |    0x37  |   reg | memHi  | memMi   | memLo  |
+| 58 - STRX |  6 | 3 |   -  |    0x38 |  reg | reg  | -  | -  |
+| 59 - LDRX  | 6  | 3 |   -  |   0x39  |  reg | reg  | -  | -  |
+| 60 - STRX8 | 6  | 3 |  -  |    0x3a  |  reg | reg  | -  | -  |
+| 61 - LDRX8 | 6  | 3 |  -  |    0x3b  |  reg | reg  | -  | -  |
+| 62 - STAIP | 5  | 4 |  -  |    0x3c  |  ip | memHi  | memLo  | -  |
+| 63 - STR8 | 5  | 3 |   -  |    0x3d  |   reg | reg  | -  | -  |
+| 64 - LDR8  | 5  | 3 |  -  |    0x3e  |   reg | reg  | -  | -  |
+| 65 - JC | 4  | 3 |    -  |  0x3f  | memHi | memLo  | -  | -  |
+| 66 - JNC | 4  | 3 |   -  |   0x40  |  memHi | memLo  | -  | -  |
+| 67 - LDI8 | 3  | 3 |  -  |    0x41  |  reg | value  | -  | -  |
 
 
 
