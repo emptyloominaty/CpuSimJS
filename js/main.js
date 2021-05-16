@@ -5,7 +5,7 @@ let cpuThread="undefined"
 let memRom = {
     data: [],
     init: function() {
-        this.data = new Array(memorySize).fill(0)
+        this.data = genMemory()
     }
 }
 

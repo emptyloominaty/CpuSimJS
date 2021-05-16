@@ -125,13 +125,17 @@ let assembler = {
                     memRom.data[memAddress + 3] = valueI[1]
                 }
 
-            } else if (opC==="ldx" || opC==="stx"|| opC==="ldx8" || opC==="stx8" || opC==="strx" || opC==="ldrx" || opC==="strx8" || opC==="ldrx8") {
+            } else if (opC==="ldx" || opC==="stx"|| opC==="ldx8" || opC==="stx8" ) {
                 memRom.data[memAddress] = opCode
                 memRom.data[memAddress + 1] = removeRfromCode(instructions[i].val1)
                 let valueI = this.functions.convert24to8(instructions[i].val2)
                 memRom.data[memAddress + 2] = valueI[0]
                 memRom.data[memAddress + 3] = valueI[1]
                 memRom.data[memAddress + 4] = valueI[2]
+            } else if ( opC==="strx" || opC==="ldrx" || opC==="strx8" || opC==="ldrx8") {
+                memRom.data[memAddress] = opCode
+                memRom.data[memAddress + 1] = removeRfromCode(instructions[i].val1)
+                memRom.data[memAddress + 2] = removeRfromCode(instructions[i].val2)
             } else {
                 for(let j=0; j<instBytes; j++) {
                     //-----------------------------------------------------------------------OPCODE
@@ -215,7 +219,7 @@ document.getElementById("codeEditor").value =
 
 
 
-
+document.getElementById("cpuLoading").innerHTML = ""
 
 /* //remove $
 

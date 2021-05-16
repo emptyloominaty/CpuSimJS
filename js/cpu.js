@@ -504,28 +504,28 @@ let cpu = {
                 break
             }
             case 58: {//STRX
-                let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
+                let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+((+inst[2])+1)])
                 let bytes = functions.convert16to8(this.registers["r" + inst[1]])
                 memory.data[memoryAddress] = bytes[0]
                 memory.data[memoryAddress+1] = bytes[1]
                 break
             }
             case 59: { //LDRX
-                let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
+                let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+((+inst[2])+1)])
                 let byte1 = memory.data[memoryAddress]
                 let byte2 = memory.data[memoryAddress+1]
                 this.registers["r"+inst[1]] = functions.convert8to16(byte1,byte2)
                 break
             }
             case 60: {//STRX8
-                let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
+                let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+((+inst[2])+1)])
                 let val = +this.registers["r" + inst[1]]
                 val = val & 0xff
                 memory.data[memoryAddress] = val
                 break
             }
             case 61: { //LDRX8
-                let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+inst[3]])
+                let memoryAddress = functions.convert16to32(this.registers["r"+inst[2]],this.registers["r"+((+inst[2])+1)])
                 let byte1 = memory.data[memoryAddress]
                 this.registers["r"+inst[1]] = +byte1
                 break
@@ -566,6 +566,36 @@ let cpu = {
                 this.registers["r"+inst[1]] = +inst[2]
                 break
             }
+
+            case 68: { //CBT8
+                let array = functions.convert1byteto8bits(this.registers["r"+inst[1]])
+                this.registers["r"+((+inst[1]))] = array[0]
+                this.registers["r"+((+inst[1])+1)] = array[1]
+                this.registers["r"+((+inst[1])+2)] = array[2]
+                this.registers["r"+((+inst[1])+3)] = array[3]
+                this.registers["r"+((+inst[1])+4)] = array[4]
+                this.registers["r"+((+inst[1])+5)] = array[5]
+                this.registers["r"+((+inst[1])+6)] = array[6]
+                this.registers["r"+((+inst[1])+7)] = array[7]
+                break
+            }
+            case 69: { //C8TB
+                let array = [0,0,0,0,0,0,0,0]
+                array[0] = this.registers["r"+((+inst[1]))]
+                array[1] = this.registers["r"+((+inst[1])+1)]
+                array[2] = this.registers["r"+((+inst[1])+2)]
+                array[3] = this.registers["r"+((+inst[1])+3)]
+                array[4] = this.registers["r"+((+inst[1])+4)]
+                array[5] = this.registers["r"+((+inst[1])+5)]
+                array[6] = this.registers["r"+((+inst[1])+6)]
+                array[7] = this.registers["r"+((+inst[1])+7)]
+                console.log(array)
+                this.registers["r"+((+inst[1]))] =  functions.convert8bitsto1byte(array)
+                break
+            }
+
+
+
         }
         //reset cpu phase after execute
         cpu.cpuData.phase=0
@@ -604,9 +634,7 @@ let cpu = {
 let memory = {
     data: [],
     init: function() {
-        this.data = new Array(memorySize).fill(0)
-        this.data[keyboardInput] = 0 //keyboard
-        console.log(this.data[keyboardInput])
+        this.data = genMemory()
     }
 }
 

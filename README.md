@@ -13,12 +13,20 @@
 * Max Memory: **64**kB (**16**MB)
 * Stack: **0x0000 - 0x00FF**
 * Data Types:
+    - **1-bit** Boolean
     - **8-bit** Unsigned Integer
     - **8-bit** Signed Integer
     - **16-bit** Unsigned Integer
     - **16-bit** Signed Integer
     - **32-bit**? Unsigned Integer
     - **32-bit**? Signed Integer
+    
+|  | Start | End |
+| ------------- | :-------------: | :-------------: |
+| Stack  |  0x000000  |  0x0000FF   |
+| Program Counter | 0x000100  | 0x00FFFF   |
+| Address Space | 0x000000  | 0xFFFFFF   |
+
 ### Instructions
 ```
 0 - STOP                        ()  
@@ -88,6 +96,8 @@
 65 - JC (function)              (Conditional Jump if Carry)
 66 - JNC (function)             (Conditional Jump if not Carry)
 67 - LDI8 r(r) (val)            (Load Immediate 1byte)
+68 - CBT8 r(r)                  (Convert Byte to 8 Bits) 1 -> 8 Registers r1 -> (r1:r8)
+69 - C8TB r(r)                  (Convert 8 Bits to Byte) 8 -> 1 Register (r1:r8) -> r1
 ```
 
 | OP - Name  | Cycles |Bytes |  | Byte1 | Byte2 | Byte3 | Byte4 | Byte5 |
@@ -159,11 +169,5 @@
 | 65 - JC | 4  | 3 |    -  |  0x41  | memHi | memLo  | -  | -  |
 | 66 - JNC | 4  | 3 |   -  |   0x42  |  memHi | memLo  | -  | -  |
 | 67 - LDI8 | 3  | 3 |  -  |    0x43  |  reg | value  | -  | -  |
-
-
-
-|  | Start | End |
-| ------------- | :-------------: | :-------------: |
-| Stack  |  0x000000  |  0x0000FF   |
-| Program Counter | 0x000100  | 0x00FFFF   |
-| Address Space | 0x000000  | 0xFFFFFF   |
+| 68 - CBT8 | 2  | 3 |  -  |    0x44  |  reg |  - | -  | -  |
+| 69 - C8TB | 2  | 3 |  -  |    0x45  |  reg |  - | -  | -  |
