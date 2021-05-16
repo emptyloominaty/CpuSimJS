@@ -27,7 +27,6 @@
 | Program Counter | 0x000100  | 0x00FFFF   |
 | Address Space | 0x000000  | 0xFFFFFF   |
 |  |   |    |
-|  |   |    |
 | CPU Ram | 0x000000  |  0x00FFFF  |
 | VRAM | 0x010000  |  0x01FFFF  |
 | Char ROM | 0x020000  |  0x021000  |
