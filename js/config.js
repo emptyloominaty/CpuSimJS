@@ -20,7 +20,7 @@ const gpuStartColorCache =  0x010005 //address stored in mem (2bytes)
 const gpuEndColorCache =    0x010007 //address stored in mem (2bytes)
 
 //character ROM
-const charRomSize = 4096 //102 characters (5x8)
+const charRomSize = 4096 //510 characters (5x8)
 const charRomStart =        0x020000
 const charRomEnd =          0x021000
 
@@ -44,14 +44,18 @@ let genMemory = function() {
     data[gpuStartFrameBuffer] = 0x010009
     data[gpuEndtFrameBuffer] = 0x014E29
     //TODO:character ROM
+    let charCount = 128
+    let charSize = 8
+    let charGeneratedData = genCharacters(charCount)
 
+
+    for (let i = 0; i<charCount; i++) {
+        for (let a = 0; a<charSize; a++) {
+            let b = (i*8)+a
+            data[charRomStart + b] = charGeneratedData[i][a]
+        }
+    }
     return data
 }
 
 
-
-let genCharacters = function() {
-
-
-
-}

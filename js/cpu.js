@@ -1,6 +1,8 @@
 importScripts('opcodes.js')
 importScripts('functions.js')
+importScripts('characters.js')
 importScripts('config.js')
+
 let run
 let clock = 25
 let stop = 0
@@ -125,6 +127,7 @@ let cpu = {
                 postMessage("stop")
                 stop = 1
                 cpu.timeC=cpu.timeA
+                cpu.sendMemoryToMainThread()
                 cpu.sendDataToMainThread()
                 close()
                 break
@@ -589,7 +592,6 @@ let cpu = {
                 array[5] = this.registers["r"+((+inst[1])+5)]
                 array[6] = this.registers["r"+((+inst[1])+6)]
                 array[7] = this.registers["r"+((+inst[1])+7)]
-                console.log(array)
                 this.registers["r"+((+inst[1]))] =  functions.convert8bitsto1byte(array)
                 break
             }

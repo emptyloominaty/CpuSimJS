@@ -14,12 +14,9 @@
 * Stack: **0x0000 - 0x00FF**
 * Data Types:
     - **1-bit** Boolean
-    - **8-bit** Unsigned Integer
-    - **8-bit** Signed Integer
-    - **16-bit** Unsigned Integer
-    - **16-bit** Signed Integer
-    - **32-bit**? Unsigned Integer
-    - **32-bit**? Signed Integer
+    - **8-bit** Unsigned/Signed Integer
+    - **16-bit** Unsigned/Signed Integer
+    - **32-bit**? Unsigned/Signed Integer
     
 |  | Start | End |
 | ------------- | :-------------: | :-------------: |
