@@ -1,8 +1,8 @@
 let canvas = document.getElementById("screen")
 let cvs = canvas.getContext("2d")
 let pixelSize = 4
-let screenW = 200
-let screenH = 100
+let screenW = 320
+let screenH = 200
 let color = "#000000"
 
 canvas.width = screenW*pixelSize
