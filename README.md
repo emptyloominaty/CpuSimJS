@@ -11,7 +11,7 @@
     - 16 Interrupt Pointers 
 * IPC: **0.17** Avg
 * Max Memory: **64**kB (**16**MB)
-* Stack: **0x0000 - 0x00FF**
+* Stack: **256 Bytes**
 * Data Types:
     - **1-bit** Boolean
     - **8-bit** Unsigned/Signed Integer

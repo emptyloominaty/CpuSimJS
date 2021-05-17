@@ -1,1 +1,0 @@
-let keyPressed = 0

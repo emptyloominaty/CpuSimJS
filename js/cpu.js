@@ -333,7 +333,12 @@ let cpu = {
                 break
             }
             case 32: { //DIV
-                let output = (this.registers["r" + inst[1]] / this.registers["r" + inst[2]])
+                let output = 0
+                if ( this.registers["r" + inst[2]]===0) {
+                    output = 0
+                } else {
+                    output = (this.registers["r" + inst[1]] / this.registers["r" + inst[2]])
+                }
                 output = Math.floor(output)
                 this.registers["r" + inst[3]] = output
                 this.registers["r" + (inst[3]+1)] = (this.registers["r" + inst[1]] % this.registers["r" + inst[2]]) //remainder
@@ -419,7 +424,12 @@ let cpu = {
             }
             case 45: { //DIVI
                 let b = functions.convert8to16(inst[2],inst[3])
-                let output = (this.registers["r" + inst[1]] / (b))
+                let output = 0
+                if ( b===0) {
+                    output = 0
+                } else {
+                    output = (this.registers["r" + inst[1]] / (b))
+                }
                 this.registers["r" + inst[1]] = output
                 this.registers["r" + inst[1]] = (this.registers["r" + inst[1]] % (b)) //remainder
                 this.setFlags(this.registers["r" + inst[1]])
@@ -696,10 +706,14 @@ self.addEventListener('message', function(e) {
         }
         case "input": {
             memory.data[e.data.address] = e.data.val
-            console.log(memory.data[e.data.address])
+            break
+        }
+        case "interrupt": {
+            console.log(e.data.ip)
+            break
         }
     }
-}, false);
+}, false)
 
 
 

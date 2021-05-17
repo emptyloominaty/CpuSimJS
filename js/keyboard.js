@@ -1,28 +1,22 @@
 window.addEventListener("keydown", function (event) {
-    if (event.defaultPrevented) {
-        return;
-    }
 
-    switch (event.key) {
+    /*switch (event.key) {
         case "ArrowDown":
-            keyPressed = "ArrowDown"
             pressKey(1)
-            break;
+            break
         case "ArrowUp":
-            keyPressed = "ArrowUp"
             pressKey(2)
-            break;
+            break
         case "ArrowLeft":
-            keyPressed = "ArrowLeft"
             pressKey(3)
-            break;
+            break
         case "ArrowRight":
-            keyPressed = "ArrowRight"
             pressKey(4)
-            break;
+            break
         default:
-            return;
-    }
+            return
+    }*/
 
-    event.preventDefault();
+    pressKey(event.keyCode)
+
 }, true);

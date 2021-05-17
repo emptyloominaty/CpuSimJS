@@ -43,7 +43,7 @@ let genMemory = function() {
     //FRAME BUFFER
     data[gpuStartFrameBuffer] = 0x010009
     data[gpuEndtFrameBuffer] = 0x014E29
-    //TODO:character ROM
+    //CHARACTER ROM
     let charCount = 128
     let charSize = 8
     let charGeneratedData = genCharacters(charCount)

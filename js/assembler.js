@@ -124,11 +124,16 @@ let assembler = {
                     memRom.data[memAddress + 2] = valueI[0]
                     memRom.data[memAddress + 3] = valueI[1]
                 }
-
             } else if (opC==="ldx" || opC==="stx"|| opC==="ldx8" || opC==="stx8" ) {
                 memRom.data[memAddress] = opCode
                 memRom.data[memAddress + 1] = removeRfromCode(instructions[i].val1)
-                let valueI = this.functions.convert24to8(instructions[i].val2)
+                let valueI = 0
+                if (typeof instructions[i].val2 === 'string' && instructions[i].val2.startsWith("0x")) {
+                    valueI = this.functions.convert24to8(instructions[i].val2)
+                } else {
+                    valueI = vars[instructions[i].val2].memAddress
+                    valueI = this.functions.convert24to8(valueI)
+                }
                 memRom.data[memAddress + 2] = valueI[0]
                 memRom.data[memAddress + 3] = valueI[1]
                 memRom.data[memAddress + 4] = valueI[2]
@@ -220,21 +225,3 @@ document.getElementById("codeEditor").value =
 
 
 document.getElementById("cpuLoading").innerHTML = ""
-
-/* //remove $
-
-let xd = "$5 @54 @22 $1"
-const regex = /\$.[0-9]?/g //
-let found = xd.match(regex) || false
-
-console.log(found)
-if (found) {
-  for (let i = 0; i<found.length; i++) {
-   	found[i] = found[i].replace(/\$/g, '');
-	}
-
-}
-
-console.log(found)
-
- */
