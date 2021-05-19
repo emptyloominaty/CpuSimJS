@@ -226,6 +226,7 @@ let clock = 1 / clockHz * 1000
 let pressKey = function(key) {
     if(cpuThread!=="undefined") {
          cpuThread.postMessage({data:"input", address:keyboardInput, val:key})
+         cpuThread.postMessage({data:"interrupt", ip:1})
     }
 }
 

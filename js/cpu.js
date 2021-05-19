@@ -8,6 +8,10 @@ let clock = 25
 let stop = 0
 let loop
 let clockType = 0 //0=low 1=high 2=max
+let interruptHw = 0
+let interruptType = 0
+let interruptCycles = 0
+
 
 let cpu = {
     timeA: 0,
@@ -32,22 +36,44 @@ let cpu = {
         cpu.timeB = performance.now()
 
         let phase = cpu.cpuData.phase
-        if (phase===0) {
-            cpu.fetchStart()
-        } else if (phase===1) {
-            cpu.fetchBytes()
-        } else if (phase===2) {
-            if (cpu.cpuData.cyclesI>0) {
-                cpu.cpuData.cyclesI--
+        switch (phase) {
+            case 0: { //FETCH OPCODE
+                if (interruptHw === 0 || cpu.registers.flags.ID === 1 || cpu.registers.flags.ID === true || cpu.registers.flags.I === 1 || cpu.registers.flags.I === true) {
+                    cpu.fetchStart()
+                } else {
+                    if (interruptCycles===0) {
+                        cpu.cpuData.op = 46
+                        cpu.cpuData.instructionCache = new Array(5).fill(0)
+                        cpu.cpuData.instructionCache[0] = 46
+                        cpu.cpuData.instructionCache[1] = interruptType
+                    }
+                    interruptCycles++
+                    if (interruptCycles>5) {
+                        cpu.cpuData.phase = 3
+                        interruptHw = 0
+                        interruptCycles = 0
+                    }
+                }
+                break
             }
-            if (cpu.cpuData.cyclesI<=0) {
-                cpu.cpuData.phase++
+            case 1: { //FETCH OTHER BYTES
+                cpu.fetchBytes()
+                break
             }
-        } else if (phase===3) {
-            let inst = cpu.cpuData.instructionCache
-            cpu.execute(inst)
+            case 2: { //EXECUTE1
+                if (cpu.cpuData.cyclesI>0) {
+                    cpu.cpuData.cyclesI--
+                }
+                if (cpu.cpuData.cyclesI<=0) {
+                    cpu.cpuData.phase++
+                }
+                break
+            }
+            case 3: { //EXECUTE2
+                cpu.execute(cpu.cpuData.instructionCache)
+                break
+            }
         }
-
 
         if (cpu.registers.pc>cpu.maxPc) {
             cpu.registers.pc = 256
@@ -436,7 +462,7 @@ let cpu = {
                 break
             }
             case 46: { //INT
-                if (this.registers.flags.ID===0 && this.registers.flags.I===0) {
+                if ((this.registers.flags.ID===false || this.registers.flags.ID===0) && (this.registers.flags.I===false || this.registers.flags.I===0)) {
                     let pcBytes = functions.convert16to8(this.registers.pc)
                     let flags = this.registers.flags
                     let flagBytes = functions.convert8bitsto1byte([flags.N, flags.O, flags.C, flags.Z, flags.I, flags.ID, 0, 0])
@@ -709,7 +735,8 @@ self.addEventListener('message', function(e) {
             break
         }
         case "interrupt": {
-            console.log(e.data.ip)
+            interruptHw = 1
+            interruptType = e.data.ip
             break
         }
     }
