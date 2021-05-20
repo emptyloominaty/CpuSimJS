@@ -17,6 +17,11 @@ let assembler = {
             opListAssembler[opCodeList[i].name]={bytes:opCodeList[i].bytes, cycles:opCodeList[i].cycles, code:i}
         }
 
+        let org = false
+        let orgAddress = 0
+        let orgBytes = 0
+        let inOrg = 0
+
         let bytes = 0
         let inst = 0
         for(let i = 0; i<code.length; i++) {
@@ -24,6 +29,14 @@ let assembler = {
             line  = line.filter(function(e){return e})
             const regex = /<.*?>/g // <Function>
             let found = line[0].match(regex) || false
+
+            org = (line[0]===".ORG") || (line[0]===".org") || false
+            if (org===true) {
+                orgBytes = 0
+                inOrg = 1
+                orgAddress = Number(line[1].replace(/\$/g, '0x'))
+                continue
+            }
 
             /*-------------------Variables---------------------------- */
             if (line[0]==="var" || line[0]==="VAR") {
@@ -52,15 +65,27 @@ let assembler = {
             else if (found[0]) {
                 let fnc = line[0].replace('<','')
                 fnc = fnc.replace('>','')
-                functions[fnc] = {name:fnc,line:i, memAddress:(stackSize+1)+bytes}
+                if (inOrg===0) {
+                    functions[fnc] = {name:fnc,line:i, memAddress:(stackSize+1)+bytes}
+                } else {
+                    functions[fnc] = {name:fnc,line:i, memAddress:(+orgAddress+ +orgBytes)}
+                }
             }
             /*-------------------Instructions---------------------------- */
             else if (line[0]!=="" || line[0]!==" ") {
                 if (line[2]!==undefined) {
                     line[2] = line[2].replace(/\$/g, '0x')
                 }
-                instructions[inst] = {name:line[0],bytes:opListAssembler[line[0]].bytes, line:i, memAddress:(stackSize+1)+bytes, val1:line[1]||0, val2:line[2]||0, val3:line[3]||0, val4:line[4]||0, val5:line[5]||0}
-                bytes+=opListAssembler[line[0]].bytes
+                if (line[3]!==undefined) {
+                    line[3] = line[3].replace(/\$/g, '0x')
+                }
+                if (inOrg===0) {
+                    instructions[inst] = {name:line[0],bytes:opListAssembler[line[0]].bytes, line:i, memAddress:(stackSize+1)+bytes, val1:line[1]||0, val2:line[2]||0, val3:line[3]||0, val4:line[4]||0, val5:line[5]||0}
+                    bytes+=opListAssembler[line[0]].bytes
+                } else {
+                    instructions[inst] = {name:line[0],bytes:opListAssembler[line[0]].bytes, line:i, memAddress:(+orgAddress+ +orgBytes), val1:line[1]||0, val2:line[2]||0, val3:line[3]||0, val4:line[4]||0, val5:line[5]||0}
+                    orgBytes+=opListAssembler[line[0]].bytes
+                }
                 inst++
             }
         } //loop end
