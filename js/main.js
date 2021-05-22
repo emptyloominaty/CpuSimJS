@@ -17,7 +17,7 @@ let control = {
     timeD: 0,
     clockReal: 0,
     registers: {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:256, flags:{N:false,O:false,Z:false,C:false,I:false,ID:false}},
-    memory: [],
+    memory: new Uint8Array(memorySize).fill(0),
     cpuData: {op:0,decoded:0,bytes:0,cycles:0,instructionCache:[0,0,0,0,0],inst:0,phase:0,bytesLeft:0,fetchI:1,cyclesI:0},
     el_cpuStatus: document.getElementById("cpuStatus"),
     el_programCounter: document.getElementById("programCounter"),

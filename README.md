@@ -27,7 +27,10 @@
 | CPU Ram | 0x000000  |  0x00FFFF  |
 | VRAM | 0x010000  |  0x01FFFF  |
 | Char ROM | 0x020000  |  0x021000  |
+| User Storage | 0x030000  |  0x03FFFF  |
 | Keyboard | 0x0A0000  |  -  |
+
+
 
 ### Instructions
 ```

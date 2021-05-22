@@ -655,7 +655,6 @@ let cpu = {
     },
     sendMemoryToMainThread: function() {
         let postMsgData = {data:"memory", memory: memory.data}
-        postMsgData = JSON.parse(JSON.stringify(postMsgData))
         postMessage(postMsgData)
     },
     checkStack: function() {
