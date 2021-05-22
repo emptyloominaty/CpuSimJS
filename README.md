@@ -3,7 +3,7 @@
 ## CPU
 * Architecture: **EMP 1 16-Bit**
 * **Load–store** architecture
-* Data Width: **16-bit**
+* Data Width: **16-bit** 
 * Address Width: **16-bit / 24-bit**
 * Registers: 
     - 16 16-Bit Registers (**r0-r15**)  <br/>
