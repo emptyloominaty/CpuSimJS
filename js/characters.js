@@ -1,5 +1,5 @@
 
-let genCharacters = function(charCount = 256) {
+let genCharacters = function(charCount) {
     let chars = []
     for (let i = 0; i<charCount; i++) {
         chars[i]=[0,0,0,0,0,0,0,0,0,0]
@@ -76,6 +76,7 @@ let genCharacters = function(charCount = 256) {
     chars[93] = [0B00000,0B01110,0B00010,0B00010,0B00010,0B00010,0B00010,0B01110] //]
     chars[94] = [0B00000,0B00100,0B01010,0B10001,0B00000,0B00000,0B00000,0B00000] //^
     chars[95] = [0B00000,0B00000,0B00000,0B00000,0B00000,0B00000,0B00000,0B11111] //_
+    chars[96] = [0B00000,0B01000,0B00100,0B00010,0B00000,0B00000,0B00000,0B00000] //`
 
     chars[97] = [0B00000,0B00000,0B00000,0B01110,0B00001,0B01111,0B10001,0B01111] //a
     chars[98] = [0B00000,0B10000,0B10000,0B10110,0B11001,0B10001,0B10001,0B11110] //b
