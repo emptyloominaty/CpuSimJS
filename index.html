@@ -6,6 +6,7 @@
     <title>EMP Cpu</title>
     <link rel="stylesheet" type="text/css" href="styles/style.css">
 
+    <!-- CPU -->
     <script src="js/globalVars.js" defer></script>
     <script src="js/config.js" defer></script>
     <script src="js/opcodes.js" defer></script>
@@ -15,6 +16,9 @@
     <script src="js/main.js" defer></script>
     <script src="js/gpu.js" defer></script>
     <script src="js/assembler.js" defer></script>
+
+    <!-- OTHER JS -->
+    <script src="js/drag.js" defer></script>
 
 </head>
 <body>
@@ -33,12 +37,12 @@
 
         <div class="wrapper2 wrapper3">
             <div class="wrapper1">
-                <!--INFO ABOUT CPU -->
+                <!-----------------------------------------INFO ABOUT CPU--------------------------------------->
                 <div class="window1" id="infoDiv">
                     <p id="cpuFirst"></p>
                     <p id="cpuSecond"></p>
                 </div>
-                <!--ALU -->
+                <!-----------------------------------------ALU--------------------------------------->
                 <div class="window1" id="aluDiv">
                     <h3>ALU</h3>
                     <div class="wrapper1">
@@ -80,7 +84,7 @@
                     </div>
                 </div>
             </div>
-            <!--Registers -->
+            <!-----------------------------------------Registers--------------------------------------->
             <div class="window1" id="regDiv">
                 <h3>Registers</h3>
                 <div class="wrapper1">
@@ -133,7 +137,7 @@
                 </div>
 
             </div>
-            <!--Memory -->
+            <!-----------------------------------------Memory--------------------------------------->
             <div class="window1" id="memDiv">
                 <h3>Memory</h3>
                 <div class="wrapper1">
@@ -164,7 +168,7 @@
                 </div>
             </div>
         </div>
-        <!--Code Editor -->
+        <!----------------------------------------Code Editor--------------------------------------->
         <div class="window1 wrapper3" id="editorDiv">
             <div class="wrapper1">
                 <div class="wrapper2">
@@ -189,12 +193,15 @@
                 <div id="memAllValues"></div>
             </div>
         </div>
+        <!-----------------------------------------Display--------------------------------------->
         <button id="btnToggleKeyboard" onclick="preventToggle()"  >Prevent Keyboard: 0</button>
-        <div class="wrapper3"  id="screenDiv">
-            <canvas id="screen" width="200" height="100" style="border:1px solid #d3d3d3;">
-            </canvas>
+        <div class="wrapper3">
+            <div class="wrapper1  wrapper3"  id="screenDiv">
+                <div id="screenDivheader" >320x200 Screen</div>
+                <canvas id="screen" width="200" height="100" style="border:1px solid #d3d3d3;">
+                </canvas>
+            </div>
         </div>
-
 
     </div>
 

@@ -22,6 +22,21 @@ label {
     line-height: 180%;
 }
 
+#screenDiv {
+    position: absolute;
+    z-index: 9;
+    text-align: center;
+    border: 1px solid #d3d3d3;
+}
+
+#screenDivheader {
+    cursor: move;
+    z-index: 10;
+    background-color: #0c1b44;
+    color: #354357;
+    height:18px;
+}
+
 .kilobytes {
     padding-top:8px;
 }
@@ -70,8 +85,6 @@ label {
 .borderSpanFlag {
     width:15px;
 }
-
-
 
 .memVal2 {
     width:58px;
