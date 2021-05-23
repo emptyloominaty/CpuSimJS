@@ -117,7 +117,7 @@ let assembler = {
         }
 
         let removeRfromCode = function(value) { //registers r1 => 1
-            const regex2 = /\br.[0-9]?/g
+            const regex2 = /\b([R-R-r-r]{1}[0-9]{1,2})/gm
             let found = value.match(regex2) || false
             if (found) {
                 found = found[0].replace(/r.*?/g, "")
@@ -125,7 +125,7 @@ let assembler = {
             return found
         }
         let findRinCode = function(value) {
-            const regex2 = /\br.[0-9]?/g
+            const regex2 = /\b([R-R-r-r]{1}[0-9]{1,2})/gm
             let found = value.match(regex2) || false
 
             if (found!==false) { found=true}

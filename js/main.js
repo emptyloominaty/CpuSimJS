@@ -80,6 +80,11 @@ let control = {
                     control.el_btnToggleCpu.innerText = "Start"
                     control.updateHTML(1) //update screen
                     control.stopCpu()
+                    break
+                }
+                case "debug" :{
+                    console.log(e.data.log)
+                    break
                 }
             }
         }, false);
@@ -127,11 +132,12 @@ let control = {
             this.timeD = performance.now()
             control.updateHTMLRegisters()
             control.updateHTMLAlu()
+            this.el_cpuInfoSecond.innerHTML = "Clock:"+clock+" Ram:"+(memorySize/1024)+"kB"
         }
     },
     updateHTMLStart: function() {
         this.el_cpuInfoFirst.innerHTML = cpuFirstInfo
-        this.el_cpuInfoSecond.innerHTML = cpuSecondInfo
+        this.el_cpuInfoSecond.innerHTML = "Clock:"+clockHz+"Hz Ram:"+(memorySize/1024)+"kB"
     },
     updateHTMLRegisters: function() {
         for (let i = 0; i<16; i++) {

@@ -19,12 +19,26 @@ let drawPixel = function(x,y,color) {
 let drawScreen = function() {
     cvs.clearRect(0, 0, canvas.width, canvas.height)
     let pxCount = 0
+    let frameBufferStart = functions.convert8to16(control.memory[gpuStartFrameBuffer],control.memory[gpuStartFrameBuffer+1])
+    if (frameBufferStart===undefined) { frameBufferStart=9 }
     for (let y = 0; y<screenH; y++) {
         for (let x = 0; x<screenW; x++) {
-            if (control.memory[(control.memory[gpuStartFrameBuffer]+pxCount)]===0 || control.memory[(control.memory[gpuStartFrameBuffer]+pxCount)]===undefined) {
+            let colorVal = control.memory[65536+(frameBufferStart+pxCount)]  //65536 = 01 + xxxx
+            if (colorVal===0 || colorVal===undefined) {
                 color = "#000000"
             } else {
-                color = "#FFFFFF"
+                if (colorMode===0) {
+                    color = "#FFFFFF"
+                } else if (colorMode===1) {
+                    let R = ((colorVal & 0xE0) >> 5)
+                    let G = ((colorVal & 0x1C) >> 2)
+                    let B = (colorVal & 0x03)
+                    let RReal = R*36
+                    let GReal = G*36
+                    let BReal = B*85
+                    color = "rgb("+RReal+","+GReal+","+BReal+")"
+                    //let RGB = ((R << 5) | (G << 2) | B)  //RGB->8B
+                }
             }
             drawPixel(x,y,color)
             pxCount++

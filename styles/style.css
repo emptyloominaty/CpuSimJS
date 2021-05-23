@@ -18,6 +18,18 @@ h1,h2,h3,h4 {
     margin:5px;
 }
 
+label {
+    line-height: 180%;
+}
+
+.kilobytes {
+    padding-top:8px;
+}
+
+.hzClock {
+    padding-top:12px;
+}
+
 .window1 {
     border: 2px solid #303a44;
     box-shadow:  0 0 3px #769893;
@@ -110,10 +122,11 @@ input {
     font-family: Calibri, Arial, sans-serif;
     font-size:1rem;
     text-align:center;
-    border:1px solid #c8c8c8;
+    border:1px solid #C8C8C8;
     border-radius: 3px;
     width: 50px;
     padding:3px;
+    margin:2px 5px 2px 5px;
 }
 
 #setCpuClock {
@@ -141,7 +154,9 @@ input:focus {
     padding:10px;
 }
 
-
+.smallBtn {
+    width:35px;
+}
 
 /* -----Disable Arrows from input type number------- */
 /* Chrome, Safari, Edge, Opera */

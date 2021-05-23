@@ -70,6 +70,8 @@ let cpu = {
                 break
             }
             case 3: { //EXECUTE2
+                //postMessage({data:"debug",log:"OP: "+opCodeList[cpu.cpuData.op].name+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp+" -- "+cpu.cpuData.instructionCache[1]+" | "+cpu.cpuData.instructionCache[2]+" | "+cpu.cpuData.instructionCache[3]+" | "+cpu.cpuData.instructionCache[4]})
+                //console.log("OP: "+cpu.cpuData.op+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp+" -- "+cpu.cpuData.instructionCache[1]+" | "+cpu.cpuData.instructionCache[2]+" | "+cpu.cpuData.instructionCache[3]) //test
                 cpu.execute(cpu.cpuData.instructionCache)
                 break
             }
@@ -78,7 +80,7 @@ let cpu = {
         if (cpu.registers.pc>cpu.maxPc) {
             cpu.registers.pc = 256
         }
-        //console.log("OP: "+cpu.cpuData.op+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp+" | | | "+cpu.cpuData.instructionCache[1]+" | "+cpu.cpuData.instructionCache[2]+" | "+cpu.cpuData.instructionCache[3]) //test
+
         cpu.cyclesPerSec++
         if (((cpu.timeA-cpu.timeE)>16)) { //62.5
             if (((cpu.timeA-cpu.timeF)>1000)) { //1
@@ -570,14 +572,11 @@ let cpu = {
                 break
             }
             case 62: {//STAIP
-                let memoryAddress = functions.convert8to16(inst[2],inst[3])
-                let byte1 = memory.data[memoryAddress]
-                let byte2 = memory.data[memoryAddress+1]
-                this.registers["ip"+inst[1]] = functions.convert8to16(byte1,byte2)
+                this.registers["ip"+inst[1]] = functions.convert8to16(inst[2],inst[3])
                 break
             }
             case 63: {//STR8
-                let memoryAddress = convertTo16Unsigned(this.registers["r"+inst[2]])
+                let memoryAddress = +this.registers["r"+inst[2]]
                 let val = +this.registers["r" + inst[1]]
                 val = val & 0xff
                 memory.data[memoryAddress] = val

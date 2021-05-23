@@ -28,7 +28,7 @@
         <!--START/STOP Button + clock -->
         <div class="wrapper3" id="first">
             <button id="btnToggleCpu" onclick="control.toggleCpu()" > Start </button>
-            <input id="setCpuClock" type="number" max="2000000" min="1" autocomplete="off" value="25" >
+            <input id="setCpuClock" type="number"  autocomplete="off" value="200" > <span class="hzClock">Hz</span>
         </div>
 
         <div class="wrapper2 wrapper3">
@@ -50,6 +50,32 @@
                             <p> A:<span class="borderSpan" id="aluReg1">-</span> </p>
                             <p> B:<span class="borderSpan" id="aluReg2">-</span> </p>
                             <p> C:<span class="borderSpan" id="aluReg3">-</span> </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="window1" >
+                    <h3>Config</h3>
+                    <div class="wrapper1">
+                        <div class="wrapper2">
+                            <label for="inputConfigCpuMemory">Cpu Ram </label>
+                            <input type="Number" min="1" max="64" value="64" autocomplete="off" id="inputConfigCpuMemory"> <span class="kilobytes"> kB </span>
+                            <button class="smallerTxtBtn smallBtn" onclick="config.setCpuRam()"> Set </button>
+                        </div>
+                        <div class="wrapper2">
+                            <label for="inputConfigVideoMemory">Video Ram </label>
+                            <input type="Number" min="1" max="64" value="64" autocomplete="off" id="inputConfigVideoMemory">  <span class="kilobytes"> kB </span>
+                            <button class="smallerTxtBtn smallBtn" onclick="config.setVideoRam()"> Set </button>
+                        </div>
+                        <div class="wrapper2">
+                            <label for="inputConfigCharMemory">Character Rom </label>
+                            <input type="Number" min="1" max="64" value="4" autocomplete="off" id="inputConfigCharMemory">  <span class="kilobytes" > kB </span>
+                            <button class="smallerTxtBtn smallBtn" onclick="config.setCharMemory()"> Set </button>
+                        </div>
+                        <div class="wrapper2">
+
+                        </div>
+                        <div class="wrapper2">
+
                         </div>
                     </div>
                 </div>
