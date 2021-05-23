@@ -1,6 +1,7 @@
 let assembler = {
     functions: functions,
     assembly: function() {
+        let textOutput = ""
         control.reset() //remove all memory data + cpu reset
         let code = document.getElementById("codeEditor").value
         code = code.replace(/;.*?;/g, ""); //comments
@@ -139,6 +140,7 @@ let assembler = {
             let opC = instructions[i].name.toLowerCase()
             let name = instructions[i].name.toUpperCase()
             let opCode = opListAssembler[name].code
+
             if (opC==="ldi" || opC==="ldi8" ||  opC==="addi" || opC==="subi" || opC==="muli" || opC==="divi" ) {
                 memRom.data[memAddress] = opCode
                 memRom.data[memAddress + 1] = removeRfromCode(instructions[i].val1)
@@ -202,7 +204,20 @@ let assembler = {
                     }
                 }
             }
+            //--------
+
+            textOutput += "<span class='hexCol1'>$"+this.functions.decimalToHex(memAddress,4)+"</span>: "
+            textOutput += "<span class='hexCol2'>"+this.functions.decimalToHex(memRom.data[memAddress], 2)+"</span> "
+            if (instBytes>0) {
+                for(let j=1; j<instBytes; j++) {
+                    textOutput += this.functions.decimalToHex(memRom.data[memAddress + j], 2)+" "
+                }
+            }
+            textOutput+="\n"
+            //--------
         }
+        document.getElementById("assemblerOutputHex").innerHTML = textOutput
+
         console.log(instructions)
         console.log(functions)
         console.log(vars)
@@ -211,18 +226,18 @@ let assembler = {
         //HTML
         let variablesAddresses = document.getElementById("variablesAddresses")
         for (const key of Object.keys(vars)) {
-                textVars += vars[key].name +" : "+ vars[key].memAddress +" ($"+ this.functions.decimalToHex(vars[key].memAddress,4) +  ") <br>"
+                textVars += vars[key].name +" : <span class='hexCol3'> ($"+ this.functions.decimalToHex(vars[key].memAddress,4) +  ") </span><br>"
         }
         variablesAddresses.innerHTML = textVars
 
-        let textFunctions = ""
-        //HTML
-        let functionsAddresses = document.getElementById("functionsAddresses")
-        for (const key of Object.keys(functions)) {
-            textFunctions += functions[key].name +" : "+ functions[key].memAddress +" ($"+ this.functions.decimalToHex(functions[key].memAddress,4) + ") <br>"
-        }
-        functionsAddresses.innerHTML = textFunctions
-
+        /*   let textFunctions = ""
+           //HTML
+           let functionsAddresses = document.getElementById("functionsAddresses")
+           for (const key of Object.keys(functions)) {
+               textFunctions += functions[key].name +" : "+ functions[key].memAddress +" ($"+ this.functions.decimalToHex(functions[key].memAddress,4) + ") <br>"
+           }
+           functionsAddresses.innerHTML = textFunctions
+       */
     }
 }
 

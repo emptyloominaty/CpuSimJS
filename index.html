@@ -6,6 +6,9 @@
     <title>EMP Cpu</title>
     <link rel="stylesheet" type="text/css" href="styles/style.css">
 
+    <!-- OTHER JS -->
+    <script src="js/drag.js" defer></script>
+
     <!-- CPU -->
     <script src="js/globalVars.js" defer></script>
     <script src="js/config.js" defer></script>
@@ -17,8 +20,7 @@
     <script src="js/gpu.js" defer></script>
     <script src="js/assembler.js" defer></script>
 
-    <!-- OTHER JS -->
-    <script src="js/drag.js" defer></script>
+
 
 </head>
 <body>
@@ -88,48 +90,48 @@
             <div class="window1" id="regDiv">
                 <h3>Registers</h3>
                 <div class="wrapper1">
-                    <div class="wrapper2">
+                    <div class="wrapper2 wrapper3">
                         <p> PC:<span class="borderSpan" id="regpc">-</span> </p>
                         <p> SP:<span class="borderSpan" id="regsp">-</span> </p>
                     </div>
-                    <div class="wrapper2">
+                    <div class="wrapper2 wrapper3">
                         <p> r0:<span class="borderSpan" id="reg0">-</span> </p>
                         <p> r8:<span class="borderSpan" id="reg8">-</span> </p>
                     </div>
-                    <div class="wrapper2">
+                    <div class="wrapper2 wrapper3">
                         <p> r1:<span class="borderSpan" id="reg1">-</span> </p>
                         <p> r9:<span class="borderSpan" id="reg9">-</span> </p>
                     </div>
-                    <div class="wrapper2">
+                    <div class="wrapper2 wrapper3">
                         <p> r2:<span class="borderSpan" id="reg2">-</span> </p>
                         <p> r10:<span class="borderSpan" id="reg10">-</span> </p>
                     </div>
-                    <div class="wrapper2">
+                    <div class="wrapper2 wrapper3">
                         <p> r3:<span class="borderSpan" id="reg3">-</span> </p>
                         <p> r11:<span class="borderSpan" id="reg11">-</span> </p>
                     </div>
-                    <div class="wrapper2">
+                    <div class="wrapper2 wrapper3">
                         <p> r4:<span class="borderSpan" id="reg4">-</span> </p>
                         <p> r12:<span class="borderSpan" id="reg12">-</span> </p>
                     </div>
-                    <div class="wrapper2">
+                    <div class="wrapper2 wrapper3">
                         <p> r5:<span class="borderSpan" id="reg5">-</span> </p>
                         <p> r13:<span class="borderSpan" id="reg13">-</span> </p>
                     </div>
-                    <div class="wrapper2">
+                    <div class="wrapper2 wrapper3">
                         <p> r6:<span class="borderSpan" id="reg6">-</span> </p>
                         <p> r14:<span class="borderSpan" id="reg14">-</span> </p>
                     </div>
-                    <div class="wrapper2">
+                    <div class="wrapper2 wrapper3">
                         <p> r7:<span class="borderSpan" id="reg7">-</span> </p>
                         <p> r15:<span class="borderSpan" id="reg15">-</span> </p>
                     </div>
-                    <div class="wrapper2">
+                    <div class="wrapper2 wrapper3">
                         <p> N:<span class="borderSpan borderSpanFlag" id="flagsN">-</span> </p>
                         <p> O:<span class="borderSpan borderSpanFlag" id="flagsO">-</span> </p>
                         <p> C:<span class="borderSpan borderSpanFlag" id="flagsC">-</span> </p>
                     </div>
-                    <div class="wrapper2">
+                    <div class="wrapper2 wrapper3">
                         <p> Z:<span class="borderSpan borderSpanFlag" id="flagsZ">-</span> </p>
                         <p> I:<span class="borderSpan borderSpanFlag" id="flagsI">-</span> </p>
                         <p> ID:<span class="borderSpan borderSpanFlag" id="flagsID">-</span> </p>
@@ -141,11 +143,14 @@
             <div class="window1" id="memDiv">
                 <h3>Memory</h3>
                 <div class="wrapper1">
-                    <div class="wrapper2">
+                    <div class="wrapper3">
                        <p> Memory Usage:<span id="memUsage"></span> </p>
+                    </div>
+                    <div class="wrapper3">
                         <button class="smallerTxtBtn" onclick="control.getMemoryUsage()"> Get Usage</button>
                     </div>
-                    <div class="wrapper2">
+
+                    <div class="wrapper2 wrapper3">
                         <input type="text" pattern="0[xX][0-9a-fA-F]+" maxlength="6" value="0x" autocomplete="off" id="input_GetMemVal">
                         <button class="smallerTxtBtn" onclick="control.getMemoryValue()"> Get Value</button>
 
@@ -171,24 +176,35 @@
         <!----------------------------------------Code Editor--------------------------------------->
         <div class="window1 wrapper3" id="editorDiv">
             <div class="wrapper1">
-                <div class="wrapper2">
+                <div class="wrapper2 wrapper3">
                     <h3>Code Editor</h3>
-                    <button class="smallerTxtBtn" onclick="assembler.assembly()"> Upload to Mem</button>
                 </div>
                 <div class="wrapper2 wrapper3">
-                    <div id="functionsAddresses">Functions</div>
+                    <div class="wrapper1 wrapper3"> <h4> HEX Output </h4>
+                        <div id="assemblerOutputHex"></div>
+                    </div>
                     <textarea spellcheck="false" id="codeEditor"> </textarea>
-                    <div id="variablesAddresses">Vars</div>
+                    <div class="wrapper1 wrapper3 flexstart"> <h4> Variables </h4>
+                        <div id="variablesAddresses"></div>
+                    </div>
+                </div>
+                <div class="wrapper2 wrapper3" >
+                    <button class="smallerTxtBtn" onclick="assembler.assembly()"> Upload to Mem</button>
                 </div>
             </div>
         </div>
+        <!----------------------------------------Memory--------------------------------------->
         <div class="window1 wrapper3" id="memExportDiv">
             <div class="wrapper1">
-                <div class="wrapper2">
+                <div class="wrapper3">
                     <h3>Memory Values</h3>
-                    <button class="smallerTxtBtn" onclick="control.getAllMemoryValues()" > Get All Memory Values</button>
-                    <button class="smallerTxtBtn" onclick="control.getAllMemoryValuesAddr()" > Get All Memory Values + Addresses </button>
-                    <button class="smallerTxtBtn" onclick="control.clearMemoryValuesHTML()" > Clear</button>
+                </div>
+                <div class="wrapper2 wrapper3">
+                    <div class="wrapper3">
+                        <button class="smallerTxtBtn" onclick="control.getAllMemoryValues()" > Get All Memory Values</button>
+                        <button class="smallerTxtBtn" onclick="control.getAllMemoryValuesAddr()" > Get All Memory Values + Addresses </button>
+                        <button class="smallerTxtBtn" onclick="control.clearMemoryValuesHTML()" > Clear</button>
+                    </div>
                 </div>
                 <div id="memAllValues"></div>
             </div>

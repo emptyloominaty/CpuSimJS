@@ -21,6 +21,7 @@ let cpu = {
     timeE: 0,
     timeF: 0,
     timeG: 0,
+    timeH: 0,
     cyclesPerSec: 0,
     clockReal: 0,
     bit: 16,
@@ -87,9 +88,8 @@ let cpu = {
                 cpu.clockReal = cpu.cyclesPerSec
                 cpu.cyclesPerSec=0
                 cpu.timeF=performance.now()
-                cpu.sendMemoryToMainThread()
             }
-            if (((cpu.timeA-cpu.timeG)>200)) { //5
+            if (((cpu.timeA-cpu.timeG)>100)) { //10 (4% rip)
                 cpu.timeG=performance.now()
                 /*---Break----*/
                 /*Breaks
@@ -108,7 +108,12 @@ let cpu = {
                         setInterval2(clock)
                     } ,0)
                 }
+                if (((cpu.timeA-cpu.timeH)>200)) { //5
+                    cpu.timeH=performance.now()
+                    cpu.sendMemoryToMainThread()
+                }
             }
+
             cpu.sendDataToMainThread()
             cpu.timeE = performance.now()
         }

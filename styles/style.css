@@ -22,6 +22,20 @@ label {
     line-height: 180%;
 }
 
+#cpuLoading {
+    position: absolute;
+    top: 0;
+    width:100%;
+    text-align:center;
+}
+
+#btnToggleKeyboard {
+    width:150px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
 #screenDiv {
     position: absolute;
     z-index: 9;
@@ -35,6 +49,18 @@ label {
     background-color: #0c1b44;
     color: #354357;
     height:18px;
+}
+
+.hexCol1 {
+    color: #b0b56a;
+}
+
+.hexCol2 {
+    color: #a671b5;
+}
+
+.hexCol3 {
+    color: #64c0cb;
 }
 
 .kilobytes {
@@ -70,6 +96,10 @@ label {
     justify-content: center;
 }
 
+.flexstart {
+    justify-content:flex-start;
+}
+
 .borderSpan {
     font-weight:600;
     border: 1px solid #414044;
@@ -98,10 +128,14 @@ label {
     font-family: 'Courier New', monospace;
 }
 
-#variablesAddresses,#functionsAddresses {
+#variablesAddresses,#functionsAddresses,#assemblerOutputHex {
     background-color: #2f2f2f;
     padding: 4px;
     margin: 10px;
+    white-space:pre-wrap;
+    overflow-y: scroll;
+    height:200px;
+    width:250px;
 }
 
 /* Buttons & Inputs */
@@ -163,7 +197,7 @@ input:focus {
     font-weight:600;
     background-color: #2f2f2f;
     width:300px;
-    height:200px;
+    height:225px;
     padding:10px;
 }
 
