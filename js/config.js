@@ -28,8 +28,12 @@ let charRomSize = 4096 //512 characters (5x8)
 const charRomStart =        0x020000
 
 //----------User Storage (03)
-let userStorageSize = 65536
+let userStorageSize = 64
 const userStorageStart =    0x0C0000
+
+//----------Extended memory(04-09)
+let extMemorySize = 0
+const extMemoryStart =    0x0D0000
 
 //----------I/O Ports  (0A)
 const keyboardInput =       0x0A0000 //1byte
@@ -69,30 +73,16 @@ let genMemory = function() {
             data[charRomStart + b] = charGeneratedData[i][a]
         }
     }
+    //USER STORAGE
+    for (let i = 0; i<userStorageSize; i++) {
+        data[userStorageStart+i] = 0
+    }
+    //EXT RAM (DATA)
+    for (let i = 0; i<extMemorySize; i++) {
+        data[extMemoryStart+i] = 0
+    }
+
+
     return data
 }
-
-
-
-let config = {
-    setCpuRam: function() {
-        let value = (+document.getElementById("inputConfigCpuMemory").value)*1024
-        if (value<512) {value=512}
-        if (value>65536) {value=65536}
-        memorySize =  value
-    },
-    setVideoRam: function () {
-        let value = (+document.getElementById("inputConfigVideoMemory").value)*1024
-        if (value<8192) {value=8192}
-        if (value>65536) {value=65536}
-        vramSize = value
-    },
-    setCharMemory: function () {
-        let value = (+document.getElementById("inputConfigCharMemory").value)*1024
-        if (value<1024) {value=1024}
-        if (value>65536) {value=65536}
-        vramSize =  value
-    }
-}
-
 

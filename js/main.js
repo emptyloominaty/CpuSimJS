@@ -89,7 +89,8 @@ let control = {
             }
         }, false);
 
-
+        this.el_btnToggleCpu.classList.remove("greenBtn")
+        this.el_btnToggleCpu.classList.add("redBtn")
     },
     stopCpu: function() {
         cpuThread.terminate()
@@ -97,12 +98,15 @@ let control = {
         this.el_btnToggleCpu.innerText = "Start"
         control.updateHTML(1) //update screen
         cpuThread="undefined"
+        this.el_btnToggleCpu.classList.remove("redBtn")
+        this.el_btnToggleCpu.classList.add("greenBtn")
+
     },
     toggleCpu: function() {
         //console.log(performance.now())
         clockHz = this.el_setCpuClock.value
         clock = 1 / clockHz * 1000
-        cpuSecondInfo = "Clock:"+clockHz+"hz Ram:"+(memorySize/1024)+"kB"
+        cpuSecondInfo = "Clock:<span class='hexCol1'>"+clockHz+"hz</span>  Ram:"+(memorySize/1024)+"kB"
         control.updateHTMLStart()
         if (this.status==="Executing")  {
             this.stopCpu()
@@ -132,12 +136,12 @@ let control = {
             this.timeD = performance.now()
             control.updateHTMLRegisters()
             control.updateHTMLAlu()
-            this.el_cpuInfoSecond.innerHTML = "Clock:"+clock+" Ram:"+(memorySize/1024)+"kB"
+            this.el_cpuInfoSecond.innerHTML = "Clock:<span class='hexCol1'>"+clock+"</span> Ram:"+(memorySize/1024)+"kB"
         }
     },
     updateHTMLStart: function() {
         this.el_cpuInfoFirst.innerHTML = cpuFirstInfo
-        this.el_cpuInfoSecond.innerHTML = "Clock:"+clockHz+"Hz Ram:"+(memorySize/1024)+"kB"
+        this.el_cpuInfoSecond.innerHTML = "Clock:<span class='hexCol1'>"+clockHz+"Hz</span> Ram:"+(memorySize/1024)+"kB"
     },
     updateHTMLRegisters: function() {
         for (let i = 0; i<16; i++) {
@@ -219,7 +223,23 @@ let control = {
         let loByte = functions.convert8to16(bytes4[2],bytes4[3])
         this.el_memVal4.innerHTML = loByte+(hiByte*65536)
     },
-
+    importUserStorage: function() {
+        let data = document.getElementById("importStorage").value
+        data = data.split(",")
+        for (let i = 0; i<userStorageSize; i++) {
+            if (data[i]===undefined) {
+                memRom.data[userStorageStart+i] = 0
+            }
+            memRom.data[userStorageStart+i]=data[i]
+        }
+    },
+    exportUserStorage: function() {
+        let data = ""
+        for (let i = 0; i<userStorageSize; i++) {
+            data += control.memory[userStorageStart+i]+","
+        }
+        document.getElementById("exportStorage").value = data
+    },
 }
 
 //main

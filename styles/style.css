@@ -22,6 +22,8 @@ label {
     line-height: 180%;
 }
 
+
+
 #cpuLoading {
     position: absolute;
     top: 0;
@@ -51,6 +53,14 @@ label {
     height:18px;
 }
 
+.redBtn {
+    color:#FF8787
+}
+
+.greenBtn {
+    color:#54F080
+}
+
 .hexCol1 {
     color: #b0b56a;
 }
@@ -78,8 +88,22 @@ label {
     background-color: #3a3a3a;
     border-radius:3px;
     padding: 7px;
-    margin:10px;
+    margin: 10px;
 }
+
+.window2 {
+    border: 2px solid #303a44;
+    box-shadow:  0 0 3px #769893;
+    text-shadow: 0 0 3px #769893;
+    background-color: #3a3a3a;
+    border-radius:3px;
+    width:915px;
+    padding: 7px;
+    margin:0 auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
 
 .wrapper1 {
     display:flex;
@@ -144,9 +168,10 @@ button {
     margin:5px;
     padding: 3px;
     width:100px;
-    background-color: #3a3a3a;
-    color: #ededed;
-    text-shadow: 0 0 3px #dcdcdc;
+   /* background-color: #3a3a3a;*/
+    background-color: #303030;
+    color: #abf3ff;
+    text-shadow: 0 0 3px #50d5dc;
     border:1px solid #c8c8c8;
     border-radius:3px;
     cursor:pointer;
@@ -164,12 +189,12 @@ button:hover {
 }
 
 input {
-    background-color: #3a3a3a;
     color:#fff;
     font-family: Calibri, Arial, sans-serif;
     font-size:1rem;
     text-align:center;
-    border:1px solid #C8C8C8;
+    border:0 solid #C8C8C8;
+    background-color: #303030;
     border-radius: 3px;
     width: 50px;
     padding:3px;
@@ -180,6 +205,7 @@ input {
     width:100px;
     margin-top:6px;
     height:20px;
+    background-color: #252525;
 }
 
 #input_GetMemVal {
@@ -199,6 +225,19 @@ input:focus {
     width:300px;
     height:225px;
     padding:10px;
+}
+
+.txtAreaUserStorage {
+    color:#fff;
+    background-color: #2f2f2f;
+    width:300px;
+    height:225px;
+    padding:10px;
+    margin:0 10px 5px 10px;
+}
+
+.alignCenter {
+    text-align:center;
 }
 
 .smallBtn {

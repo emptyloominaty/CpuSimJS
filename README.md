@@ -5,6 +5,7 @@
 * **Load–store** architecture
 * Data Width: **16-bit** 
 * Address Width: **16-bit / 24-bit**
+* Bus: **8-bit** Data + **16-bit** Address // **24-bit** Address
 * Registers: 
     - 16 16-Bit Registers (**r0-r15**)  <br/>
     - 16-Bit Program Counter, 16-Bit Stack Pointer, Flags <br/>
@@ -17,7 +18,7 @@
     - **8-bit** Unsigned/Signed Integer
     - **16-bit** Unsigned/Signed Integer
     - **32-bit**? Unsigned/Signed Integer
-    
+        
 |  | Start | End |
 | ------------- | :-------------: | :-------------: |
 | Stack  |  0x000000  |  0x0000FF   |
@@ -176,3 +177,33 @@
 | 67 - LDI8 | 3  | 3 |  -  |    0x43  |  reg | value  | -  | -  |
 | 68 - CBT8 | 2  | 3 |  -  |    0x44  |  reg |  - | -  | -  |
 | 69 - C8TB | 2  | 3 |  -  |    0x45  |  reg |  - | -  | -  |
+
+
+#GPU
+* Video Memory: **64**kB
+
+| Mode  | Resolution  | Colors | VRAM req. |
+| :-------------: | :-------------: | :-------------: | :-------------: | 
+| 0 | 320x200 | 2  | 62.5kB |
+| 1 | 320x200 | 256  | 62.5kB |
+|   | |  |  |
+| 2*| 320x200 | 2  | 7.81kB |
+| 3*| 640x400 | 2  | 31.25kB |
+*Not implemented yet
+    
+#Memory
+* 0.5 - 64kB CPU RAM
+* 8 - 64kB GPU RAM
+* 4kB Character ROM
+* 0 - 64kB User Storage
+* 0 - 320kB Extended RAM (only for **data**, **instructions** must be copied to main 64kB memory)
+
+    
+#    
+###Max Clock(sim)
+* on Intel Core i5 6600k 4.4GHz
+    -  **3.7**-**3.8**MHz (Firefox)
+    -  **2.6**-**2.7**MHz (Chrome)
+    -  **2.3**-**2.7**MHz (Edge)
+    -  ?-?MHz (Electron)
+    

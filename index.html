@@ -12,6 +12,7 @@
     <!-- CPU -->
     <script src="js/globalVars.js" defer></script>
     <script src="js/config.js" defer></script>
+    <script src="js/configHTMLOnly.js" defer></script>
     <script src="js/opcodes.js" defer></script>
     <script src="js/characters.js" defer></script>
     <script src="js/functions.js" defer></script>
@@ -31,12 +32,13 @@
     </div>
 
     <div id="app">
-        <!--START/STOP Button + clock -->
+        <!---------------------------------------START/STOP Button + clock--------------------------------------->
         <div class="wrapper3" id="first">
-            <button id="btnToggleCpu" onclick="control.toggleCpu()" > Start </button>
+            <button class="greenBtn" id="btnToggleCpu" onclick="control.toggleCpu()" > Start </button>
             <input id="setCpuClock" type="number"  autocomplete="off" value="200" > <span class="hzClock">Hz</span>
         </div>
 
+        <!-----------------------------------------ALU/REGS/MEMORY/CONFIG--------------------------------------->
         <div class="wrapper2 wrapper3">
             <div class="wrapper1">
                 <!-----------------------------------------INFO ABOUT CPU--------------------------------------->
@@ -78,10 +80,14 @@
                             <button class="smallerTxtBtn smallBtn" onclick="config.setCharMemory()"> Set </button>
                         </div>
                         <div class="wrapper2">
-
+                            <label for="inputConfigUserStorage">User Storage </label>
+                            <input type="Number" min="0" max="64" value="0" autocomplete="off" id="inputConfigUserStorage">  <span class="kilobytes" > kB </span>
+                            <button class="smallerTxtBtn smallBtn" onclick="config.setUserStorage()"> Set </button>
                         </div>
                         <div class="wrapper2">
-
+                            <label for="inputConfigExtRam">Extended Ram </label>
+                            <input type="Number" min="0" max="320" value="0" autocomplete="off" id="inputConfigExtRam">  <span class="kilobytes" > kB </span>
+                            <button class="smallerTxtBtn smallBtn" onclick="config.setExtRam()"> Set </button>
                         </div>
                     </div>
                 </div>
@@ -174,7 +180,7 @@
             </div>
         </div>
         <!----------------------------------------Code Editor--------------------------------------->
-        <div class="window1 wrapper3" id="editorDiv">
+        <div class="window2 wrapper3" id="editorDiv">
             <div class="wrapper1">
                 <div class="wrapper2 wrapper3">
                     <h3>Code Editor</h3>
@@ -194,7 +200,7 @@
             </div>
         </div>
         <!----------------------------------------Memory--------------------------------------->
-        <div class="window1 wrapper3" id="memExportDiv">
+        <div class="window2 wrapper3" id="memExportDiv">
             <div class="wrapper1">
                 <div class="wrapper3">
                     <h3>Memory Values</h3>
@@ -209,6 +215,29 @@
                 <div id="memAllValues"></div>
             </div>
         </div>
+        <!-----------------------------------------User Storage-------------------------------------->
+        <div class="window2 wrapper1 wrapper3">
+            <div class="wrapper1 wrapper3 alignCenter">
+                <h3>User Storage</h3>
+                <p id="capacityUserStorage">Capacity: 0B</p>
+            </div>
+            <div class="wrapper2 wrapper3">
+                <div class="wrapper1 wrapper3 alignCenter">
+                    <label for="importStorage">Import</label>
+                    <textarea class="txtAreaUserStorage" id="importStorage"></textarea>
+                    <div class="wrapper3">
+                        <button class="smallerTxtBtn" onclick="control.importUserStorage()">Import</button>
+                    </div>
+                </div>
+                <div class="wrapper1 wrapper3 alignCenter">
+                    <label for="exportStorage">Export</label>
+                    <textarea class="txtAreaUserStorage" id="exportStorage"></textarea>
+                    <div class="wrapper3">
+                        <button class="smallerTxtBtn" onclick="control.exportUserStorage()">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-----------------------------------------Display--------------------------------------->
         <button id="btnToggleKeyboard" onclick="preventToggle()"  >Prevent Keyboard: 0</button>
         <div class="wrapper3">
@@ -219,7 +248,7 @@
             </div>
         </div>
 
-    </div>
 
+    </div>
 </body>
 </html>

@@ -22,6 +22,7 @@ let cpu = {
     timeF: 0,
     timeG: 0,
     timeH: 0,
+    ping: 0,
     cyclesPerSec: 0,
     clockReal: 0,
     bit: 16,
@@ -157,7 +158,7 @@ let cpu = {
     execute: function(inst) {
         switch (inst[0]) {
             case 0: { //STOP
-                postMessage("stop")
+                postMessage({data:"stop"})
                 stop = 1
                 cpu.timeC=cpu.timeA
                 cpu.sendMemoryToMainThread()
@@ -653,6 +654,7 @@ let cpu = {
             flags:{N:false,O:false,Z:false,C:false,I:false,ID:false},ip0:0,ip1:0,ip2:0,ip3:0,ip4:0,ip5:0,ip6:0,ip7:0,ip8:0,ip9:0,ip10:0,ip11:0,ip12:0,ip13:0,ip14:0,ip15:0,}
     },
     sendDataToMainThread: function() {
+        cpu.ping = 1 - cpu.ping
         let postMsgData = {data:"data", registers:this.registers, timeA:this.timeA, timeB:this.timeB, timeC:this.timeC, timeD:this.timeD, cpuData:this.cpuData, clockReal:cpu.clockReal}
         postMsgData = JSON.parse(JSON.stringify(postMsgData))
         postMessage(postMsgData)
