@@ -1,0 +1,191 @@
+var gpuaddress 1
+var framebufferstart $0009 
+var pixel 1
+var charRomAddressHi 2
+var charRomAddressLo 0
+var charLines 392
+var nextChar 6
+var charsRowMax 46
+var charsRow 0
+var charSize 7
+var screenWidth 320
+var color 220
+
+avar keyBufferAddress $1204 $1200
+avar8 writePointer 0 $1202
+avar8 readPointer 0 $1203
+avar8 keyBufferFirst 1 $1204
+
+STAIP 1 $1000
+LDI r15 0
+LD r15 framebufferstart
+LD r14 gpuaddress
+LD r13 pixel
+LD r12 charRomAddressLo
+LD r11 charRomAddressHi
+LD r10 charLines
+JMP infiniteloop
+
+<infiniteloop>
+;ADD DOT;
+LDI r13 255
+STRX8 r13 r14
+
+LD8 r0 writePointer 
+LD8 r1 readPointer
+JNE r0 r1 bufferRead
+JMP infiniteloop
+
+<bufferRead>
+LD r2 keyBufferAddress
+AD2 r2 r1
+
+;LOAD VALUE FROM BUFFER TO r3;
+LDR8 r3 r2
+
+;INCREASE READ POINTER;
+INC r1
+ST8 r1 readPointer
+
+TRR r3 r9
+
+;REMOVE DOT;
+LDI r13 0
+STRX8 r13 r14
+
+LDI r8 9
+JE r9 r8 doEnter
+LDI r8 0
+LDI r7 32
+JE r9 r8 infiniteloop
+JL r9 r7 infiniteloop
+INC r15
+JMP drawChars
+
+<doEnter>
+LD r0 charsRow
+LD r1 charsRowMax
+LD r2 charSize
+DEC r1
+SUB r1 r0 r4 
+MUL r4 r2 r5
+ADDI r5 5
+AD2 r15 r5
+ADDI r15 2561 
+LDI r0 0 
+ST r0 charsRow
+
+
+<drawChars>
+JSR initChar
+JMP infiniteloop
+
+<initChar>
+MULI r9 8
+LDI r12 0
+AD2 r12 r9
+TRR r12 r10
+ADDI r10 8
+JSR nextRow
+JMP nextCharLine
+
+<nextCharLine>
+LDRX8 r0 r11
+CBT8 r0
+JMP drawCharLine
+
+<drawCharLine>
+TRR r4 r13
+JSR drawPixel
+TRR r3 r13
+JSR drawPixel
+TRR r2 r13
+JSR drawPixel
+TRR r1 r13
+JSR drawPixel
+TRR r0 r13
+JSR drawPixel
+ADDI r15 320
+SUBI r15 5
+INC r12
+JE r10 r12 next
+JMP nextCharLine
+
+<drawPixel>
+JMP colorPixel
+
+<drawPixelPls>
+STRX8 r13 r14
+INC r15
+RFS
+
+<colorPixel>
+LDI r7 0
+JE r13 r7 drawPixelPls
+LD r6 color
+AD2 r13 r6
+JMP drawPixelPls
+
+<next>
+SUBI r15 2554
+RFS
+
+<nextRow>
+LD r8 charsRow
+INC r8
+ST r8 charsRow
+LD r7  charsRowMax
+JE r8 r7 nextRowAdd
+RFS
+
+<nextRowAdd>
+LDI r8 1
+ST r8 charsRow
+ADDI r15 2565 ;2562;
+RFS
+
+
+
+
+;KEYBOARD INTERRUPT;
+.ORG $1000
+;PUSH REGISTERS INTERRUPT WILL USE;
+PSH r0
+PSH r1
+PSH r2
+PSH r3
+
+;Load value from keyboard port;
+LDX8 r3 $0A0000 
+
+;Load write/read pointers and buffer address;
+LD8 r0 writePointer 
+LD8 r1 readPointer
+LD r2 keyBufferAddress
+
+AD2 r2 r0
+STR8 r3 r2
+
+INC r0
+ST8 r0 writePointer
+
+;RETURN;
+JMP returnFromInterrupt
+
+<returnFromInterrupt>
+;POP REGISTERS INTERRUPT USED;
+POP r3
+POP r2
+POP r1
+POP r0
+RFI
+
+
+
+
+
+
+
+
+
+

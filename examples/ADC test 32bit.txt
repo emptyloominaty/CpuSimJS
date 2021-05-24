@@ -1,0 +1,20 @@
+var a 10000
+var b 30000
+var c 1
+var d 0
+var sum1 0
+var sum2 0
+
+LD r0 a
+LD r1 b
+LD r2 c
+LD r3 d
+ADC r0 r1 r4 
+ADC r2 r3 r5
+ST r4 sum2
+ST r5 sum1
+STOP
+;address 0x129-0x12c;
+
+
+

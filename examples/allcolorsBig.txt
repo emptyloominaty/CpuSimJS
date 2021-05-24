@@ -1,0 +1,77 @@
+var gpuaddress 1
+var framebufferstart $0009 
+var pixel 0
+var color 0
+var maxColors 255
+var width 320
+var colorWidth 10
+var colorHeight 10
+var colorpixelsW 0
+var colorpixelsH 0
+var maxRowColors 32
+var colorsInRow 0
+
+SDI
+LD r0 maxColors
+LD r1 width
+LD r2 colorWidth
+LD r3 colorHeight
+LD r4 colorpixelsW
+LD r5 colorpixelsH 
+LD r11 colorsInRow
+LD r12 maxRowColors
+LD r14 gpuaddress
+LD r15 framebufferstart
+LD r6 color
+LD r13 pixel
+JMP drawPixel
+
+<drawPixel>
+JMP colorPixel
+
+<drawPixelPls>
+STRX8 r13 r14
+INC r15
+INC r4
+JE r4 r2 drawNextLine
+JMP drawPixelPls
+
+<colorPixel>
+LDI r7 0
+AD2 r13 r6
+LD r6 color
+INC r6
+ST r6 color
+JMP drawPixelPls
+
+<drawNextLine>
+LDI r4 0
+ADDI  r15 310
+INC r5
+JE r5 r3 next
+JMP drawPixelPls
+
+<next>
+LDI r5 0
+LD r11 colorsInRow
+INC r11
+ST r11 colorsInRow
+LD r12  maxRowColors
+JE r11 r12 nextRowAdd
+SUBI r15 3190
+JG r6 r0 end
+JMP drawPixel
+
+
+<nextRowAdd>
+LDI r11 0
+LDI r12 0
+ST r11 colorsInRow
+ADDI r15 10
+JMP drawPixel
+
+
+
+
+<end>
+STOP

@@ -1,0 +1,11 @@
+var8 a 2
+var8 b 2
+var8 c 0
+
+LD8 r0 a
+LD8 r1 b
+ADD r0 r1 r2
+ST8 r2 c
+STOP
+
+

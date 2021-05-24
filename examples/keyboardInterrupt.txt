@@ -1,0 +1,76 @@
+avar keyBufferAddress 404 $0190
+avar8 writePointer 0 $0192
+avar8 readPointer 0 $0193
+avar8 keyBufferFirst 1 $0194
+
+STAIP 1 $1000
+LDI r15 0
+JMP infiniteloop
+
+<infiniteloop>
+LD8 r0 writePointer 
+LD8 r1 readPointer
+JNE r0 r1 bufferRead
+JMP infiniteloop
+
+<bufferRead>
+LD r2 keyBufferAddress
+AD2 r2 r1
+
+;LOAD VALUE FROM BUFFER TO r3;
+LDR8 r3 r2
+
+;INCREASE READ POINTER;
+INC r1
+ST8 r1 readPointer
+
+TRR r3 r0
+CBT8 r0
+INC r15
+JMP infiniteloop
+
+
+;KEYBOARD INTERRUPT;
+.ORG $1000
+;PUSH REGISTERS INTERRUPT WILL USE;
+PSH r0
+PSH r1
+PSH r2
+PSH r3
+
+;Load value from keyboard port;
+LDX8 r3 $0A0000 
+LDI r0 32
+JL r3 r0 returnFromInterrupt
+
+;Load write/read pointers and buffer address;
+LD8 r0 writePointer 
+LD8 r1 readPointer
+LD r2 keyBufferAddress
+
+AD2 r2 r0
+STR8 r3 r2
+
+INC r0
+ST8 r0 writePointer
+
+;POP REGISTERS INTERRUPT USED;
+POP r3
+POP r2
+POP r1
+POP r0
+;RETURN;
+JMP returnFromInterrupt
+
+<returnFromInterrupt>
+RFI
+
+
+
+
+
+
+
+
+
+

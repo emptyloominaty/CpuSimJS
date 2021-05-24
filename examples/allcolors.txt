@@ -1,0 +1,36 @@
+var gpuaddress 1
+var framebufferstart $000A 
+var pixel 0
+var color 0
+var maxColors 255
+
+SDI
+LD r0 maxColors
+LD r14 gpuaddress
+LD r15 framebufferstart
+LD r6 color
+LD r13 pixel
+JMP drawPixel
+
+<drawPixel>
+JMP colorPixel
+
+<drawPixelPls>
+STRX8 r13 r14
+INC r15
+JMP next
+
+<colorPixel>
+LDI r7 0
+LD r6 color
+INC r6
+ST r6 color
+AD2 r13 r6
+JMP drawPixelPls
+
+<next>
+JE r0 r6 end
+JMP drawPixel
+
+<end>
+STOP

@@ -1,0 +1,15 @@
+var32 a 4294967292
+var32 b 2
+var32 c 0
+
+LD r0 $0121
+LD r1 $0123
+LD r2 $0125
+LD r3 $0127
+ADC r0 r2 r4
+ADC r1 r3 r5
+ST r4 $0129
+ST r5 $012b
+STOP
+
+
