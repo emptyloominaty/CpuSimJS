@@ -179,7 +179,7 @@
 | 69 - C8TB | 2  | 3 |  -  |    0x45  |  reg |  - | -  | -  |
 
 
-#GPU
+# GPU
 * Video Memory: **64**kB
 
 | Mode  | Resolution  | Colors | VRAM req. |
@@ -191,16 +191,15 @@
 | 3*| 640x400 | 2  | 31.25kB |
 *Not implemented yet
     
-#Memory
+# Memory
 * 0.5 - 64kB CPU RAM
 * 8 - 64kB GPU RAM
 * 4kB Character ROM
 * 0 - 64kB User Storage
 * 0 - 320kB Extended RAM (only for **data**, **instructions** must be copied to main 64kB memory)
 
-    
-#    
-###Max Clock(sim)
+# 
+### Max Clock(sim)
 * on Intel Core i5 6600k 4.4GHz
     -  **3.7**-**3.8**MHz (Firefox)
     -  **2.6**-**2.7**MHz (Chrome)
