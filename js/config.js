@@ -17,14 +17,14 @@ let memorySize = 65536 //bytes   (Cpu Ram)
 //----------GPU RAM (01)
 let vramSize = 65536
 const vramStart =           0x010000
-let gpuColorMode =          0x010000 //1byte     0=1color  1=256colors 2=65536colors
+let gpuColorMode =          0x010000 //1byte     0=2colors  1=256colors
 let gpuStartFrameBuffer =   0x010001 //address stored in mem (2bytes)
-let gpuEndtFrameBuffer =    0x010003 //address stored in mem (2bytes)
+let gpuEndtFrameBuffer =    0x010003 //NO WHY?
 let gpuScreenWidth =        0x010005 //2bytes
 let gpuScreenHeight =       0x010007 //2bytes
 
 //----------Character ROM (02)
-let charRomSize = 4096 //512 characters (5x8)
+let charRomSize = 2048 //256 characters (5x8)
 const charRomStart =        0x020000
 
 //----------User Storage (03)
@@ -56,8 +56,8 @@ let genMemory = function() {
     data[gpuColorMode] = colorMode
     data[gpuStartFrameBuffer] = 0x00
     data[gpuStartFrameBuffer+1] = 0x09
-    data[gpuEndtFrameBuffer] = 0x4E
-    data[gpuEndtFrameBuffer+1] = 0x29
+    data[gpuEndtFrameBuffer] = 0x4E //NO WHY?
+    data[gpuEndtFrameBuffer+1] = 0x29  //NO WHY?
     data[gpuScreenWidth]= 1  //320
     data[gpuScreenWidth+1]= 64
     data[gpuScreenHeight]= 0 //20

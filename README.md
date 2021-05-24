@@ -27,8 +27,9 @@
 |  |   |    |
 | CPU Ram | 0x000000  |  0x00FFFF  |
 | VRAM | 0x010000  |  0x01FFFF  |
-| Char ROM | 0x020000  |  0x021000  |
+| Char ROM | 0x020000  |  0x0207FF |
 | User Storage | 0x030000  |  0x03FFFF  |
+| Extended Ram | 0x040000  |  0x09FFFF  |
 | Keyboard | 0x0A0000  |  -  |
 
 
@@ -187,14 +188,13 @@
 | 0 | 320x200 | 2  | 62.5kB |
 | 1 | 320x200 | 256  | 62.5kB |
 | 2*| 320x200 | 2  | 7.81kB |
-| 3*| 640x400 | 2  | 31.25kB |
 
 *Not implemented yet
     
 # Memory
 * 0.5 - 64kB CPU RAM
 * 8 - 64kB GPU RAM
-* 4kB Character ROM
+* 2kB Character ROM
 * 0 - 64kB User Storage
 * 0 - 320kB Extended RAM (only for **data**, **instructions** must be copied to main 64kB memory)
 
@@ -205,4 +205,10 @@
     -  **2.6**-**2.7**MHz (Chrome)
     -  **2.3**-**2.7**MHz (Edge)
     -  ?-?MHz (Electron)
+
     
+* on Qualcomm SDM636 1.8GHz
+    -  **230**kHz (Chrome)
+  
+
+        
