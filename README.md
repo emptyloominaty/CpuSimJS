@@ -223,8 +223,9 @@
 * on Intel Core i5 6600k 4.4GHz
     -  **3.7**-**3.8**MHz (Firefox)
     -  **2.6**-**2.7**MHz (Chrome)
+    -  **2.6**-**2.7**MHz (Electron)
     -  **2.3**-**2.7**MHz (Edge)
-    -  ?-?MHz (Electron)
+
 
     
 * on Qualcomm SDM636 1.8GHz
