@@ -31,7 +31,7 @@
 | User Storage | 0x030000  |  0x03FFFF  |
 | Extended Ram | 0x040000  |  0x09FFFF  |
 | Keyboard | 0x0A0000  |  -  |
-
+| Timers (1,2) | 0x0A0010  |  0x0A0011  |
 
 
 ### Instructions
@@ -179,6 +179,26 @@
 | 68 - CBT8 | 2  | 3 |  -  |    0x44  |  reg |  - | -  | -  |
 | 69 - C8TB | 2  | 3 |  -  |    0x45  |  reg |  - | -  | -  |
 
+### Interrupts
+
+| IP | Interrupt Name |
+| ------------- | :-------------: |
+| 0 | RESERVED |
+| 1 | Keyboard  |
+| 2 | Timer1  | 
+| 3 | Timer2  | 
+| 4 | RESERVED  | 
+| 5 | RESERVED  | 
+| 6 | RESERVED  | 
+| 7 | RESERVED  | 
+| 8 | RESERVED  | 
+| 9 | RESERVED  | 
+| 10 | User  | 
+| 11 | User  | 
+| 12 | User  | 
+| 13 | User  | 
+| 14 | User  | 
+| 15 | User  | 
 
 # GPU
 * Video Memory: **64**kB
@@ -198,8 +218,8 @@
 * 0 - 64kB User Storage
 * 0 - 320kB Extended RAM (only for **data**, **instructions** must be copied to main 64kB memory)
 
-# 
-### Max Clock(sim)
+
+## Max Clock(sim)
 * on Intel Core i5 6600k 4.4GHz
     -  **3.7**-**3.8**MHz (Firefox)
     -  **2.6**-**2.7**MHz (Chrome)

@@ -5,6 +5,20 @@ const stackSize = 255 //(255=256) //dont change
 let cpuFirstInfo = "EMP 1 16bit CPU"
 let colorMode = 1
 
+//min break time = 16ms
+const cpuBreakTime = 100 //ms
+const cpuSendMemoryTime = 200 //ms
+/*Breaks
+         1 per sec - 0.4% loss
+         2 per sec - 0.8% loss
+         3 per sec - 1.2% loss
+         4 per sec - 1.6% loss
+         5 per sec - 2% loss
+         10 per sec - 4% loss
+         60 per sec - 24% loss
+          */
+
+
 //TODO
 const bit = 16
 const maxVal = (Math.pow(2, 16))
@@ -33,10 +47,17 @@ const userStorageStart =    0x0C0000
 
 //----------Extended memory(04-09)
 let extMemorySize = 0
-const extMemoryStart =    0x0D0000
+const extMemoryStart =      0x0D0000
 
 //----------I/O Ports  (0A)
+//Keyboard
 const keyboardInput =       0x0A0000 //1byte
+
+//Timers
+const timerRegister1 =      0x0A0010 //1-255 * 10  = 10ms - 2550ms
+const timerRegister2 =      0x0A0011 //1-255 * 10  = 10ms - 2550ms
+
+
 //--------------------------------------------------MEMORY--------------------------------------------------------------
 
 //generater memory
@@ -48,6 +69,10 @@ let genMemory = function() {
     }
     //KEYBOARD
     data[keyboardInput] = 0
+    //TIMERS
+    data[timerRegister1] = 0
+    data[timerRegister2] = 0
+
     //VRAM
     for (let i = 0; i<vramSize; i++) {
         data[vramStart+i] = 0

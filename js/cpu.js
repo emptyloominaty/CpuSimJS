@@ -90,18 +90,9 @@ let cpu = {
                 cpu.cyclesPerSec=0
                 cpu.timeF=performance.now()
             }
-            if (((cpu.timeA-cpu.timeG)>100)) { //10 (4% rip)
+            if (((cpu.timeA-cpu.timeG)>cpuBreakTime)) {
                 cpu.timeG=performance.now()
                 /*---Break----*/
-                /*Breaks
-                1 - 0.4% loss every 1000ms
-                2 - 0.8% loss
-                3 - 1.2% loss
-                4 - 1.6% loss
-                5 - 2% loss
-                10 - 4% loss
-                60 - 24% loss
-                 */
                 if (clockType>0) {
                     stop=2
                     loop = setTimeout(function () {
@@ -109,7 +100,7 @@ let cpu = {
                         setInterval2(clock)
                     } ,0)
                 }
-                if (((cpu.timeA-cpu.timeH)>200)) { //5
+                if (((cpu.timeA-cpu.timeH)>cpuSendMemoryTime)) { //5
                     cpu.timeH=performance.now()
                     cpu.sendMemoryToMainThread()
                 }

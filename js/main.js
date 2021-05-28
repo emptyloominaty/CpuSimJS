@@ -16,6 +16,10 @@ let control = {
     timeC: 0,
     timeD: 0,
     clockReal: 0,
+    timer1: {ip:2, time:0, running:0, timer:0},
+    timer2: {ip:3, time:0, running:0, timer:0},
+    timer3: {ip:4, time:0, running:0, timer:0},
+    timer4: {ip:5, time:0, running:0, timer:0},
     registers: {r0:0,r1:0, r2:0, r3:0, r4:0, r5:0, r6:0, r7:0, r8:0, r9:0 ,r10:0, r11:0, r12:0, r13:0, r14:0, r15:0, sp:0, pc:256, flags:{N:false,O:false,Z:false,C:false,I:false,ID:false}},
     memory: new Uint8Array(memorySize).fill(0),
     cpuData: {op:0,decoded:0,bytes:0,cycles:0,instructionCache:[0,0,0,0,0],inst:0,phase:0,bytesLeft:0,fetchI:1,cyclesI:0},
@@ -49,6 +53,9 @@ let control = {
     el_memValHex4: document.getElementById("memValHex4"),
     el_btnToggleCpu: document.getElementById("btnToggleCpu"),
     el_setCpuClock: document.getElementById("setCpuClock"),
+    timerInterrupt: function(ip) {
+        cpuThread.postMessage({data:"interrupt", ip:ip})
+    },
     startCpu: function() {
         cpuThread = new Worker('js/cpu.js')
         this.status="Executing"
@@ -73,6 +80,31 @@ let control = {
                 }
                 case "memory": {
                     control.memory = e.data.memory
+
+                    //Timers
+                    //-----1
+                    if (control.memory[timerRegister1]>0 && control.memory[timerRegister1]!==control.timer1.time) {
+                        control.timer1.time = control.memory[timerRegister1]
+                        if (control.memory[timerRegister1]===0) {
+                            control.timer1.timer = clearInterval()
+                            control.timer1.running = 0
+                        } else {
+                            control.timer1.timer = setInterval(function() {control.timerInterrupt(control.timer1.ip) } , control.timer1.time*10)
+                            control.timer1.running = 1
+                        }
+                    }
+                    //-----2
+                    if (control.memory[timerRegister2]>0 && control.memory[timerRegister2]!==control.timer2.time) {
+                        control.timer2.time = control.memory[timerRegister2]
+                        if (control.memory[timerRegister2]===0) {
+                            control.timer2.timer = clearInterval()
+                            control.timer2.running = 0
+                        } else {
+                            control.timer2.timer = setInterval(function() {control.timerInterrupt(control.timer2.ip) } , control.timer2.time*10)
+                            control.timer2.running = 1
+                        }
+                    }
+
                     break
                 }
                 case "stop": {
@@ -87,6 +119,9 @@ let control = {
                     break
                 }
             }
+
+
+
         }, false);
 
         this.el_btnToggleCpu.classList.remove("greenBtn")
@@ -100,7 +135,10 @@ let control = {
         cpuThread="undefined"
         this.el_btnToggleCpu.classList.remove("redBtn")
         this.el_btnToggleCpu.classList.add("greenBtn")
-
+        clearInterval(control.timer1.timer)
+        clearInterval(control.timer2.timer)
+        control.timer1.time = 0
+        control.timer2.time = 0
     },
     toggleCpu: function() {
         //console.log(performance.now())

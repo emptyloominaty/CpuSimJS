@@ -1,0 +1,22 @@
+var a 0
+var b 0
+var timerAddressHi $0A
+var timerAddressLo $0010
+
+STAIP 2 $0500
+LD r0 a
+LD r1 b
+LD r14 timerAddressHi 
+LD r15 timerAddressLo
+LDI r2 100
+STRX8 r2 r14
+JSR infiniteLoop
+STOP
+
+<infiniteLoop>
+INC r0
+JMP infiniteLoop
+
+.ORG $0500
+INC r1
+RFI
