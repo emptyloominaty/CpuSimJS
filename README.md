@@ -168,11 +168,11 @@
 | 57 - STX8 | 7  | 5 |  -  |    0x39  |   reg | memHi  | memMi   | memLo  |
 | 58 - STRX |  6 | 3 |   -  |    0x3a |  reg | reg  | -  | -  |
 | 59 - LDRX  | 6  | 3 |   -  |   0x3b  |  reg | reg  | -  | -  |
-| 60 - STRX8 | 6  | 3 |  -  |    0x3c  |  reg | reg  | -  | -  |
-| 61 - LDRX8 | 6  | 3 |  -  |    0x3d  |  reg | reg  | -  | -  |
+| 60 - STRX8 | 5  | 3 |  -  |    0x3c  |  reg | reg  | -  | -  |
+| 61 - LDRX8 | 5  | 3 |  -  |    0x3d  |  reg | reg  | -  | -  |
 | 62 - STAIP | 5  | 4 |  -  |    0x3e  |  ip | memHi  | memLo  | -  |
-| 63 - STR8 | 5  | 3 |   -  |    0x3f  |   reg | reg  | -  | -  |
-| 64 - LDR8  | 5  | 3 |  -  |    0x40 |   reg | reg  | -  | -  |
+| 63 - STR8 | 4  | 3 |   -  |    0x3f  |   reg | reg  | -  | -  |
+| 64 - LDR8  | 4  | 3 |  -  |    0x40 |   reg | reg  | -  | -  |
 | 65 - JC | 4  | 3 |    -  |  0x41  | memHi | memLo  | -  | -  |
 | 66 - JNC | 4  | 3 |   -  |   0x42  |  memHi | memLo  | -  | -  |
 | 67 - LDI8 | 3  | 3 |  -  |    0x43  |  reg | value  | -  | -  |

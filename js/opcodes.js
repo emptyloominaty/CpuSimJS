@@ -60,11 +60,11 @@ let opCodeList = {
     57: {bytes:5,name:"STX8",cycles:7}, //Store 1byte (24bit address)
     58: {bytes:3,name:"STRX",cycles:6}, //Store to Address stored in Register (24bit address)
     59: {bytes:3,name:"LDRX",cycles:6}, //Load from Address stored in Register (24bit address)
-    60: {bytes:3,name:"STRX8",cycles:6},//Store to Address stored in Register (24bit address) 1byte
-    61: {bytes:3,name:"LDRX8",cycles:6},//Load from Address stored in Register (24bit address) 1byte
+    60: {bytes:3,name:"STRX8",cycles:5},//Store to Address stored in Register (24bit address) 1byte
+    61: {bytes:3,name:"LDRX8",cycles:5},//Load from Address stored in Register (24bit address) 1byte
     62: {bytes:4,name:"STAIP",cycles:5},//Store address to Interrupt Pointer
-    63: {bytes:3,name:"STR8",cycles:5}, //Store to Address stored in Register 1byte
-    64: {bytes:3,name:"LDR8",cycles:5}, //Load from Address stored in Register 1byte
+    63: {bytes:3,name:"STR8",cycles:4}, //Store to Address stored in Register 1byte
+    64: {bytes:3,name:"LDR8",cycles:4}, //Load from Address stored in Register 1byte
     65: {bytes:3,name:"JC",cycles:4},   //Conditional Jump if Carry
     66: {bytes:3,name:"JNC",cycles:4},  //Conditional Jump if not Carry
     67: {bytes:3,name:"LDI8",cycles:3},  //Load Immediate 1byte
