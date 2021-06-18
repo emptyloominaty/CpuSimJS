@@ -141,7 +141,23 @@ let assembler = {
             let name = instructions[i].name.toUpperCase()
             let opCode = opListAssembler[name].code
 
-            if (opC==="ldi" || opC==="ldi8" ||  opC==="addi" || opC==="subi" || opC==="muli" || opC==="divi" ) {
+            if (opC==="staip") {
+                memRom.data[memAddress] = opCode
+                memRom.data[memAddress + 1] = instructions[i].val1
+                if (typeof instructions[i].val2 === 'string' && instructions[i].val2.startsWith("0x")) {
+                    let valueI = this.functions.convert16to8(instructions[i].val2)
+                    memRom.data[memAddress + 2] = valueI[0]
+                    memRom.data[memAddress + 3] = valueI[1]
+                } else {
+                    let valueI = this.functions.convert16to8(functions[instructions[i].val2].memAddress)
+                    memRom.data[memAddress + 2] = valueI[0]
+                    memRom.data[memAddress + 3] = valueI[1]
+                }
+
+
+
+
+            } else if (opC==="ldi" || opC==="ldi8" ||  opC==="addi" || opC==="subi" || opC==="muli" || opC==="divi" ) {
                 memRom.data[memAddress] = opCode
                 memRom.data[memAddress + 1] = removeRfromCode(instructions[i].val1)
                 if (opC==="ldi8") {
@@ -196,6 +212,8 @@ let assembler = {
                         memRom.data[memAddress + j] = memVar[1]
                         //-----------------------------------------------------------------------FUNCTIONS (JUMPS)
                     } else {
+                     /*   console.log(instructions[i]["val" + j])
+                        console.log(functions[instructions[i]["val" + j]])*/
                         let jumpAddress = functions[instructions[i]["val" + j]].memAddress
                         jumpAddress = this.functions.convert16to8(jumpAddress)
                         memRom.data[(memAddress + j)] = jumpAddress[0]
@@ -246,7 +264,6 @@ document.getElementById("codeEditor").value =
     "var a 1\n" +
     "var b 1\n" +
     "var c 0\n" +
-    "avar d 10 $0a00\n" +
 
     "\n" +
     "LD r0 a\n" +

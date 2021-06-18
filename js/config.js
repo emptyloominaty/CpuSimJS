@@ -31,11 +31,11 @@ let memorySize = 65536 //bytes   (Cpu Ram)
 //----------GPU RAM (01)
 let vramSize = 65536
 const vramStart =           0x010000
-let gpuColorMode =          0x010000 //1byte     0=2colors  1=256colors
-let gpuStartFrameBuffer =   0x010001 //address stored in mem (2bytes)
-let gpuEndtFrameBuffer =    0x010003 //NO WHY?
-let gpuScreenWidth =        0x010005 //2bytes
-let gpuScreenHeight =       0x010007 //2bytes
+const gpuColorMode =          0x010000 //1byte     0=2colors  1=256colors
+const gpuStartFrameBuffer =   0x010001 //address stored in mem (2bytes)
+const gpuEndtFrameBuffer =    0x010003
+const gpuScreenWidth =        0x010005 //2bytes
+const gpuScreenHeight =       0x010007 //2bytes
 
 //----------Character ROM (02)
 let charRomSize = 2048 //256 characters (5x8)
@@ -43,11 +43,11 @@ const charRomStart =        0x020000
 
 //----------User Storage (03)
 let userStorageSize = 64
-const userStorageStart =    0x0C0000
+const userStorageStart =    0x030000
 
 //----------Extended memory(04-09)
 let extMemorySize = 0
-const extMemoryStart =      0x0D0000
+const extMemoryStart =      0x040000
 
 //----------I/O Ports  (0A)
 //Keyboard
@@ -56,7 +56,8 @@ const keyboardInput =       0x0A0000 //1byte
 //Timers
 const timerRegister1 =      0x0A0010 //1-255 * 10  = 10ms - 2550ms
 const timerRegister2 =      0x0A0011 //1-255 * 10  = 10ms - 2550ms
-
+const timerRegister3 =      0x0A0012 //1-255 * 10  = 10ms - 2550ms
+const timerRegister4 =      0x0A0013 //1-255 * 10  = 10ms - 2550ms
 
 //--------------------------------------------------MEMORY--------------------------------------------------------------
 
@@ -72,6 +73,8 @@ let genMemory = function() {
     //TIMERS
     data[timerRegister1] = 0
     data[timerRegister2] = 0
+    data[timerRegister3] = 0
+    data[timerRegister4] = 0
 
     //VRAM
     for (let i = 0; i<vramSize; i++) {
@@ -81,8 +84,8 @@ let genMemory = function() {
     data[gpuColorMode] = colorMode
     data[gpuStartFrameBuffer] = 0x00
     data[gpuStartFrameBuffer+1] = 0x09
-    data[gpuEndtFrameBuffer] = 0x4E //NO WHY?
-    data[gpuEndtFrameBuffer+1] = 0x29  //NO WHY?
+    data[gpuEndtFrameBuffer] = 0x4E
+    data[gpuEndtFrameBuffer+1] = 0x29
     data[gpuScreenWidth]= 1  //320
     data[gpuScreenWidth+1]= 64
     data[gpuScreenHeight]= 0 //20
