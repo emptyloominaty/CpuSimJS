@@ -73,7 +73,7 @@ let cpu = {
             }
             case 3: { //EXECUTE2
                 //postMessage({data:"debug",log:"OP: "+opCodeList[cpu.cpuData.op].name+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp+" -- "+cpu.cpuData.instructionCache[1]+" | "+cpu.cpuData.instructionCache[2]+" | "+cpu.cpuData.instructionCache[3]+" | "+cpu.cpuData.instructionCache[4]})
-                //console.log("OP: "+cpu.cpuData.op+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp+" -- "+cpu.cpuData.instructionCache[1]+" | "+cpu.cpuData.instructionCache[2]+" | "+cpu.cpuData.instructionCache[3]) //test
+                //console.log("OP: "+cpu.cpuData.op+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp+" -- "+cpu.cpuData.instructionCache[1]+" | "+cpu.cpuData.instructionCache[2]+" | "+cpu.cpuData.instructionCache[3]+" | "+cpu.cpuData.instructionCache[4]) //test
                 cpu.execute(cpu.cpuData.instructionCache)
                 break
             }
@@ -322,13 +322,13 @@ let cpu = {
                 break
             }
             case 27: { //JNG
-                if (this.registers["r" + inst[1]] >! this.registers["r" + inst[2]]) {
+                if (this.registers["r" + inst[1]] <= this.registers["r" + inst[2]]) {
                     this.registers.pc = functions.convert8to16(inst[3],inst[4])
                 }
                 break
             }
             case 28: { //JNL
-                if (this.registers["r" + inst[1]] <! this.registers["r" + inst[2]]) {
+                if (this.registers["r" + inst[1]] >= this.registers["r" + inst[2]]) {
                     this.registers.pc = functions.convert8to16(inst[3],inst[4])
                 }
                 break
