@@ -149,11 +149,11 @@ let cpu = {
     execute: function(inst) {
         switch (inst[0]) {
             case 0: { //STOP
-                postMessage({data:"stop"})
                 stop = 1
                 cpu.timeC=cpu.timeA
                 cpu.sendMemoryToMainThread()
                 cpu.sendDataToMainThread()
+                postMessage({data:"stop"})
                 close()
                 break
             }
