@@ -65,29 +65,29 @@
                     <h3>Config</h3>
                     <div class="wrapper1">
                         <div class="wrapper2">
-                            <label for="inputConfigCpuMemory">Cpu Ram </label>
-                            <input type="Number" min="1" max="64" value="64" autocomplete="off" id="inputConfigCpuMemory"> <span class="kilobytes"> kB </span>
-                            <button class="smallerTxtBtn smallBtn" onclick="config.setCpuRam()"> Set </button>
+                                <label for="inputConfigCpuMemory">Cpu Ram</label>
+                                <input onchange="config.setCpuRam()" type="range" min="1" max="64" value="64" step="1" id="inputConfigCpuMemory">
+                                <span class="kilobytes" id="inputConfigCpuMemory_val"> 64 </span> <span class="kilobytes"> kB </span>
                         </div>
                         <div class="wrapper2">
                             <label for="inputConfigVideoMemory">Video Ram </label>
-                            <input type="Number" min="1" max="64" value="64" autocomplete="off" id="inputConfigVideoMemory">  <span class="kilobytes"> kB </span>
-                            <button class="smallerTxtBtn smallBtn" onclick="config.setVideoRam()"> Set </button>
+                            <input onchange="config.setVideoRam()" type="range" min="8" max="64" value="64" step="1" id="inputConfigVideoMemory">
+                            <span class="kilobytes" id="inputConfigVideoMemory_val"> 64 </span> <span class="kilobytes"> kB </span>
                         </div>
                         <div class="wrapper2">
                             <label for="inputConfigCharMemory">Character Rom </label>
-                            <input type="Number" min="1" max="64" value="4" autocomplete="off" id="inputConfigCharMemory">  <span class="kilobytes" > kB </span>
-                            <button class="smallerTxtBtn smallBtn" onclick="config.setCharMemory()"> Set </button>
+                            <input onchange="config.setCharMemory()" type="range" min="2" max="64" value="4" step="1" id="inputConfigCharMemory">
+                            <span class="kilobytes" id="inputConfigCharMemory_val"> 4 </span> <span class="kilobytes"> kB </span>
                         </div>
                         <div class="wrapper2">
                             <label for="inputConfigUserStorage">User Storage </label>
-                            <input type="Number" min="0" max="64" value="0" autocomplete="off" id="inputConfigUserStorage">  <span class="kilobytes" > kB </span>
-                            <button class="smallerTxtBtn smallBtn" onclick="config.setUserStorage()"> Set </button>
+                            <input onchange="config.setUserStorage()" type="range" min="0" max="64" value="4" step="1" id="inputConfigUserStorage">
+                            <span class="kilobytes" id="inputConfigUserMemory_val"> 0 </span> <span class="kilobytes"> kB </span>
                         </div>
                         <div class="wrapper2">
                             <label for="inputConfigExtRam">Extended Ram </label>
-                            <input type="Number" min="0" max="320" value="0" autocomplete="off" id="inputConfigExtRam">  <span class="kilobytes" > kB </span>
-                            <button class="smallerTxtBtn smallBtn" onclick="config.setExtRam()"> Set </button>
+                            <input onchange="config.setExtRam()" type="range" min="0" max="320" value="0" step="1" id="inputConfigExtRam">
+                            <span class="kilobytes" id="inputConfigExtMemory_val"> 0 </span> <span class="kilobytes"> kB </span>
                         </div>
                     </div>
                 </div>
