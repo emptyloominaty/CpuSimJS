@@ -70,6 +70,7 @@ let opCodeList = {
     67: {bytes:3,name:"LDI8",cycles:3},  //Load Immediate 1byte
     68: {bytes:2,name:"CBT8",cycles:3},  //Convert 1byte to 8bits  r1 -> r1,r2,r3,r4,r5,r6,r7,r8
     69: {bytes:2,name:"C8TB",cycles:3},  //Convert 8bits to 1byte  r1,r2,r3,r4,r5,r6,r7,r8 -> r1
+    70: {bytes:4,name:"DIVR",cycles:35}, //Get remainder of division
 
     /*idk
     67: {bytes:2,name:"CUS",cycles:4},   //TODO:Convert from unsigned to signed   0 = 32768 | 32767 = 65535

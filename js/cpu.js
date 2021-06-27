@@ -366,7 +366,6 @@ let cpu = {
                 }
                 output = Math.floor(output)
                 this.registers["r" + inst[3]] = output
-                this.registers["r" + (inst[3]+1)] = (this.registers["r" + inst[1]] % this.registers["r" + inst[2]]) //remainder
                 this.setFlags(this.registers["r" + inst[3]])
                 break
             }
@@ -625,6 +624,18 @@ let cpu = {
                 array[6] = this.registers["r"+((+inst[1])+6)]
                 array[7] = this.registers["r"+((+inst[1])+7)]
                 this.registers["r"+((+inst[1]))] =  functions.convert8bitsto1byte(array)
+                break
+            }
+            case 70: { //DIVR
+                let output = 0
+                if ( this.registers["r" + inst[2]]===0) {
+                    output = 0
+                } else {
+                    output = (this.registers["r" + inst[1]] % this.registers["r" + inst[2]]) //remainder
+                }
+                output = Math.floor(output)
+                this.registers["r" + inst[3]] = output
+                this.setFlags(this.registers["r" + inst[3]])
                 break
             }
 

@@ -205,9 +205,6 @@ let assembler = {
                         memRom.data[memAddress + j] = instructions[i]["val" + j]
                         //-----------------------------------------------------------------------MEM ADDRESS
                     } else if (opC !== "jsr" && opC !== "jg" && opC !== "jng" && opC !== "jl" && opC !== "jnl" && opC !== "je" && opC !== "jne" && opC !== "jmp") {
-                        console.log("---------------")
-                        console.log(vars[instructions[i]["val" + j]])
-                        console.log(instructions[i]["val" + j])
                         let memVar = vars[instructions[i]["val" + j]].memAddress
                         memVar = this.functions.convert16to8(memVar)
                         memRom.data[memAddress + j] = memVar[0]
