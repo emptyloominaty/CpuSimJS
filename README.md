@@ -13,11 +13,7 @@
 * IPC: **0.17** Avg
 * Max Memory: **64**kB (**16**MB)
 * Stack: **256 Bytes**
-* Data Types:
-    - **1-bit** Boolean
-    - **8-bit** Unsigned/Signed Integer
-    - **16-bit** Unsigned/Signed Integer
-    - **32-bit**? Unsigned/Signed Integer
+
         
 |  | Start | End |
 | ------------- | :-------------: | :-------------: |
@@ -105,6 +101,7 @@
 67 - LDI8 r(r) (val)            (Load Immediate 1byte)
 68 - CBT8 r(r)                  (Convert Byte to 8 Bits) 1 -> 8 Registers r1 -> (r1:r8)
 69 - C8TB r(r)                  (Convert 8 Bits to Byte) 8 -> 1 Register (r1:r8) -> r1
+70 - DIVR r(r) r(r) r(r)	(Get Remainder of Division)
 ```
 
 | OP - Name  | Cycles |Bytes |  | Byte1 | Byte2 | Byte3 | Byte4 | Byte5 |
@@ -178,6 +175,7 @@
 | 67 - LDI8 | 3  | 3 |  -  |    0x43  |  reg | value  | -  | -  |
 | 68 - CBT8 | 3  | 2 |  -  |    0x44  |  reg |  - | -  | -  |
 | 69 - C8TB | 3  | 2 |  -  |    0x45  |  reg |  - | -  | -  |
+| 70 - DIVR |  35 | 4 |  -  |   0x46 |   reg | reg  | reg  | -  |   
 
 ### Interrupts
 
