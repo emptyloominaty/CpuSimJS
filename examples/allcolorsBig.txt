@@ -38,7 +38,7 @@ JMP drawPixelPls
 
 <colorPixel>
 LDI r7 0
-AD2 r13 r6
+TRR r6 r13
 LD r6 color
 INC r6
 ST r6 color
