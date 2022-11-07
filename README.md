@@ -10,7 +10,7 @@
     - 16 16-Bit Registers (**r0-r15**)  <br/>
     - 16-Bit Program Counter, 16-Bit Stack Pointer, Flags <br/>
     - 16 Interrupt Pointers 
-* IPC: **0.13** Avg
+* IPC: **0.14** Avg
 * Max Memory: **64**kB (**16**MB)
 * Stack: **256 Bytes**
 
