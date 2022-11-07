@@ -14,6 +14,8 @@ let interruptCycles = 0
 
 
 let cpu = {
+    cyclesDone: 0,
+    instructionsDone: 0,
     timeA: 0,
     timeB: 0,
     timeC: 0,
@@ -36,6 +38,8 @@ let cpu = {
         cpu.timeA = performance.now()
         cpu.timeC = (cpu.timeA-cpu.timeB)
         cpu.timeB = performance.now()
+
+        cpu.cyclesDone ++
 
         let phase = cpu.cpuData.phase
         switch (phase) {
@@ -72,6 +76,7 @@ let cpu = {
                 break
             }
             case 3: { //EXECUTE2
+                cpu.instructionsDone++
                 //postMessage({data:"debug",log:"OP: "+opCodeList[cpu.cpuData.op].name+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp+" -- "+cpu.cpuData.instructionCache[1]+" | "+cpu.cpuData.instructionCache[2]+" | "+cpu.cpuData.instructionCache[3]+" | "+cpu.cpuData.instructionCache[4]})
                 //console.log("OP: "+cpu.cpuData.op+"  PC:"+cpu.registers.pc+" SP:"+cpu.registers.sp+" -- "+cpu.cpuData.instructionCache[1]+" | "+cpu.cpuData.instructionCache[2]+" | "+cpu.cpuData.instructionCache[3]+" | "+cpu.cpuData.instructionCache[4]) //test
                 cpu.execute(cpu.cpuData.instructionCache)
@@ -657,7 +662,7 @@ let cpu = {
     },
     sendDataToMainThread: function() {
         cpu.ping = 1 - cpu.ping
-        let postMsgData = {data:"data", registers:this.registers, timeA:this.timeA, timeB:this.timeB, timeC:this.timeC, timeD:this.timeD, cpuData:this.cpuData, clockReal:cpu.clockReal}
+        let postMsgData = {data:"data", registers:this.registers, timeA:this.timeA, timeB:this.timeB, timeC:this.timeC, timeD:this.timeD, cpuData:this.cpuData, clockReal:cpu.clockReal, cyclesDone:cpu.cyclesDone, instructionsDone:cpu.instructionsDone}
         postMsgData = JSON.parse(JSON.stringify(postMsgData))
         postMessage(postMsgData)
     },

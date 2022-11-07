@@ -10,6 +10,8 @@ let memRom = {
 }
 
 let control = {
+    cyclesDone: 0,
+    instructionsDone: 0,
     status:"Stopped",
     timeA: 0,
     timeB: 0,
@@ -75,6 +77,8 @@ let control = {
                     control.timeD = e.data.timeD
                     control.cpuData = e.data.cpuData
                     control.clockReal = e.data.clockReal
+                    control.cyclesDone = e.data.cyclesDone
+                    control.instructionsDone = e.data.instructionsDone
                     control.updateHTML() //update screen
                     break
                 }
@@ -299,3 +303,6 @@ let xd =0
 let time1 = performance.now()
 let time2 = 0
 
+setInterval(()=>{
+    console.log("IPC: "+(control.instructionsDone/control.cyclesDone).toFixed(2)+" :: "+control.cyclesDone+" / "+control.instructionsDone)
+},5000)

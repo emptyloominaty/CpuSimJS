@@ -73,7 +73,7 @@ let assembler = {
                 }
             }
             /*-------------------Instructions---------------------------- */
-            else if (line[0]!=="" || line[0]!==" ") {
+            else if (line[0]!=="" || line[0]!==" ") { //TODO: &&
                 if (line[2]!==undefined) {
                     line[2] = line[2].replace(/\$/g, '0x')
                 }
@@ -153,10 +153,6 @@ let assembler = {
                     memRom.data[memAddress + 2] = valueI[0]
                     memRom.data[memAddress + 3] = valueI[1]
                 }
-
-
-
-
             } else if (opC==="ldi" || opC==="ldi8" ||  opC==="addi" || opC==="subi" || opC==="muli" || opC==="divi" ) {
                 memRom.data[memAddress] = opCode
                 memRom.data[memAddress + 1] = removeRfromCode(instructions[i].val1)
